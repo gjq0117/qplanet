@@ -25,7 +25,7 @@ public class Sort implements Serializable {
     /**
      * 主键
      */
-      @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
@@ -41,6 +41,18 @@ public class Sort implements Serializable {
     private String sortDescription;
 
     /**
+     * 背景图片
+     */
+    @TableField("sort_img")
+    private String sortImg;
+
+    /**
+     * 格言
+     */
+    @TableField("motto")
+    private String motto;
+
+    /**
      * 优先级：数字小的在前面
      */
     @TableField("priority")
@@ -49,13 +61,13 @@ public class Sort implements Serializable {
     /**
      * 创建时间
      */
-    @TableField(value = "create_time",fill = FieldFill.INSERT)
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
     private Date createTime;
 
     /**
      * 最后更新时间
      */
-    @TableField(value = "update_time",fill = FieldFill.UPDATE)
+    @TableField(value = "update_time", fill = FieldFill.UPDATE)
     private Date updateTime;
 
     /**
@@ -63,7 +75,7 @@ public class Sort implements Serializable {
      */
     @TableField("deleted")
     @TableLogic
-    private Boolean deleted;
+    private Integer deleted;
 
 
 }

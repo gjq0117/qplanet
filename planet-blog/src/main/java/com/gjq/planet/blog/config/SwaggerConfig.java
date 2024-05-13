@@ -36,6 +36,8 @@ public class SwaggerConfig {
     @Bean(value = "defaultApi2")
     Docket docket() {
         return new Docket(DocumentationType.SWAGGER_2)
+                // 线上的时候需要关闭
+                .enable(false)
                 //配置网站的基本信息
                 .apiInfo(new ApiInfoBuilder()
                         //网站标题

@@ -2,7 +2,6 @@ package com.gjq.planet.blog.dao;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gjq.planet.blog.mapper.SortMapper;
-import com.gjq.planet.blog.service.ISortService;
 import com.gjq.planet.common.domain.entity.Sort;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +14,5 @@ import org.springframework.stereotype.Service;
  * @since 2024-04-13
  */
 @Service
-public class SortDao extends ServiceImpl<SortMapper, Sort> implements ISortService {
-
+public class SortDao extends ServiceImpl<SortMapper, Sort> {
 }

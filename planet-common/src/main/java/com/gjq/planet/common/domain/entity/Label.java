@@ -63,7 +63,7 @@ public class Label implements Serializable {
      */
     @TableField("deleted")
     @TableLogic
-    private Boolean deleted;
+    private Integer deleted;
 
 
 }

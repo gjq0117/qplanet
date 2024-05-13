@@ -35,6 +35,18 @@ public class Comment implements Serializable {
     private Long userId;
 
     /**
+     *  评论来源目标ID
+     */
+    @TableField("target_id")
+    private Long targetId;
+
+    /**
+     *  评论来源类型【0：文章；...】
+     */
+    @TableField("type")
+    private Integer type;
+
+    /**
      * 楼层ID
      */
     @TableField("floor_id")
@@ -81,7 +93,7 @@ public class Comment implements Serializable {
      */
     @TableField("deleted")
     @TableLogic
-    private Boolean deleted;
+    private Integer deleted;
 
 
 }

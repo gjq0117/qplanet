@@ -2,4 +2,44 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gjq.planet.blog.mapper.UserMapper">
 
+
+    <select id="searchUserList" resultType="com.gjq.planet.common.domain.entity.User">
+        select *
+        from `user`
+        where
+        <if test="userType != null">
+            and user_type = #{userType}
+        </if>
+        <if test="isActive != null">
+            and is_actice = #{isActive}
+        </if>
+        <if test="userStatus != null">
+            and user_status = #{userStatus}
+        </if>
+        <if test="gender != null">
+            and gender = #{gender}
+        </if>
+        <if test="phone != null and phone.trim() != '' ">
+            and phone like concat('%',#{phone}, '%')
+        </if>
+        <if test="email != null and email.trim() != '' ">
+            and email like concat('%',#{email}, '%')
+        </if>
+        <if test="username != null and username.trim() != '' ">
+            and username like concat('%',#{username}, '%')
+        </if>
+    </select>
+
+    <select id="getGenderRate" resultType="com.gjq.planet.common.domain.vo.resp.statistics.GenderRateResp">
+        select
+            case gender
+            when 0 then '未知'
+            when 1 then '男'
+            when 2 then '女'
+            end AS name,
+            count(1) AS `value`
+        from
+            `user`
+        group by gender
+    </select>
 </mapper>

@@ -16,7 +16,10 @@ import java.nio.charset.StandardCharsets;
  */
 @AllArgsConstructor
 public enum HttpErrorEnum implements ErrorEnum {
-    ACCESS_DENIED(401, "登录失效，请重新登录");
+    ACCESS_DENIED(401, "登录失效，请重新登录！"),
+    NEED_ADMIN_ACCESS(402,"您没有管理员权限噢！"),
+    ACCOUNT_FREEZE(403,"账号已被冻结！如有疑问，请联系站长")
+    ;
 
 
     private Integer httpCode;
@@ -33,7 +36,6 @@ public enum HttpErrorEnum implements ErrorEnum {
     }
 
     public void sendHttpError(HttpServletResponse response) throws IOException {
-        response.setStatus(httpCode);
         response.setContentType(ContentType.JSON.toString(StandardCharsets.UTF_8));
         response.getWriter().write(JsonUtils.toStr(ApiResult.fail(httpCode, msg)));
     }

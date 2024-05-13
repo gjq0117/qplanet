@@ -23,7 +23,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ApiResult<?> methodArgumentNotValidException(MethodArgumentNotValidException e) {
         StringBuilder errorMsg = new StringBuilder();
-        e.getBindingResult().getFieldErrors().forEach(x -> errorMsg.append(x.getField()).append(x.getDefaultMessage()).append(","));
+        e.getBindingResult().getFieldErrors().forEach(x -> errorMsg.append(x.getDefaultMessage()).append(","));
         String message = errorMsg.toString();
         return ApiResult.fail(CommonErrorEnum.PARAM_INVALID.getCode(), message.substring(0, message.length() - 1));
     }

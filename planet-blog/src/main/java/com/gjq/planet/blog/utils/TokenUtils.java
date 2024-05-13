@@ -5,10 +5,10 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
-import com.gjq.planet.blog.constant.RedisKey;
+import com.gjq.planet.common.constant.CommonConstant;
+import com.gjq.planet.common.constant.RedisKey;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -35,31 +35,6 @@ public class TokenUtils {
     private String secret;
 
     /**
-     * 前端请求header携带token时的key
-     */
-    public static final String HEADER_AUTHORIZATION = "Authorization";
-
-    /**
-     * token前缀
-     */
-    public static final String AUTHORIZATION_SCHEMA = "Bearer ";
-
-    /**
-     * uid
-     */
-    private static final String UID_CLAIM = "uid";
-
-    /**
-     * 创建时间
-     */
-    private static final String CREATE_TIME = "createTime";
-
-    /**
-     * token过期日期
-     */
-    public static final int TOKEN_EXPIRE_DAYS = 3;
-
-    /**
      * JWT生成Token
      *
      * @param uid
@@ -69,12 +44,12 @@ public class TokenUtils {
         // build token
         String token = JWT.create()
                 // 只存一个uid信息，其他的自己去redis查
-                .withClaim(UID_CLAIM, uid)
-                .withClaim(CREATE_TIME, new Date())
+                .withClaim(CommonConstant.UID_CLAIM, uid)
+                .withClaim(CommonConstant.CREATE_TIME, new Date())
                 // signature
                 .sign(Algorithm.HMAC256(secret));
         // 将token存放到redis
-        RedisUtils.set(getUserTokenKey(uid), token, TOKEN_EXPIRE_DAYS, TimeUnit.DAYS);
+        RedisUtils.set(getUserTokenKey(uid), token, RedisKey.TOKEN_EXPIRE_DAYS, TimeUnit.DAYS);
         return token;
     }
 
@@ -105,7 +80,7 @@ public class TokenUtils {
     }
 
     /**
-     *  获取redis中的userToken
+     * 获取redis中的userToken
      *
      * @param uid
      * @return
@@ -115,7 +90,7 @@ public class TokenUtils {
     }
 
     /**
-     *  移除redis中的userToken
+     * 移除redis中的userToken
      *
      * @param uid
      */
@@ -130,10 +105,10 @@ public class TokenUtils {
      * @return
      */
     public String getToken(HttpServletRequest request) {
-        String header = request.getHeader(HEADER_AUTHORIZATION);
+        String header = request.getHeader(CommonConstant.HEADER_AUTHORIZATION);
         return Optional.ofNullable(header)
-                .filter(h -> h.startsWith(AUTHORIZATION_SCHEMA))
-                .map(h -> h.replace(AUTHORIZATION_SCHEMA, ""))
+                .filter(h -> h.startsWith(CommonConstant.AUTHORIZATION_SCHEMA))
+                .map(h -> h.replace(CommonConstant.AUTHORIZATION_SCHEMA, ""))
                 .orElse(null);
     }
 
@@ -145,7 +120,7 @@ public class TokenUtils {
      */
     private Long getUidOrNull(String token) {
         return Optional.ofNullable(verifyToken(token))
-                .map(map -> map.get(UID_CLAIM))
+                .map(map -> map.get(CommonConstant.UID_CLAIM))
                 .map(Claim::asLong)
                 .orElse(null);
     }

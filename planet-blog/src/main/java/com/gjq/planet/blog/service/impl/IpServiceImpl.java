@@ -50,11 +50,16 @@ public class IpServiceImpl implements IpService {
 
 
     @Override
-    public void refreshIpInfoAsync(Long uid,String ip) {
+    public void refreshIpInfoAsync(Long uid, String ip) {
         User user = userDao.getById(uid);
         EXECUTOR.execute(() -> {
             updateIpInfo(user, ip);
         });
+    }
+
+    @Override
+    public IpDetail getIpDetail(String ip) {
+        return tryGetIpDetailOrNullThreeTimes(ip);
     }
 
     private void updateIpInfo(User user, String ip) {
@@ -115,10 +120,12 @@ public class IpServiceImpl implements IpService {
         IpDetail ipDetail = null;
         String url = "https://ip.taobao.com/outGetIpInfo?ip=" + ip + "&accessKey=alibaba-inc";
         try {
+            log.info("开始解析IP信息，ip:{}", ip);
             String data = HttpUtil.get(url);
             ApiResult<IpDetail> result = JsonUtils.toObj(data, new TypeReference<ApiResult<IpDetail>>() {
             });
             ipDetail = result.getData();
+            log.info("解析IP信息成功，ip:{}", ip);
             return ipDetail;
         } catch (Exception e) {
             return null;
@@ -130,7 +137,7 @@ public class IpServiceImpl implements IpService {
         for (int i = 0; i < 30; i++) {
             int finalI = i;
             EXECUTOR.execute(() -> {
-                IpDetail ipDetail = tryGetIpDetailOrNullThreeTimes("36.148.194.243");
+                IpDetail ipDetail = tryGetIpDetailOrNullThreeTimes("175.178.116.84");
                 if (Objects.nonNull(ipDetail)) {
                     Date date = new Date();
                     System.out.println(String.format("第%d次成功，目前用时%dms", finalI, date.getTime() - begin.getTime()));

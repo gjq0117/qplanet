@@ -1,8 +1,7 @@
 package com.gjq.planet.common.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -18,6 +17,9 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("article_relation")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ArticleRelation implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -25,25 +27,34 @@ public class ArticleRelation implements Serializable {
     /**
      * 主键
      */
-      @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
+    @TableField("article_id")
+    private Long articleId;
+
     /**
-     * 标签ID
+     * 关联目标ID
      */
-    @TableField("label_id")
-    private Long labelId;
+    @TableField("target_id")
+    private Long targetId;
+
+    /**
+     *  关联类型(0：标签；)
+     */
+    @TableField("type")
+    private Integer type;
 
     /**
      * 创建时间
      */
-    @TableField(value = "create_time",fill = FieldFill.INSERT)
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
     private Date createTime;
 
     /**
      * 最后更新时间
      */
-    @TableField(value = "update_time",fill = FieldFill.UPDATE)
+    @TableField(value = "update_time", fill = FieldFill.UPDATE)
     private Date updateTime;
 
     /**
@@ -51,7 +62,7 @@ public class ArticleRelation implements Serializable {
      */
     @TableField("deleted")
     @TableLogic
-    private Boolean deleted;
+    private Integer deleted;
 
 
 }

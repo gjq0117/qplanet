@@ -1,8 +1,7 @@
 package com.gjq.planet.common.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -18,6 +17,9 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("article")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Article implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -25,7 +27,7 @@ public class Article implements Serializable {
     /**
      * 主键
      */
-      @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
@@ -77,33 +79,48 @@ public class Article implements Serializable {
     private Long likeCount;
 
     /**
+     *  评论数
+     */
+    @TableField("comment_count")
+    private Long commentCount;
+
+    /**
      * 是否可见【0：否；1：是】
      */
     @TableField("view_status")
-    private Boolean viewStatus;
+    private Integer viewStatus;
 
     /**
      * 是否推荐【0：否；1：是】
      */
     @TableField("recommend_status")
-    private Boolean recommendStatus;
+    private Integer recommendStatus;
 
     /**
      * 是否启用评论【0：否；1：是】
      */
     @TableField("comment_status")
-    private Boolean commentStatus;
+    private Integer commentStatus;
+
+    /**
+     * 文章状态【0：保存；1：发布；2：下架】
+     */
+    @TableField("status")
+    private Integer status;
+
+    @TableField("publish_time")
+    private Date publishTime;
 
     /**
      * 创建时间
      */
-    @TableField(value = "create_time",fill = FieldFill.INSERT)
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
     private Date createTime;
 
     /**
      * 最后更新时间
      */
-    @TableField(value = "update_time",fill = FieldFill.UPDATE)
+    @TableField(value = "update_time", fill = FieldFill.UPDATE)
     private Date updateTime;
 
     /**
@@ -111,7 +128,7 @@ public class Article implements Serializable {
      */
     @TableLogic
     @TableField("deleted")
-    private Boolean deleted;
+    private Integer deleted;
 
 
 }

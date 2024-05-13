@@ -2,6 +2,7 @@ package com.gjq.planet.blog.service;
 
 import com.gjq.planet.common.domain.vo.req.webinfo.WebInfoUpdateReq;
 import com.gjq.planet.common.domain.vo.resp.webinfo.WebInfoResp;
+import com.gjq.planet.common.domain.vo.resp.webinfo.WebStatisticsInfo;
 
 /**
  * <p>
@@ -26,4 +27,17 @@ public interface IWebInfoService {
      * @param req
      */
     void updateById(WebInfoUpdateReq req);
+
+    /**
+     *  获取网站统计数据
+     *
+     * @return
+     */
+    WebStatisticsInfo getWebStatisticsInfo();
+
+    /**
+     *  网站访问量+1
+     */
+    void addVisitCount();
+
 }

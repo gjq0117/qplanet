@@ -1,6 +1,6 @@
 package com.gjq.planet.blog.service;
 
-import com.gjq.planet.common.domain.dto.RequestInfo;
+import com.gjq.planet.common.domain.entity.IpDetail;
 
 /**
  * @author: gjq0117
@@ -16,4 +16,12 @@ public interface IpService {
      * @param ip
      */
     void refreshIpInfoAsync(Long uid, String ip);
+
+    /**
+     *  获取IP详情
+     *
+     * @param ip
+     * @return
+     */
+    IpDetail getIpDetail(String ip);
 }

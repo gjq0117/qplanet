@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 @Getter
 public enum OssSceneEnum {
     BLOG(1, "博客", "/blog"),
+    USER(2,"用户", "/user")
     ;
 
     private final Integer type;

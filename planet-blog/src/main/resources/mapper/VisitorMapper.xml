@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gjq.planet.blog.mapper.VisitorMapper">
+
+    <select id="sevenDayVisitCount"
+            resultType="com.gjq.planet.common.domain.vo.resp.statistics.WebRecentVisitResp">
+        SELECT a.date as dates ,IFNULL(b.count,0) as visits
+        FROM(
+                SELECT CURDATE() as date
+                UNION ALL
+                SELECT DATE_SUB(CURDATE(),INTERVAL 1 day)as date
+                UNION ALL
+                SELECT DATE_SUB(CURDATE(),INTERVAL 2 day)as date
+                UNION ALL
+                SELECT DATE_SUB(CURDATE(),INTERVAL 3 day)as date
+                UNION ALL
+                SELECT DATE_SUB(CURDATE(),INTERVAL 4 day)as date
+                UNION ALL
+                SELECT DATE_SUB(CURDATE(),INTERVAL 5 day)as date
+                UNION ALL
+                SELECT DATE_SUB(CURDATE(),INTERVAL 6 day)as date
+            )a
+        LEFT JOIN(
+            select date_format(create_time,'%Y-%m-%d') as date,
+            count(1) as `count`
+            from visitor
+            where create_time >= date(now()) - interval 7 day
+              and resource_type = 0
+            group by day(create_time)
+        ) b on a.date = b.date
+        ORDER BY a.date asc
+    </select>
+</mapper>

@@ -29,19 +29,19 @@ public class TokenInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (handler instanceof HandlerMethod) {
             HandlerMethod method = (HandlerMethod) handler;
+            Long uid = tokenUtils.getUidOrNull(request);
+            request.setAttribute(UID, uid);
             // 判断方法上是否有@NotToken注解
             boolean notToken = method.getMethod().isAnnotationPresent(NotToken.class);
             // 不需要token，直接返回
             if (notToken) {
                 return true;
             }
-            Long uid = tokenUtils.getUidOrNull(request);
             if (Objects.isNull(uid)) {
                 // 用户没有登录态
                 HttpErrorEnum.ACCESS_DENIED.sendHttpError(response);
                 return false;
             }
-            request.setAttribute(UID, uid);
         }
         return true;
     }

@@ -2,6 +2,7 @@ package com.gjq.planet.blog.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -33,8 +34,7 @@ public class JsonUtils {
 
     public static <T> List<T> toList(String str, Class<T> clz) {
         try {
-            return jsonMapper.readValue(str, new TypeReference<List<T>>() {
-            });
+            return jsonMapper.readValue(str, getCollectionType(List.class, clz));
         } catch (JsonProcessingException e) {
             throw new UnsupportedOperationException(e);
         }
@@ -62,6 +62,17 @@ public class JsonUtils {
         } catch (Exception e) {
             throw new UnsupportedOperationException(e);
         }
+    }
+
+    /**
+     *  取泛型的Collection Type
+     *
+     * @param collectionClass
+     * @param elementClasses
+     * @return JavaType Java类型
+     */
+    private static JavaType getCollectionType(Class<?> collectionClass, Class<?>... elementClasses) {
+        return jsonMapper.getTypeFactory().constructParametricType(collectionClass, elementClasses);
     }
 
 }

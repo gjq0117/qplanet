@@ -17,7 +17,7 @@ import java.util.Date;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("`user`")
+@TableName(value = "user", autoResultMap = true)
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -111,6 +111,8 @@ public class User implements Serializable {
 
     /**
      * 用户类型【0：admin；1：管理员；2：普通用户】
+     *
+     * @see com.gjq.planet.common.enums.SystemRoleEnum
      */
     @TableField("user_type")
     private Integer userType;

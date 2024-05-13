@@ -2,6 +2,7 @@ package com.gjq.planet.blog.service.impl;
 
 import com.gjq.planet.blog.utils.AssertUtil;
 import com.gjq.planet.blog.utils.RequestHolder;
+import com.gjq.planet.common.domain.dto.RequestInfo;
 import com.gjq.planet.oss.domain.req.OssReq;
 import com.gjq.planet.oss.domain.req.UploadUrlReq;
 import com.gjq.planet.oss.domain.resp.OssResp;
@@ -24,9 +25,11 @@ public class OssServiceImpl implements OssService {
 
     @Override
     public OssResp getUploadUrl(UploadUrlReq req) {
+        RequestInfo requestInfo = RequestHolder.get();
+        AssertUtil.isNotEmpty(requestInfo, "请先登录!!!");
         Long uid = RequestHolder.get().getUid();
         OssSceneEnum sceneEnum = OssSceneEnum.of(req.getScene());
-        AssertUtil.isNotEmpty(sceneEnum, "场景错误!!");
+        AssertUtil.isNotEmpty(sceneEnum, "场景错误!!!");
         OssReq ossReq = OssReq.builder()
                 .fileName(req.getFileName())
                 .filePath(sceneEnum.getPath())

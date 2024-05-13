@@ -45,6 +45,6 @@ public class IpInfo implements Serializable {
      * @param ip
      */
     public boolean needRefreshIpDetail(String ip) {
-        return Objects.equals(ip, updateIp);
+        return !Objects.equals(ip, updateIp);
     }
 }

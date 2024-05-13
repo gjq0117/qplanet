@@ -2,16 +2,18 @@ package com.gjq.planet.blog.controller;
 
 
 import com.gjq.planet.blog.annotation.NotToken;
+import com.gjq.planet.blog.annotation.PlanetAdmin;
 import com.gjq.planet.blog.service.IWebInfoService;
 import com.gjq.planet.blog.utils.ApiResult;
 import com.gjq.planet.common.domain.vo.req.webinfo.WebInfoUpdateReq;
 import com.gjq.planet.common.domain.vo.resp.webinfo.WebInfoResp;
+import com.gjq.planet.common.domain.vo.resp.webinfo.WebStatisticsInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.stereotype.Controller;
+import javax.validation.Valid;
 
 /**
  * <p>
@@ -36,11 +38,19 @@ public class WebInfoController {
         return ApiResult.success(webInfoService.getWebInfo());
     }
 
+    @PlanetAdmin
     @ApiOperation("更新网站信息")
     @PutMapping("/update")
-    public ApiResult<Void> update(@RequestBody WebInfoUpdateReq req) {
+    public ApiResult<Void> update(@RequestBody @Valid WebInfoUpdateReq req) {
         webInfoService.updateById(req);
         return ApiResult.success();
+    }
+
+    @NotToken
+    @ApiOperation("获取网站统计信息")
+    @GetMapping("/getWebStatisticsInfo")
+    public ApiResult<WebStatisticsInfo> getWebStatisticsInfo() {
+        return ApiResult.success(webInfoService.getWebStatisticsInfo());
     }
 }
 

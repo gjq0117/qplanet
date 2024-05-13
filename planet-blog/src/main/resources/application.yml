@@ -4,9 +4,9 @@ spring:
   application:
     name: plant-blog
   profiles:
-    active: test
+    active: prod
   datasource:
-    url: jdbc:mysql://${planet.mysql.ip}:${planet.mysql.port}/${planet.mysql.db}?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://${planet.mysql.ip}:${planet.mysql.port}/${planet.mysql.db}?useUnicode=true&&useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     username: ${planet.mysql.username}
     password: ${planet.mysql.password}
     driver-class-name: com.mysql.jdbc.Driver
@@ -21,10 +21,24 @@ spring:
     timeout: 1800000
     # 设置密码
     password: ${planet.redis.password}
+  # 邮箱配置
+  mail:
+    host: ${planet.mail.host}
+    port: ${planet.mail.port}
+    protocol: ${planet.mail.protocol}
+    username: ${planet.mail.username}
+    password: ${planet.mail.password}
+    properties:
+      mail:
+        smtp:
+          socketFactory:
+            port: ${planet.mail.port}
+            class: javax.net.ssl.SSLSocketFactory
+          ssl:
+            enable: true
   jackson:
-    serialization:
-      #将data类型转换为时间戳再返回给前端
-      write-dates-as-timestamps: true
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
   mvc:
     pathmatch:
       # swagger新UI所需配置
@@ -43,7 +57,8 @@ oss:
   access-key: ${planet.oss.access-key}
   secret-key: ${planet.oss.secret-key}
   bucket-name: ${planet.oss.bucket-name}
-
-
 jwt:
   secret: ${planet.jwt.secret}
+logging:
+  file:
+    path: ${planet.log.path}

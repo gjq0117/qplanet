@@ -32,4 +32,43 @@ public class UserDao extends ServiceImpl<UserMapper, User> {
                 .eq(User::getEmail, account)
                 .one();
     }
+
+    public Boolean isExistUserName(String userName) {
+        return lambdaQuery()
+                .eq(User::getUsername, userName)
+                .count() > 0;
+    }
+
+    public Boolean isExistEmail(String email) {
+        return lambdaQuery()
+                .eq(User::getEmail, email)
+                .count() > 0;
+    }
+
+    public User getUserByEmail(String email) {
+        return lambdaQuery()
+                .eq(User::getEmail, email)
+                .one();
+    }
+
+    public void modifyPwdByEmail(User user) {
+        lambdaUpdate()
+                .set(User::getPassword, user.getPassword())
+                .eq(User::getEmail, user.getEmail())
+                .update();
+    }
+
+    public User getByNickName(String nickname) {
+        return lambdaQuery()
+                .eq(User::getNickname, nickname)
+                .one();
+    }
+
+    public Boolean changeUserStatus(Long uid, Integer status) {
+        return lambdaUpdate()
+                .set(User::getUserStatus, status)
+                .eq(User::getId, uid)
+                .update();
+    }
+
 }
