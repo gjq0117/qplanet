@@ -17,21 +17,18 @@ public interface IWebInfoService {
     /**
      *  获取网站基本信息
      *
-     * @return
      */
     WebInfoResp getWebInfo();
 
     /**
      *  通过id更新网站信息
      *
-     * @param req
      */
-    void updateById(WebInfoUpdateReq req);
+    void updateOrSave(WebInfoUpdateReq req);
 
     /**
      *  获取网站统计数据
      *
-     * @return
      */
     WebStatisticsInfo getWebStatisticsInfo();
 

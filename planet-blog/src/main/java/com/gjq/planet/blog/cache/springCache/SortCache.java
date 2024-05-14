@@ -43,7 +43,7 @@ public class SortCache {
     @Cacheable(cacheNames = "sortList")
     public List<SortResp> getSortList() {
         List<Sort> sortList = sortDao.list();
-        if (Objects.isNull(sortList) || sortList.size() <= 0) {
+        if (Objects.isNull(sortList) || sortList.isEmpty()) {
             return null;
         }
         return sortList.stream().map(sort -> {

@@ -142,7 +142,8 @@ public class SortServiceImpl implements ISortService {
     @Override
     public List<HasArticleSortResp> getSortAndNewArticleForSix() {
         List<HasArticleSortResp> sortAndArticle = this.getSortAndArticle();
-        return sortAndArticle.subList(0, sortAndArticle.size() > 6 ? 6 : sortAndArticle.size());
+        // 每个分类取前六个
+        return sortAndArticle.stream().limit(6).collect(Collectors.toList());
     }
 
     @Override
@@ -150,7 +151,7 @@ public class SortServiceImpl implements ISortService {
         List<HasArticleSortResp> result = null;
         // 查缓存
         result = sortListCache.getList();
-        if (Objects.nonNull(result) && result.size() > 0) {
+        if (Objects.nonNull(result) && !result.isEmpty()) {
             return result;
         }
         // 查库
@@ -161,7 +162,7 @@ public class SortServiceImpl implements ISortService {
         List<SortResp> hasArticleSort = sortList.stream().filter(sortResp ->
                 sortResp.getArticleNum() > 0
         ).collect(Collectors.toList());
-        if (Objects.nonNull(hasArticleSort) && hasArticleSort.size() > 0) {
+        if (!hasArticleSort.isEmpty()) {
             result = hasArticleSort.stream().map(sortResp -> {
                 HasArticleSortResp hasArticleSortResp = new HasArticleSortResp();
                 BeanUtils.copyProperties(sortResp, hasArticleSortResp);
@@ -185,7 +186,7 @@ public class SortServiceImpl implements ISortService {
     public SortPageResp getSortPageResp(Long sortId, Long labelId) {
         SortPageResp result = null;
         List<ArticleResp> articleList = articleService.getArticleList();
-        if (Objects.nonNull(articleList) && articleList.size() > 0) {
+        if (Objects.nonNull(articleList) && !articleList.isEmpty()) {
             // 需要返回的文章
             List<ArticleResp> articleRespList = articleList.stream().filter(articleResp -> {
                 boolean sortFlag = Objects.nonNull(articleResp.getSortResp()) && sortId.equals(articleResp.getSortResp().getId());

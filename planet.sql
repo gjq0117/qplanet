@@ -59,7 +59,7 @@ CREATE TABLE `article_relation`
     `update_time` datetime(0) NULL DEFAULT NULL COMMENT '最后更新时间',
     `deleted`     tinyint(1) UNSIGNED ZEROFILL NULL DEFAULT 0 COMMENT '是否删除【0：未删除；1：删除】',
     PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 34 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文章多关联外键表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文章多关联外键表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for comment
@@ -96,7 +96,7 @@ CREATE TABLE `label`
     `update_time`       datetime(0) NULL DEFAULT NULL COMMENT '最后更新时间',
     `deleted`           tinyint(1) UNSIGNED ZEROFILL NULL DEFAULT 0 COMMENT '是否删除【0：未删除；1：删除】',
     PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '标签信息' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '标签信息' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for sort
@@ -114,7 +114,7 @@ CREATE TABLE `sort`
     `update_time`      datetime(0) NULL DEFAULT NULL COMMENT '最后更新时间',
     `deleted`          tinyint(1) UNSIGNED ZEROFILL NULL DEFAULT 0 COMMENT '是否删除【0：未删除 1：删除】',
     PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 35 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '分类信息' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '分类信息' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for user
@@ -141,7 +141,7 @@ CREATE TABLE `user`
     `update_time`      datetime(0) NULL DEFAULT NULL COMMENT '最后更新时间',
     `deleted`          tinyint(1) UNSIGNED ZEROFILL NULL DEFAULT 0 COMMENT '是否删除【0：未删除；1：删除】',
     PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户信息' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户信息' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for visitor
@@ -162,7 +162,7 @@ CREATE TABLE `visitor`
     `deleted`       tinyint(1) NULL DEFAULT 0 COMMENT '是否删除【0：未删除；1：删除】',
     PRIMARY KEY (`id`) USING BTREE,
     INDEX           `ip_index`(`ip`) USING BTREE COMMENT 'IP索引'
-) ENGINE = InnoDB AUTO_INCREMENT = 76 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '网站访问信息' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '网站访问信息' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for web_info
@@ -183,7 +183,7 @@ CREATE TABLE `web_info`
     `update_time`      datetime(0) NULL DEFAULT NULL COMMENT '最后更新时间',
     `deleted`          tinyint(1) UNSIGNED ZEROFILL NULL DEFAULT 0 COMMENT '是否删除 【0：未删除；1：删除】',
     PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '网站信息' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '网站信息' ROW_FORMAT = Dynamic;
 
 SET
 FOREIGN_KEY_CHECKS = 1;

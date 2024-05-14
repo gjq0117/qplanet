@@ -43,12 +43,11 @@ public class WebInfoServiceImpl implements IWebInfoService {
     @Override
     public WebInfoResp getWebInfo() {
         WebInfo webInfo = webInfoCache.getWebInfo();
-        WebInfoResp result = WebInfoBuilder.buildResp(webInfo);
-        return result;
+        return WebInfoBuilder.buildResp(webInfo);
     }
 
     @Override
-    public void updateById(WebInfoUpdateReq req) {
+    public void updateOrSave(WebInfoUpdateReq req) {
         AssertUtil.isNotEmpty(req, "更新webInfo时，客户端传入过来的WebInfoUpdateReq为空");
         WebInfo webInfo = WebInfoBuilder.buildFromReq(req);
         if (Objects.isNull(webInfo.getId())) {
@@ -64,12 +63,12 @@ public class WebInfoServiceImpl implements IWebInfoService {
     @Override
     public WebStatisticsInfo getWebStatisticsInfo() {
         List<SortResp> list = sortService.list();
-        if (Objects.isNull(list) || list.isEmpty()) {
-            return null;
+        int sortCount = 0;
+        if (Objects.nonNull(list)) {
+            sortCount = Math.toIntExact(list.stream().filter(sortResp ->
+                    sortResp.getArticleNum() > 0
+            ).count());
         }
-        Integer sortCount = Math.toIntExact(list.stream().filter(sortResp ->
-                sortResp.getArticleNum() > 0
-        ).count());
         return WebStatisticsInfo.builder()
                 .articleCount(articleDao.getPublishCount())
                 .sortCount(sortCount)
@@ -81,7 +80,10 @@ public class WebInfoServiceImpl implements IWebInfoService {
     public void addVisitCount() {
         // 更新网站访问量
         WebInfo webInfo = webInfoDao.getFirstOne();
-        webInfo.setViewCount(Optional.ofNullable(webInfo).map(WebInfo::getViewCount).orElse(0L) + 1);
+        if (Objects.isNull(webInfo)) {
+            return;
+        }
+        webInfo.setViewCount(Optional.of(webInfo).map(WebInfo::getViewCount).orElse(0L) + 1);
         webInfoDao.updateById(webInfo);
     }
 

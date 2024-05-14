@@ -33,16 +33,16 @@ public class WebInfoController {
 
     @NotToken
     @ApiOperation("获取网站基本信息")
-    @GetMapping("/getOne")
+    @GetMapping("/getWebInfo")
     public ApiResult<WebInfoResp> getWebInfo() {
         return ApiResult.success(webInfoService.getWebInfo());
     }
 
     @PlanetAdmin
     @ApiOperation("更新网站信息")
-    @PutMapping("/update")
-    public ApiResult<Void> update(@RequestBody @Valid WebInfoUpdateReq req) {
-        webInfoService.updateById(req);
+    @PutMapping("/updateOrSave")
+    public ApiResult<Void> updateOrSave(@RequestBody @Valid WebInfoUpdateReq req) {
+        webInfoService.updateOrSave(req);
         return ApiResult.success();
     }
 

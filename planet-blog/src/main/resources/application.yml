@@ -4,7 +4,7 @@ spring:
   application:
     name: plant-blog
   profiles:
-    active: prod
+    active: myTest
   datasource:
     url: jdbc:mysql://${planet.mysql.ip}:${planet.mysql.port}/${planet.mysql.db}?useUnicode=true&&useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
     username: ${planet.mysql.username}
@@ -16,7 +16,7 @@ spring:
     # Redis服务器端口号
     port: ${planet.redis.port}
     # 使用的数据库索引，默认是0
-    database: 0
+    database: ${planet.redis.database}
     # 连接超时时间
     timeout: 1800000
     # 设置密码
@@ -61,4 +61,4 @@ jwt:
   secret: ${planet.jwt.secret}
 logging:
   file:
-    path: ${planet.log.path}
+    path: \logs\planet\blog

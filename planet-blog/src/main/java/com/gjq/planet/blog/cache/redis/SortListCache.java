@@ -50,7 +50,7 @@ public class SortListCache {
     /**
      * 设置List缓存（hash）如果没有hash表就创建
      *
-     * @param articleSortRespList
+     * @param articleSortRespList 文章列表
      */
     public void setList(List<HasArticleSortResp> articleSortRespList) {
         // 倒序存
@@ -63,7 +63,7 @@ public class SortListCache {
     /**
      * 通过ID设置缓存
      *
-     * @param sortId
+     * @param sortId 分类ID
      */
     public void setById(Long sortId) {
         HasArticleSortResp resp = new HasArticleSortResp();
