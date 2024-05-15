@@ -34,7 +34,11 @@ public class SortListCache {
     /**
      * key
      */
-    private static final String key = RedisKey.getKey(RedisKey.SORT_ARTICLE_LIST);
+    public static final String key = RedisKey.getKey(RedisKey.SORT_ARTICLE_LIST);
+    /**
+     *  过期时间
+     */
+    public static final int SORT_ARTICLE_LIST_EXPIRE_DAYS = RedisKey.SORT_ARTICLE_LIST_EXPIRE_DAYS;
 
     @Autowired
     private SortDao sortDao;
@@ -56,7 +60,7 @@ public class SortListCache {
         // 倒序存
         for (int i = 0; i < articleSortRespList.size(); i++) {
             HasArticleSortResp resp = articleSortRespList.get(articleSortRespList.size() - i - 1);
-            RedisUtils.hset(key, String.valueOf(resp.getId()), JsonUtils.toStr(resp), RedisKey.SORT_ARTICLE_LIST_EXPIRE_DAYS, TimeUnit.DAYS);
+            RedisUtils.hset(key, String.valueOf(resp.getId()), JsonUtils.toStr(resp), SORT_ARTICLE_LIST_EXPIRE_DAYS, TimeUnit.DAYS);
         }
     }
 
@@ -74,7 +78,7 @@ public class SortListCache {
                 .sorted(Comparator.comparing(ArticleResp::getPublishTime).reversed())
                 .collect(Collectors.toList());
         resp.setArticleRespList(articleRespList);
-        RedisUtils.hset(key, String.valueOf(sortId), JsonUtils.toStr(resp), RedisKey.SORT_ARTICLE_LIST_EXPIRE_DAYS, TimeUnit.DAYS);
+        RedisUtils.hset(key, String.valueOf(sortId), JsonUtils.toStr(resp), SORT_ARTICLE_LIST_EXPIRE_DAYS, TimeUnit.DAYS);
     }
 
     /**
@@ -83,7 +87,7 @@ public class SortListCache {
      * @param resp
      */
     public void setOne(HasArticleSortResp resp) {
-        RedisUtils.hset(key, String.valueOf(resp.getId()), JsonUtils.toStr(resp), RedisKey.SORT_ARTICLE_LIST_EXPIRE_DAYS, TimeUnit.DAYS);
+        RedisUtils.hset(key, String.valueOf(resp.getId()), JsonUtils.toStr(resp), SORT_ARTICLE_LIST_EXPIRE_DAYS, TimeUnit.DAYS);
     }
 
     public HasArticleSortResp getById(Long sortId) {
