@@ -3,7 +3,7 @@ package com.gjq.planet.blog.event.listener;
 import com.gjq.planet.blog.dao.UserDao;
 import com.gjq.planet.blog.event.UserLogoutSuccessEvent;
 import com.gjq.planet.common.domain.entity.User;
-import com.gjq.planet.common.enums.UserActiveStatusEnum;
+import com.gjq.planet.common.enums.blog.UserActiveStatusEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;

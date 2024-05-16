@@ -2,6 +2,7 @@ package com.gjq.planet.common.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import com.gjq.planet.common.enums.blog.SystemRoleEnum;
 import lombok.*;
 
 import java.io.Serializable;
@@ -112,7 +113,7 @@ public class User implements Serializable {
     /**
      * 用户类型【0：admin；1：管理员；2：普通用户】
      *
-     * @see com.gjq.planet.common.enums.SystemRoleEnum
+     * @see SystemRoleEnum
      */
     @TableField("user_type")
     private Integer userType;

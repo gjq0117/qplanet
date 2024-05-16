@@ -4,7 +4,7 @@ import com.gjq.planet.blog.dao.UserDao;
 import com.gjq.planet.blog.exception.HttpErrorEnum;
 import com.gjq.planet.blog.service.IUserService;
 import com.gjq.planet.common.domain.entity.User;
-import com.gjq.planet.common.enums.YesOrNoEnum;
+import com.gjq.planet.common.enums.blog.YesOrNoEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;

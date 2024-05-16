@@ -1,6 +1,7 @@
 package com.gjq.planet.common.domain.vo.resp.user;
 
 import com.gjq.planet.common.domain.entity.IpInfo;
+import com.gjq.planet.common.enums.blog.SystemRoleEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -91,7 +92,7 @@ public class UserListResp {
     /**
      * 用户类型【0：admin；1：管理员；2：普通用户】
      *
-     * @see com.gjq.planet.common.enums.SystemRoleEnum
+     * @see SystemRoleEnum
      */
     @ApiModelProperty("用户类型【0：admin；1：管理员；2：普通用户】")
     private Integer userType;

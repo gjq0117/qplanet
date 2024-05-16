@@ -1,6 +1,6 @@
 package com.gjq.planet.common.valid.validator;
 
-import com.gjq.planet.common.enums.GenderEnum;
+import com.gjq.planet.common.enums.blog.GenderEnum;
 import com.gjq.planet.common.valid.Gender;
 
 import javax.validation.ConstraintValidator;

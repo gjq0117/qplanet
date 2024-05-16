@@ -1,4 +1,4 @@
-package com.gjq.planet.common.enums;
+package com.gjq.planet.common.enums.blog;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
