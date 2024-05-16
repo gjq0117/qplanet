@@ -1,6 +1,6 @@
 package com.gjq.planet.common.valid.validator;
 
-import com.gjq.planet.common.enums.SystemRoleEnum;
+import com.gjq.planet.common.enums.blog.SystemRoleEnum;
 import com.gjq.planet.common.valid.SystemRole;
 
 import javax.validation.ConstraintValidator;

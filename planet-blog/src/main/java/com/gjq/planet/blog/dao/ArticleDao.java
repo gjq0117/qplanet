@@ -4,8 +4,8 @@ package com.gjq.planet.blog.dao;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gjq.planet.blog.mapper.ArticleMapper;
 import com.gjq.planet.common.domain.entity.Article;
-import com.gjq.planet.common.enums.ArticleStatusEnum;
-import com.gjq.planet.common.enums.YesOrNoEnum;
+import com.gjq.planet.common.enums.blog.ArticleStatusEnum;
+import com.gjq.planet.common.enums.blog.YesOrNoEnum;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

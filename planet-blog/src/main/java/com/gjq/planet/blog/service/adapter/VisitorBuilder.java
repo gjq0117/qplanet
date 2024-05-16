@@ -2,6 +2,7 @@ package com.gjq.planet.blog.service.adapter;
 
 import com.gjq.planet.common.domain.entity.IpDetail;
 import com.gjq.planet.common.domain.entity.Visitor;
+import com.gjq.planet.common.enums.blog.VisitTypeEnum;
 
 /**
  * @author: gjq0117
@@ -18,7 +19,7 @@ public class VisitorBuilder {
      * @param resourceId
      * @param resourceType
      * @return
-     * @see com.gjq.planet.common.enums.VisitTypeEnum  resourceType
+     * @see VisitTypeEnum  resourceType
      */
     public static Visitor buildVisitor(IpDetail ipDetail, Long uid, Long resourceId, Integer resourceType) {
         return Visitor.builder()

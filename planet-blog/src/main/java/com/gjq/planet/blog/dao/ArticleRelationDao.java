@@ -2,7 +2,7 @@ package com.gjq.planet.blog.dao;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.gjq.planet.common.enums.ArticleRelationEnum;
+import com.gjq.planet.common.enums.blog.ArticleRelationEnum;
 import com.gjq.planet.blog.mapper.ArticleRelationMapper;
 import com.gjq.planet.common.domain.entity.ArticleRelation;
 import org.springframework.stereotype.Service;

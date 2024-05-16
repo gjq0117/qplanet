@@ -12,6 +12,7 @@
         <module>planet-common</module>
         <module>planet-blog</module>
         <module>planet-framework</module>
+        <module>planet-im</module>
     </modules>
 
     <properties>

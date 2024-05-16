@@ -1,6 +1,6 @@
 package com.gjq.planet.common.domain.vo.req.article;
 
-import com.gjq.planet.common.enums.ArticleAttributeStatusEnum;
+import com.gjq.planet.common.enums.blog.ArticleAttributeStatusEnum;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import lombok.Data;

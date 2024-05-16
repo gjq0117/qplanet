@@ -14,8 +14,8 @@ import org.springframework.beans.BeanUtils;
 
 import java.util.List;
 
-import static com.gjq.planet.common.enums.YesOrNoEnum.NO;
-import static com.gjq.planet.common.enums.YesOrNoEnum.YES;
+import static com.gjq.planet.common.enums.blog.YesOrNoEnum.NO;
+import static com.gjq.planet.common.enums.blog.YesOrNoEnum.YES;
 
 /**
  * @author: gjq0117

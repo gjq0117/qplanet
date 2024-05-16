@@ -8,9 +8,9 @@ import com.gjq.planet.common.domain.vo.req.user.ModifyUserInfoReq;
 import com.gjq.planet.common.domain.vo.req.user.UserRegisterReq;
 import com.gjq.planet.common.domain.vo.resp.user.UserInfoResp;
 import com.gjq.planet.common.domain.vo.resp.user.UserListResp;
-import com.gjq.planet.common.enums.GenderEnum;
-import com.gjq.planet.common.enums.SystemRoleEnum;
-import com.gjq.planet.common.enums.YesOrNoEnum;
+import com.gjq.planet.common.enums.blog.GenderEnum;
+import com.gjq.planet.common.enums.blog.SystemRoleEnum;
+import com.gjq.planet.common.enums.blog.YesOrNoEnum;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 

@@ -20,7 +20,7 @@ import com.gjq.planet.common.domain.entity.Visitor;
 import com.gjq.planet.common.domain.vo.req.visitor.VisitorListReq;
 import com.gjq.planet.common.domain.vo.resp.visitor.VisitorListResp;
 import com.gjq.planet.common.domain.vo.resp.visitor.VisitorProvinceResp;
-import com.gjq.planet.common.enums.VisitTypeEnum;
+import com.gjq.planet.common.enums.blog.VisitTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
