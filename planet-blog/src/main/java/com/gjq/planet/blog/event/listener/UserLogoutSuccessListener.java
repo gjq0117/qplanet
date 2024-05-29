@@ -22,7 +22,6 @@ public class UserLogoutSuccessListener {
     /**
      * 用户退出登录改变状态
      *
-     * @param userLogoutSuccessEvent
      */
     @EventListener(classes = UserLogoutSuccessEvent.class)
     public void updateStatus(UserLogoutSuccessEvent userLogoutSuccessEvent) {

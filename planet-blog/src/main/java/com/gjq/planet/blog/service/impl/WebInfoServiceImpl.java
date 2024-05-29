@@ -6,7 +6,7 @@ import com.gjq.planet.blog.dao.WebInfoDao;
 import com.gjq.planet.blog.service.ISortService;
 import com.gjq.planet.blog.service.IWebInfoService;
 import com.gjq.planet.blog.service.adapter.WebInfoBuilder;
-import com.gjq.planet.blog.utils.AssertUtil;
+import com.gjq.planet.common.utils.AssertUtil;
 import com.gjq.planet.common.domain.entity.WebInfo;
 import com.gjq.planet.common.domain.vo.req.webinfo.WebInfoUpdateReq;
 import com.gjq.planet.common.domain.vo.resp.sort.SortResp;

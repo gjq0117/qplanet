@@ -2,9 +2,9 @@ package com.gjq.planet.blog.cache.redis;
 
 import com.gjq.planet.blog.dao.ArticleDao;
 import com.gjq.planet.blog.service.IArticleService;
-import com.gjq.planet.blog.utils.JsonUtils;
-import com.gjq.planet.blog.utils.RedisUtils;
-import com.gjq.planet.common.constant.RedisKey;
+import com.gjq.planet.common.utils.JsonUtils;
+import com.gjq.planet.common.utils.RedisUtils;
+import com.gjq.planet.common.constant.BlogRedisKey;
 import com.gjq.planet.common.domain.entity.Article;
 import com.gjq.planet.common.domain.vo.resp.article.ArticleResp;
 import org.apache.commons.lang3.StringUtils;
@@ -29,7 +29,7 @@ public class ArticleRespListCache {
     /**
      * key
      */
-    private static final String key = RedisKey.getKey(RedisKey.ARTICLE_LIST);
+    private static final String key = BlogRedisKey.getKey(BlogRedisKey.ARTICLE_LIST);
 
     @Autowired
     private ArticleDao articleDao;
@@ -47,7 +47,7 @@ public class ArticleRespListCache {
     public void setList(List<ArticleResp> articleListRespList) {
         for (ArticleResp resp :
                 articleListRespList) {
-            RedisUtils.hset(key, String.valueOf(resp.getId()), JsonUtils.toStr(resp), RedisKey.ARTICLE_LIST_EXPIRE_DAYS, TimeUnit.DAYS);
+            RedisUtils.hset(key, String.valueOf(resp.getId()), JsonUtils.toStr(resp), BlogRedisKey.ARTICLE_LIST_EXPIRE_DAYS, TimeUnit.DAYS);
         }
     }
 
@@ -57,7 +57,7 @@ public class ArticleRespListCache {
      * @param resp
      */
     public void setOne(ArticleResp resp) {
-        RedisUtils.hset(key, String.valueOf(resp.getId()), JsonUtils.toStr(resp), RedisKey.ARTICLE_LIST_EXPIRE_DAYS, TimeUnit.DAYS);
+        RedisUtils.hset(key, String.valueOf(resp.getId()), JsonUtils.toStr(resp), BlogRedisKey.ARTICLE_LIST_EXPIRE_DAYS, TimeUnit.DAYS);
     }
 
     /**
@@ -67,7 +67,7 @@ public class ArticleRespListCache {
     public void setById(Long id) {
         Article article = articleDao.getById(id);
         ArticleResp articleResp = articleService.transToResp(article);
-        RedisUtils.hset(key, String.valueOf(id), JsonUtils.toStr(articleResp), RedisKey.ARTICLE_LIST_EXPIRE_DAYS, TimeUnit.DAYS);
+        RedisUtils.hset(key, String.valueOf(id), JsonUtils.toStr(articleResp), BlogRedisKey.ARTICLE_LIST_EXPIRE_DAYS, TimeUnit.DAYS);
     }
 
     /**

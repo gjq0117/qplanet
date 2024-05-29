@@ -1,37 +1,54 @@
 package com.gjq.planet.blog.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.lang.Pair;
 import cn.hutool.crypto.SecureUtil;
+import com.gjq.planet.blog.cache.redis.batch.UserSummerInfoCache;
 import com.gjq.planet.blog.dao.UserDao;
 import com.gjq.planet.blog.event.UserLoginSuccessEvent;
 import com.gjq.planet.blog.event.UserLogoutSuccessEvent;
 import com.gjq.planet.blog.event.UserRegisterSuccessEvent;
 import com.gjq.planet.blog.mapper.UserMapper;
 import com.gjq.planet.blog.service.IUserService;
+import com.gjq.planet.blog.service.adapter.GroupMemberBuilder;
 import com.gjq.planet.blog.service.adapter.UserBuilder;
-import com.gjq.planet.blog.utils.*;
+import com.gjq.planet.blog.utils.ChatMemberUtils;
+import com.gjq.planet.blog.utils.EmailUtil;
+import com.gjq.planet.blog.utils.TokenUtils;
+import com.gjq.planet.common.constant.BlogRedisKey;
 import com.gjq.planet.common.constant.CommonConstant;
 import com.gjq.planet.common.constant.EmailConstant;
 import com.gjq.planet.common.constant.MailConstant;
-import com.gjq.planet.common.constant.RedisKey;
 import com.gjq.planet.common.domain.dto.RequestInfo;
 import com.gjq.planet.common.domain.entity.User;
+import com.gjq.planet.common.domain.vo.req.CursorPageBaseReq;
+import com.gjq.planet.common.domain.vo.req.groupmember.GroupMemberReq;
 import com.gjq.planet.common.domain.vo.req.user.*;
+import com.gjq.planet.common.domain.vo.resp.CursorPageBaseResp;
+import com.gjq.planet.common.domain.vo.resp.groupmember.GroupMemberResp;
 import com.gjq.planet.common.domain.vo.resp.user.LoginResp;
 import com.gjq.planet.common.domain.vo.resp.user.UserInfoResp;
 import com.gjq.planet.common.domain.vo.resp.user.UserListResp;
+import com.gjq.planet.common.domain.vo.resp.user.UserSummerInfoResp;
 import com.gjq.planet.common.enums.blog.SystemRoleEnum;
+import com.gjq.planet.common.enums.blog.UserActiveStatusEnum;
 import com.gjq.planet.common.enums.blog.YesOrNoEnum;
+import com.gjq.planet.common.utils.AssertUtil;
+import com.gjq.planet.common.utils.CommonUtil;
+import com.gjq.planet.common.utils.RedisUtils;
+import com.gjq.planet.common.utils.RequestHolder;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 
 /**
@@ -53,6 +70,9 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     private EmailUtil emailUtil;
+
+    @Autowired
+    private UserSummerInfoCache userSummerInfoCache;
 
     @Autowired
     private ApplicationEventPublisher applicationEventPublisher;
@@ -129,13 +149,14 @@ public class UserServiceImpl implements IUserService {
         //2、随机生成一个数组验证码
         String code = CommonUtil.getRandomCode(EmailConstant.REGISTER_CODE_LENGTH);
         //3、将验证码存放到redis并设置一定的过期时间
-        RedisUtils.set(redisKey, code, RedisKey.REGISTER_CODE_EXPIRE_MINUTES, TimeUnit.MINUTES);
+        RedisUtils.set(redisKey, code, BlogRedisKey.REGISTER_CODE_EXPIRE_MINUTES, TimeUnit.MINUTES);
         //4、发送邮箱给用户
         emailUtil.sendHtmlMail(req.getEmail(), MailConstant.MAIL_SUBJECT, MailConstant.getRegCodeMailText(code, req.getUsername()));
         return randomKey;
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public void register(UserRegisterReq req) {
         AssertUtil.isFalse(isExistUserName(req.getUsername()), "用户名存在啦！再换一个吧~");
         AssertUtil.isFalse(isExistEmail(req.getEmail()), "邮箱已经被注册了噢！再换一个吧~");
@@ -168,7 +189,7 @@ public class UserServiceImpl implements IUserService {
         String randomKey = UUID.randomUUID().toString().replace("-", "");
         String redisKey = getModifyPwdCodeKey(req.getEmail(), randomKey);
         String code = CommonUtil.getRandomCode(EmailConstant.REGISTER_CODE_LENGTH);
-        RedisUtils.set(redisKey, code, RedisKey.MODIFY_PWD_EXPIRE_MINUTES, TimeUnit.MINUTES);
+        RedisUtils.set(redisKey, code, BlogRedisKey.MODIFY_PWD_EXPIRE_MINUTES, TimeUnit.MINUTES);
         // 发邮箱
         emailUtil.sendHtmlMail(req.getEmail(), MailConstant.MAIL_SUBJECT, MailConstant.getModifyPwdCodeMailText(code, user.getNickname()));
         return randomKey;
@@ -199,7 +220,7 @@ public class UserServiceImpl implements IUserService {
         }
         // 用户昵称不能相同
         User user = userDao.getByNickName(req.getNickname());
-        AssertUtil.isTrue(Objects.isNull(user) || (Objects.nonNull(user) && user.getId().equals(RequestHolder.get().getUid())), "用户昵称已经被占用了噢~ 再换一个吧！");
+        AssertUtil.isTrue(Objects.isNull(user) || user.getId().equals(RequestHolder.get().getUid()), "用户昵称已经被占用了噢~ 再换一个吧！");
         User update = UserBuilder.buildFromModifyReq(req);
         userDao.updateById(update);
     }
@@ -215,7 +236,7 @@ public class UserServiceImpl implements IUserService {
         }
         // 查数据库
         List<User> userList = userDao.list();
-        if (Objects.nonNull(userList) && userList.size() > 0) {
+        if (Objects.nonNull(userList) && !userList.isEmpty()) {
             result = UserBuilder.buildListResp(userList);
         }
         return result;
@@ -228,6 +249,56 @@ public class UserServiceImpl implements IUserService {
             // 如果是改成冻结状态 则强制让用户下线
             logoutByUid(uid);
         }
+    }
+
+    @Override
+    public CursorPageBaseResp<GroupMemberResp> getUserCursorPage(List<Long> uidList, GroupMemberReq req) {
+        // 先查询出在线的，再查询出不在线的
+        Pair<UserActiveStatusEnum, String> cursorPair = ChatMemberUtils.getCursorPair(req.getCursor());
+        UserActiveStatusEnum activeStatusEnum = cursorPair.getKey();
+        String cursor = cursorPair.getValue();
+        Boolean isLast = Boolean.FALSE;
+        List<GroupMemberResp> result = new ArrayList<>();
+        // 在线的
+        if (activeStatusEnum.equals(UserActiveStatusEnum.ONLINE)) {
+            CursorPageBaseResp<User> userCursorPageResp = userDao.listUserPage(uidList, new CursorPageBaseReq(req.getPageSize(), cursor), activeStatusEnum);
+            result.addAll(GroupMemberBuilder.buildGroupMember(userCursorPageResp.getList()));
+            // 如果是最后一条且不足pageSize的，需要去离线列表中补齐
+            if (userCursorPageResp.getIsLast() && userCursorPageResp.getList().size() < uidList.size()) {
+                activeStatusEnum = UserActiveStatusEnum.OFFLINE;
+                userCursorPageResp = userDao.listUserPage(uidList, new CursorPageBaseReq(req.getPageSize() - userCursorPageResp.getList().size(), cursor), activeStatusEnum);
+                result.addAll(GroupMemberBuilder.buildGroupMember(userCursorPageResp.getList()));
+            }
+            cursor = userCursorPageResp.getCursor();
+            isLast = userCursorPageResp.getIsLast();
+        } else if (activeStatusEnum.equals(UserActiveStatusEnum.OFFLINE)) {
+            // 离线的
+            CursorPageBaseResp<User> userCursorPageResp = userDao.listUserPage(uidList, new CursorPageBaseReq(req.getPageSize(), cursor), activeStatusEnum);
+            result.addAll(GroupMemberBuilder.buildGroupMember(userCursorPageResp.getList()));
+            cursor = userCursorPageResp.getCursor();
+            isLast = userCursorPageResp.getIsLast();
+        }
+        return new CursorPageBaseResp<>(ChatMemberUtils.generateCursor(activeStatusEnum, cursor), isLast, result);
+    }
+
+    @Override
+    public List<UserSummerInfoResp> batchRefreshUserSummerInfo(RefreshUserSummerReq refreshUserSummerReq) {
+        if (CollectionUtil.isEmpty(refreshUserSummerReq.getReqList())) {
+            return null;
+        }
+        List<Long> uidList = new ArrayList<>();
+        List<Long> lastRefreshDateList = new ArrayList<>();
+        for (RefreshUserSummerReq.InfoReq req : refreshUserSummerReq.getReqList()) {
+            uidList.add(req.getUid());
+            lastRefreshDateList.add(req.getLastRefreshTime());
+        }
+        List<UserSummerInfoResp> batch = userSummerInfoCache.getBatch(uidList);
+        // 过滤掉不需要刷新的（lastRefreshTime < lastUpdateTime）
+        return batch.stream().filter(userSummerInfoResp -> {
+            Long lastUpdateTime = userSummerInfoResp.getLastUpdateTime();
+            Long lastRefreshDate = lastRefreshDateList.get(uidList.indexOf(userSummerInfoResp.getUid()));
+            return Objects.isNull(lastRefreshDate) || lastRefreshDate < lastUpdateTime;
+        }).collect(Collectors.toList());
     }
 
     /**
@@ -275,7 +346,7 @@ public class UserServiceImpl implements IUserService {
      * @return
      */
     private String getModifyPwdCodeKey(String email, String randomKey) {
-        return RedisKey.getKey(RedisKey.MODIFY_PWD_CODE, email + randomKey);
+        return BlogRedisKey.getKey(BlogRedisKey.MODIFY_PWD_CODE, email + randomKey);
     }
 
 
@@ -286,7 +357,7 @@ public class UserServiceImpl implements IUserService {
      * @return
      */
     private String getRegisterCodeKey(String username, String randomKey) {
-        return RedisKey.getKey(RedisKey.REGISTER_CODE, username + randomKey);
+        return BlogRedisKey.getKey(BlogRedisKey.REGISTER_CODE, username + randomKey);
     }
 
     /**

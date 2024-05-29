@@ -3,9 +3,9 @@ package com.gjq.planet.blog.cache.redis;
 import com.gjq.planet.blog.dao.ArticleDao;
 import com.gjq.planet.blog.dao.SortDao;
 import com.gjq.planet.blog.service.IArticleService;
-import com.gjq.planet.blog.utils.JsonUtils;
-import com.gjq.planet.blog.utils.RedisUtils;
-import com.gjq.planet.common.constant.RedisKey;
+import com.gjq.planet.common.utils.JsonUtils;
+import com.gjq.planet.common.utils.RedisUtils;
+import com.gjq.planet.common.constant.BlogRedisKey;
 import com.gjq.planet.common.domain.entity.Article;
 import com.gjq.planet.common.domain.entity.Sort;
 import com.gjq.planet.common.domain.vo.resp.article.ArticleResp;
@@ -34,11 +34,11 @@ public class SortListCache {
     /**
      * key
      */
-    public static final String key = RedisKey.getKey(RedisKey.SORT_ARTICLE_LIST);
+    public static final String key = BlogRedisKey.getKey(BlogRedisKey.SORT_ARTICLE_LIST);
     /**
      *  过期时间
      */
-    public static final int SORT_ARTICLE_LIST_EXPIRE_DAYS = RedisKey.SORT_ARTICLE_LIST_EXPIRE_DAYS;
+    public static final int SORT_ARTICLE_LIST_EXPIRE_DAYS = BlogRedisKey.SORT_ARTICLE_LIST_EXPIRE_DAYS;
 
     @Autowired
     private SortDao sortDao;

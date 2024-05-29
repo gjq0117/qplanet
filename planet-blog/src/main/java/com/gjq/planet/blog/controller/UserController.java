@@ -1,14 +1,15 @@
 package com.gjq.planet.blog.controller;
 
 
-import com.gjq.planet.blog.annotation.NotToken;
-import com.gjq.planet.blog.annotation.PlanetAdmin;
 import com.gjq.planet.blog.service.IUserService;
-import com.gjq.planet.blog.utils.ApiResult;
+import com.gjq.planet.common.annotation.NotToken;
+import com.gjq.planet.common.annotation.PlanetAdmin;
+import com.gjq.planet.common.domain.vo.resp.user.UserSummerInfoResp;
 import com.gjq.planet.common.domain.vo.req.user.*;
 import com.gjq.planet.common.domain.vo.resp.user.LoginResp;
 import com.gjq.planet.common.domain.vo.resp.user.UserInfoResp;
 import com.gjq.planet.common.domain.vo.resp.user.UserListResp;
+import com.gjq.planet.common.utils.ApiResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +70,7 @@ public class UserController {
         return ApiResult.success();
     }
 
-    @ApiOperation("获取用户信息")
+    @ApiOperation("获取当前用户信息")
     @GetMapping("/getUserInfo")
     public ApiResult<UserInfoResp> getUserInfo() {
         return ApiResult.success(userService.getUserInfo());
@@ -118,6 +119,12 @@ public class UserController {
     public ApiResult<Void> logoutByUid(@PathVariable("uid") Long uid) {
         userService.logoutByUid(uid);
         return ApiResult.success();
+    }
+
+    @ApiOperation("批量刷新用户聚合信息")
+    @PostMapping("/batchRefreshUserSummerInfo")
+    public ApiResult<List<UserSummerInfoResp>> batchRefreshUserSummerInfo(@RequestBody RefreshUserSummerReq req) {
+        return ApiResult.success(userService.batchRefreshUserSummerInfo(req));
     }
 }
 

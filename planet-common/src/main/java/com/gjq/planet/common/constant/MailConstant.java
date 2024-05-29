@@ -95,11 +95,11 @@ public class MailConstant {
      * @return
      */
     public static String getRegCodeMailText(String code, String receiveName) {
-        return String.format(MAIL_TEMPLATE, CommonConstant.WEB_NAME, String.format(MAIL_TITLE_REGISTER_CODE, CommonConstant.WEB_NAME), receiveName, String.format(MAIL_TEXT_REGISTER_CODE, CommonConstant.WEB_NAME, code, RedisKey.REGISTER_CODE_EXPIRE_MINUTES), "", CommonConstant.WEB_NAME);
+        return String.format(MAIL_TEMPLATE, CommonConstant.WEB_NAME, String.format(MAIL_TITLE_REGISTER_CODE, CommonConstant.WEB_NAME), receiveName, String.format(MAIL_TEXT_REGISTER_CODE, CommonConstant.WEB_NAME, code, BlogRedisKey.REGISTER_CODE_EXPIRE_MINUTES), "", CommonConstant.WEB_NAME);
     }
 
     public static String getModifyPwdCodeMailText(String code, String receiveName) {
-        return String.format(MAIL_TEMPLATE, CommonConstant.WEB_NAME, String.format(MAIL_TITLE_MODIFY_PWD_CODE, CommonConstant.WEB_NAME), receiveName, String.format(MAIL_TEXT_MODIFY_PWD_CODE, CommonConstant.WEB_NAME, code, RedisKey.MODIFY_PWD_EXPIRE_MINUTES), "", CommonConstant.WEB_NAME);
+        return String.format(MAIL_TEMPLATE, CommonConstant.WEB_NAME, String.format(MAIL_TITLE_MODIFY_PWD_CODE, CommonConstant.WEB_NAME), receiveName, String.format(MAIL_TEXT_MODIFY_PWD_CODE, CommonConstant.WEB_NAME, code, BlogRedisKey.MODIFY_PWD_EXPIRE_MINUTES), "", CommonConstant.WEB_NAME);
     }
 
 

@@ -1,7 +1,7 @@
 package com.gjq.planet.blog.interceptor;
 
 import com.gjq.planet.blog.dao.UserDao;
-import com.gjq.planet.blog.exception.HttpErrorEnum;
+import com.gjq.planet.common.exception.HttpErrorEnum;
 import com.gjq.planet.blog.service.IUserService;
 import com.gjq.planet.common.domain.entity.User;
 import com.gjq.planet.common.enums.blog.YesOrNoEnum;

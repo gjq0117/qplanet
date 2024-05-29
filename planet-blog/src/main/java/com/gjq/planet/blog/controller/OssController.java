@@ -1,6 +1,6 @@
 package com.gjq.planet.blog.controller;
 
-import com.gjq.planet.blog.utils.ApiResult;
+import com.gjq.planet.common.utils.ApiResult;
 import com.gjq.planet.oss.domain.req.UploadUrlReq;
 import com.gjq.planet.oss.domain.resp.OssResp;
 import com.gjq.planet.oss.service.OssService;

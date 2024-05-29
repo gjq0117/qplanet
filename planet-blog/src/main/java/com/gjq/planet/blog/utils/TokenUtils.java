@@ -6,7 +6,8 @@ import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import com.gjq.planet.common.constant.CommonConstant;
-import com.gjq.planet.common.constant.RedisKey;
+import com.gjq.planet.common.constant.BlogRedisKey;
+import com.gjq.planet.common.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,7 +50,7 @@ public class TokenUtils {
                 // signature
                 .sign(Algorithm.HMAC256(secret));
         // 将token存放到redis
-        RedisUtils.set(getUserTokenKey(uid), token, RedisKey.TOKEN_EXPIRE_DAYS, TimeUnit.DAYS);
+        RedisUtils.set(getUserTokenKey(uid), token, BlogRedisKey.TOKEN_EXPIRE_DAYS, TimeUnit.DAYS);
         return token;
     }
 
@@ -60,7 +61,7 @@ public class TokenUtils {
      * @return
      */
     public String getUserTokenKey(Long uid) {
-        return RedisKey.getKey(RedisKey.USER_TOKEN_STRING, uid);
+        return BlogRedisKey.getKey(BlogRedisKey.USER_TOKEN_STRING, uid);
     }
 
     /**
@@ -118,7 +119,10 @@ public class TokenUtils {
      * @param token
      * @return
      */
-    private Long getUidOrNull(String token) {
+    public Long getUidOrNull(String token) {
+        if (Objects.nonNull(token) && token.startsWith("Bearer ")) {
+            token = token.replace("Bearer ", "");
+        }
         return Optional.ofNullable(verifyToken(token))
                 .map(map -> map.get(CommonConstant.UID_CLAIM))
                 .map(Claim::asLong)

@@ -1,10 +1,14 @@
 package com.gjq.planet.blog.service;
 
 
+import com.gjq.planet.common.domain.vo.req.groupmember.GroupMemberReq;
 import com.gjq.planet.common.domain.vo.req.user.*;
+import com.gjq.planet.common.domain.vo.resp.CursorPageBaseResp;
+import com.gjq.planet.common.domain.vo.resp.groupmember.GroupMemberResp;
 import com.gjq.planet.common.domain.vo.resp.user.LoginResp;
 import com.gjq.planet.common.domain.vo.resp.user.UserInfoResp;
 import com.gjq.planet.common.domain.vo.resp.user.UserListResp;
+import com.gjq.planet.common.domain.vo.resp.user.UserSummerInfoResp;
 
 import java.util.List;
 
@@ -41,7 +45,7 @@ public interface IUserService {
     void logout();
 
     /**
-     *  下线指定uid的用户(用户管理员操作)
+     * 下线指定uid的用户(用户管理员操作)
      */
     void logoutByUid(Long uid);
 
@@ -106,10 +110,27 @@ public interface IUserService {
     List<UserListResp> getUserList(UserListReq req);
 
     /**
-     *  改变用户状态
+     * 改变用户状态
      *
      * @param uid
      * @param status
      */
     void changeUserStatus(Long uid, Integer status);
+
+    /**
+     * 获取用户游标信息
+     *
+     * @param uidList 用户列表
+     * @param req     分页请求
+     * @return result
+     */
+    CursorPageBaseResp<GroupMemberResp> getUserCursorPage(List<Long> uidList, GroupMemberReq req);
+
+    /**
+     *  批量刷新用户聚合信息（返回了就是代表需要刷新）
+     *
+     * @param req req
+     * @return return
+     */
+    List<UserSummerInfoResp> batchRefreshUserSummerInfo(RefreshUserSummerReq req);
 }

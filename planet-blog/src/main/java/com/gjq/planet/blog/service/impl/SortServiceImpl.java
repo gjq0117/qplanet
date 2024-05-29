@@ -10,7 +10,8 @@ import com.gjq.planet.blog.service.IArticleService;
 import com.gjq.planet.blog.service.ILabelService;
 import com.gjq.planet.blog.service.ISortService;
 import com.gjq.planet.blog.service.adapter.SortBuilder;
-import com.gjq.planet.blog.utils.AssertUtil;
+import com.gjq.planet.common.enums.blog.ArticleStatusEnum;
+import com.gjq.planet.common.utils.AssertUtil;
 import com.gjq.planet.common.domain.entity.Article;
 import com.gjq.planet.common.domain.entity.Sort;
 import com.gjq.planet.common.domain.vo.req.sort.SortReq;
@@ -197,7 +198,7 @@ public class SortServiceImpl implements ISortService {
                     labelFlag = labelIdList.contains(labelId);
                 }
                 return sortFlag && labelFlag;
-            }).collect(Collectors.toList());
+            }).filter(articleResp -> ArticleStatusEnum.PUBLISH.getType().equals(articleResp.getStatus())).collect(Collectors.toList());
             SortResp sortResp = getRespById(sortId);
             List<LabelResp> labelRespList = new ArrayList<>();
             if (Objects.nonNull(labelId)) {

@@ -14,6 +14,9 @@ import lombok.Data;
 @Data
 public class UserInfoResp {
 
+    @ApiModelProperty("uid")
+    private Long uid;
+
     @ApiModelProperty("用户名")
     private String username;
 
@@ -40,5 +43,8 @@ public class UserInfoResp {
 
     @ApiModelProperty("Ip信息")
     private IpInfo ipInfo;
+
+    @ApiModelProperty("在线状态")
+    private Integer isActive;
 }
 

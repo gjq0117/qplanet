@@ -12,7 +12,6 @@
         <module>planet-common</module>
         <module>planet-blog</module>
         <module>planet-framework</module>
-        <module>planet-im</module>
     </modules>
 
     <properties>
@@ -23,7 +22,6 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <skipTests>true</skipTests>
-        <docker.host>http://192.168.3.101:2375</docker.host>
         <hutool.version>5.8.18</hutool.version>
         <springfox-swagger.version>3.0.0</springfox-swagger.version>
         <swagger-models.version>1.6.0</swagger-models.version>
