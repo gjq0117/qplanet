@@ -26,7 +26,7 @@ public class WSResp {
     }
 
     /**
-     * @see com.gjq.planet.common.enums.websocket.WSRespTypeEnum
+     * @see com.gjq.planet.common.enums.im.WSRespTypeEnum
      */
     @ApiModelProperty("响应类型")
     private Integer type;

@@ -1,7 +1,7 @@
 package com.gjq.planet.blog.interceptor;
 
-import com.gjq.planet.blog.annotation.NotToken;
-import com.gjq.planet.blog.exception.HttpErrorEnum;
+import com.gjq.planet.common.annotation.NotToken;
+import com.gjq.planet.common.exception.HttpErrorEnum;
 import com.gjq.planet.blog.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

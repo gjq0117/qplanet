@@ -1,9 +1,9 @@
 package com.gjq.planet.blog.controller;
 
 
-import com.gjq.planet.blog.annotation.PlanetAdmin;
+import com.gjq.planet.common.annotation.PlanetAdmin;
 import com.gjq.planet.blog.service.ILabelService;
-import com.gjq.planet.blog.utils.ApiResult;
+import com.gjq.planet.common.utils.ApiResult;
 import com.gjq.planet.common.domain.vo.req.label.LabelReq;
 import com.gjq.planet.common.domain.vo.resp.label.LabelResp;
 import io.swagger.annotations.Api;

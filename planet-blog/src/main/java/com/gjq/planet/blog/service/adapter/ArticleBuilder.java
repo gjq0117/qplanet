@@ -1,6 +1,6 @@
 package com.gjq.planet.blog.service.adapter;
 
-import com.gjq.planet.blog.utils.RequestHolder;
+import com.gjq.planet.common.utils.RequestHolder;
 import com.gjq.planet.common.domain.entity.Article;
 import com.gjq.planet.common.domain.entity.User;
 import com.gjq.planet.common.domain.vo.req.article.ArticleReq;

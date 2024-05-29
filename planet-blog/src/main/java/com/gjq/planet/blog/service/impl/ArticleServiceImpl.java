@@ -7,7 +7,7 @@ import com.gjq.planet.blog.cache.redis.SortListCache;
 import com.gjq.planet.blog.cache.springCache.LabelCache;
 import com.gjq.planet.blog.cache.springCache.SortCache;
 import com.gjq.planet.blog.dao.*;
-import com.gjq.planet.blog.exception.BusinessException;
+import com.gjq.planet.common.exception.BusinessException;
 import com.gjq.planet.blog.service.IArticleService;
 import com.gjq.planet.blog.service.IVisitorService;
 import com.gjq.planet.blog.service.adapter.ArticleBuilder;

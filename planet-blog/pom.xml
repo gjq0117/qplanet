@@ -71,6 +71,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-actuator-autoconfigure</artifactId>
         </dependency>
+        <!-- netty -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

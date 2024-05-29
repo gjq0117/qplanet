@@ -1,7 +1,7 @@
 package com.gjq.planet.blog.interceptor;
 
-import com.gjq.planet.blog.annotation.PlanetAdmin;
-import com.gjq.planet.blog.exception.HttpErrorEnum;
+import com.gjq.planet.common.annotation.PlanetAdmin;
+import com.gjq.planet.common.exception.HttpErrorEnum;
 import com.gjq.planet.blog.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

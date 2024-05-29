@@ -1,7 +1,7 @@
 package com.gjq.planet.blog.interceptor;
 
 import cn.hutool.extra.servlet.ServletUtil;
-import com.gjq.planet.blog.utils.RequestHolder;
+import com.gjq.planet.common.utils.RequestHolder;
 import com.gjq.planet.common.domain.dto.RequestInfo;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;

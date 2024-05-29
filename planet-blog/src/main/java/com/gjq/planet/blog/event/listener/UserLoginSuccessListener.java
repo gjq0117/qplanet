@@ -5,7 +5,7 @@ import com.gjq.planet.blog.dao.UserDao;
 import com.gjq.planet.blog.event.UserLoginSuccessEvent;
 import com.gjq.planet.blog.service.IVisitorService;
 import com.gjq.planet.blog.service.IpService;
-import com.gjq.planet.blog.utils.RequestHolder;
+import com.gjq.planet.common.utils.RequestHolder;
 import com.gjq.planet.common.domain.entity.User;
 import com.gjq.planet.common.enums.blog.UserActiveStatusEnum;
 import org.springframework.beans.factory.annotation.Autowired;

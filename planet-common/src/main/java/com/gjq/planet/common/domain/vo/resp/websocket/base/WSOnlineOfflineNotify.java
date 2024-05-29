@@ -1,6 +1,6 @@
 package com.gjq.planet.common.domain.vo.resp.websocket.base;
 
-import com.gjq.planet.common.enums.websocket.WSRespTypeEnum;
+import com.gjq.planet.common.enums.im.WSRespTypeEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;

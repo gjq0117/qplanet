@@ -1,20 +1,24 @@
 package com.gjq.planet.blog.service.adapter;
 
-import com.gjq.planet.blog.utils.CommonUtil;
-import com.gjq.planet.blog.utils.RequestHolder;
+import com.gjq.planet.common.domain.entity.IpInfo;
 import com.gjq.planet.common.domain.entity.User;
 import com.gjq.planet.common.domain.vo.req.user.ModifyPwdReq;
 import com.gjq.planet.common.domain.vo.req.user.ModifyUserInfoReq;
 import com.gjq.planet.common.domain.vo.req.user.UserRegisterReq;
 import com.gjq.planet.common.domain.vo.resp.user.UserInfoResp;
 import com.gjq.planet.common.domain.vo.resp.user.UserListResp;
+import com.gjq.planet.common.domain.vo.resp.user.UserSummerInfoResp;
 import com.gjq.planet.common.enums.blog.GenderEnum;
 import com.gjq.planet.common.enums.blog.SystemRoleEnum;
 import com.gjq.planet.common.enums.blog.YesOrNoEnum;
+import com.gjq.planet.common.utils.CommonUtil;
+import com.gjq.planet.common.utils.RequestHolder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -32,18 +36,18 @@ public class UserBuilder {
      */
     public static User buildFromRegisReq(UserRegisterReq registerReq) {
         // 随机构建nickname
-        String nickname = buildNickName();
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         return User.builder()
                 .username(registerReq.getUsername())
                 .password(bCryptPasswordEncoder.encode(registerReq.getPassword()))
                 .email(registerReq.getEmail())
                 // 默认nickname
-                .nickname(nickname)
-                // 默认性别位置
+                .nickname(buildNickName())
+                // 默认性别未知
                 .gender(GenderEnum.UNKNOWN.getType())
                 .userStatus(YesOrNoEnum.YES.getCode())
                 .userType(SystemRoleEnum.CUSTOMER.getCode())
+                .lastActiveTime(new Date())
                 .build();
     }
 
@@ -63,11 +67,12 @@ public class UserBuilder {
     public static UserInfoResp buildUserInfo(User user) {
         UserInfoResp userInfoResp = new UserInfoResp();
         BeanUtils.copyProperties(user, userInfoResp);
+        userInfoResp.setUid(user.getId());
         return userInfoResp;
     }
 
     /**
-     *  构建修改密码实体
+     * 构建修改密码实体
      *
      * @param req
      * @return
@@ -81,7 +86,7 @@ public class UserBuilder {
     }
 
     /**
-     *  通过修改用户信息请求实体构建用户信息
+     * 通过修改用户信息请求实体构建用户信息
      *
      * @param req
      * @return
@@ -94,7 +99,7 @@ public class UserBuilder {
     }
 
     /**
-     *  构建用户列表
+     * 构建用户列表
      *
      * @param userList
      * @return
@@ -105,5 +110,27 @@ public class UserBuilder {
             BeanUtils.copyProperties(user, userListResp);
             return userListResp;
         }).collect(Collectors.toList());
+    }
+
+    /**
+     * 构建用户聚合信息
+     *
+     * @param user 用户信息
+     * @return 用户聚合列表
+     */
+    public static UserSummerInfoResp buildUserSummerInfo(User user) {
+        UserSummerInfoResp userSummerInfoResp = new UserSummerInfoResp();
+        BeanUtils.copyProperties(user, userSummerInfoResp);
+        userSummerInfoResp.setUid(user.getId());
+        // 构建地区信息
+        IpInfo ipInfo = user.getIpInfo();
+        if (Objects.nonNull(ipInfo)) {
+            userSummerInfoResp.setLocPlace(ipInfo.getUpdateIpDetail().getCity());
+        } else {
+            userSummerInfoResp.setLocPlace("未知");
+        }
+        // 刷新时间
+        userSummerInfoResp.setLastUpdateTime(new Date().getTime());
+        return userSummerInfoResp;
     }
 }

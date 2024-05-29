@@ -1,10 +1,10 @@
 package com.gjq.planet.blog.controller;
 
 
-import com.gjq.planet.blog.annotation.NotToken;
-import com.gjq.planet.blog.annotation.PlanetAdmin;
+import com.gjq.planet.common.annotation.NotToken;
+import com.gjq.planet.common.annotation.PlanetAdmin;
 import com.gjq.planet.blog.service.IArticleService;
-import com.gjq.planet.blog.utils.ApiResult;
+import com.gjq.planet.common.utils.ApiResult;
 import com.gjq.planet.common.domain.vo.req.article.ArticleReq;
 import com.gjq.planet.common.domain.vo.req.article.ChangeStatusReq;
 import com.gjq.planet.common.domain.vo.req.article.SearchArticleReq;

@@ -3,12 +3,12 @@ package com.gjq.planet.blog;
 import com.gjq.planet.blog.dao.UserDao;
 import com.gjq.planet.blog.dao.WebInfoDao;
 import com.gjq.planet.blog.service.StatisticsService;
-import com.gjq.planet.blog.utils.JsonUtils;
-import com.gjq.planet.blog.utils.RedisUtils;
-import com.gjq.planet.common.constant.RedisKey;
+import com.gjq.planet.common.constant.BlogRedisKey;
 import com.gjq.planet.common.domain.entity.User;
 import com.gjq.planet.common.domain.entity.WebInfo;
 import com.gjq.planet.common.domain.vo.resp.article.ArticleResp;
+import com.gjq.planet.common.utils.JsonUtils;
+import com.gjq.planet.common.utils.RedisUtils;
 import com.gjq.planet.oss.domain.req.UploadUrlReq;
 import com.gjq.planet.oss.domain.resp.OssResp;
 import com.gjq.planet.oss.service.OssService;
@@ -66,7 +66,7 @@ public class UserTest {
 
     @Test
     public void testJson() {
-        String jsonStr = RedisUtils.getStr(RedisKey.getKey(RedisKey.ARTICLE_LIST));
+        String jsonStr = RedisUtils.getStr(BlogRedisKey.getKey(BlogRedisKey.ARTICLE_LIST));
         if (!StringUtils.isBlank(jsonStr)) {
             // redis中存在
             List<ArticleResp> articleListRespList = JsonUtils.toList(jsonStr, ArticleResp.class);
@@ -123,5 +123,30 @@ public class UserTest {
     public void testStatistics() {
 //        System.out.println(statisticsService.sevenDayVisitCount());
         log.error("测试日志文件");
+    }
+
+
+
+    /**
+     *  测试游标翻页
+     */
+    @Test
+    public void testCursorPage() {
+//        CursorPageBaseReq cursorPageBaseReq = new CursorPageBaseReq(3, "9");
+//        CursorPageBaseResp<User> cursorPageBaseResp = userDao.getCursorPageBaseResp(cursorPageBaseReq);
+//        List<User> list = cursorPageBaseResp.getList();
+//        System.out.println("=======================数据");
+//        list.forEach(System.out::println);
+//        System.out.println("========================游标");
+//        System.out.println(cursorPageBaseResp.getCursor());
+
+
+//        CursorPageBaseReq cursorPageBaseReq = new CursorPageBaseReq(3, "55");
+//        CursorPageBaseResp<User> cursorPageBaseResp = userDao.getCursorPageBaseResp(cursorPageBaseReq);
+//        List<User> list = cursorPageBaseResp.getList();
+//        System.out.println("=======================数据");
+//        list.forEach(System.out::println);
+//        System.out.println("========================游标");
+//        System.out.println(cursorPageBaseResp.getCursor());
     }
 }

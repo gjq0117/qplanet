@@ -100,6 +100,8 @@ public class User implements Serializable {
 
     /**
      * 是否在线【0：否；1：是】
+     *
+     * @see com.gjq.planet.common.enums.blog.UserActiveStatusEnum
      */
     @TableField("is_active")
     private Integer isActive;

@@ -7,11 +7,11 @@ import com.gjq.planet.blog.service.IVisitorService;
 import com.gjq.planet.blog.service.IWebInfoService;
 import com.gjq.planet.blog.service.IpService;
 import com.gjq.planet.blog.service.adapter.VisitorBuilder;
-import com.gjq.planet.blog.utils.CommonUtil;
-import com.gjq.planet.blog.utils.JsonUtils;
-import com.gjq.planet.blog.utils.RedisUtils;
-import com.gjq.planet.blog.utils.RequestHolder;
-import com.gjq.planet.common.constant.RedisKey;
+import com.gjq.planet.common.utils.CommonUtil;
+import com.gjq.planet.common.utils.JsonUtils;
+import com.gjq.planet.common.utils.RedisUtils;
+import com.gjq.planet.common.utils.RequestHolder;
+import com.gjq.planet.common.constant.BlogRedisKey;
 import com.gjq.planet.common.domain.dto.RequestInfo;
 import com.gjq.planet.common.domain.entity.Article;
 import com.gjq.planet.common.domain.entity.IpDetail;
@@ -79,22 +79,22 @@ public class VisitorServiceImpl implements IVisitorService {
         String redisKey = "";
         if (Objects.nonNull(uid)) {
             // 用户访问
-            json_str = RedisUtils.getStr(RedisKey.getKey(RedisKey.VISITOR_UID_INFO, uid));
+            json_str = RedisUtils.getStr(BlogRedisKey.getKey(BlogRedisKey.VISITOR_UID_INFO, uid));
             if (StringUtils.isNotBlank(json_str)) {
                 return;
             }
             ipDetail = ipService.getIpDetail(ip);
             visitor = VisitorBuilder.buildVisitor(ipDetail, uid, null, VisitTypeEnum.BLOG_WEB.getType());
-            redisKey = RedisKey.getKey(RedisKey.VISITOR_UID_INFO, uid);
+            redisKey = BlogRedisKey.getKey(BlogRedisKey.VISITOR_UID_INFO, uid);
         } else {
             // 匿名访问
-            json_str = RedisUtils.getStr(RedisKey.getKey(RedisKey.VISITOR_IP_INFO, ip));
+            json_str = RedisUtils.getStr(BlogRedisKey.getKey(BlogRedisKey.VISITOR_IP_INFO, ip));
             if (StringUtils.isNotBlank(json_str)) {
                 return;
             }
             ipDetail = ipService.getIpDetail(ip);
             visitor = VisitorBuilder.buildVisitor(ipDetail, null, null, VisitTypeEnum.BLOG_WEB.getType());
-            redisKey = RedisKey.getKey(RedisKey.VISITOR_IP_INFO, ip);
+            redisKey = BlogRedisKey.getKey(BlogRedisKey.VISITOR_IP_INFO, ip);
         }
         if (Objects.nonNull(ipDetail)) {
             // 保存到redis 过期时间为现在到第二天零点的秒数

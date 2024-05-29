@@ -53,4 +53,14 @@ public class RegexpConstant {
      * 系统昵称正则表达式消息提示
      */
     public static final String NICKNAME_MASSAGE = "昵称只能包含字母、数字、下划线或中文字符,不能以下划线开头或结尾，且在5-10位之间";
+
+    /**
+     * 系统好友备注正则表达式
+     */
+    public static final String FRIEND_REMARK_REGEXP = "^(?!_)(?!.*?_$)[a-zA-Z0-9_\\u4e00-\\u9fa5]{0,10}$";
+
+    /**
+     * 系统好友备注表达式消息提示
+     */
+    public static final String FRIEND_REMARK_MASSAGE = "昵称只能包含字母、数字、下划线或中文字符,不能以下划线开头或结尾，且最多十个字符";
 }

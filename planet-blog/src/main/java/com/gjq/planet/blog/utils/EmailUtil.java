@@ -1,6 +1,6 @@
 package com.gjq.planet.blog.utils;
 
-import com.gjq.planet.blog.exception.BusinessException;
+import com.gjq.planet.common.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

@@ -13,7 +13,7 @@ public class WSBaseReq {
     /**
      * 请求类型
      *
-     * @see com.gjq.planet.common.enums.websocket.WSReqTypeEnum
+     * @see com.gjq.planet.common.enums.im.WSReqTypeEnum
      */
     private Integer type;
 

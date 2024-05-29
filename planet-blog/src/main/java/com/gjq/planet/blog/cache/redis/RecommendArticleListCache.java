@@ -2,9 +2,9 @@ package com.gjq.planet.blog.cache.redis;
 
 import com.gjq.planet.blog.dao.ArticleDao;
 import com.gjq.planet.blog.service.adapter.ArticleBuilder;
-import com.gjq.planet.blog.utils.JsonUtils;
-import com.gjq.planet.blog.utils.RedisUtils;
-import com.gjq.planet.common.constant.RedisKey;
+import com.gjq.planet.common.utils.JsonUtils;
+import com.gjq.planet.common.utils.RedisUtils;
+import com.gjq.planet.common.constant.BlogRedisKey;
 import com.gjq.planet.common.domain.entity.Article;
 import com.gjq.planet.common.domain.vo.resp.article.RecommendArticleResp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class RecommendArticleListCache {
     /**
      * key
      */
-    private static final String key = RedisKey.getKey(RedisKey.RECOMMEND_LIST);
+    private static final String key = BlogRedisKey.getKey(BlogRedisKey.RECOMMEND_LIST);
 
     @Autowired
     private ArticleDao articleDao;
@@ -39,7 +39,7 @@ public class RecommendArticleListCache {
     public void setList(List<RecommendArticleResp> recommendArticleRespList) {
         for (RecommendArticleResp resp :
                 recommendArticleRespList) {
-            RedisUtils.hset(key, String.valueOf(resp.getId()), JsonUtils.toStr(resp), RedisKey.RECOMMEND_LIST_EXPIRE_DAYS, TimeUnit.DAYS);
+            RedisUtils.hset(key, String.valueOf(resp.getId()), JsonUtils.toStr(resp), BlogRedisKey.RECOMMEND_LIST_EXPIRE_DAYS, TimeUnit.DAYS);
         }
     }
 
@@ -49,7 +49,7 @@ public class RecommendArticleListCache {
      * @param resp
      */
     public void setOne(RecommendArticleResp resp) {
-        RedisUtils.hset(key, String.valueOf(resp.getId()), JsonUtils.toStr(resp), RedisKey.RECOMMEND_LIST_EXPIRE_DAYS, TimeUnit.DAYS);
+        RedisUtils.hset(key, String.valueOf(resp.getId()), JsonUtils.toStr(resp), BlogRedisKey.RECOMMEND_LIST_EXPIRE_DAYS, TimeUnit.DAYS);
     }
 
     /**
@@ -60,7 +60,7 @@ public class RecommendArticleListCache {
     public void setById(Long articleId) {
         Article article = articleDao.getById(articleId);
         RecommendArticleResp resp = ArticleBuilder.buildRecommendArticleResp(article);
-        RedisUtils.hset(key, String.valueOf(articleId), JsonUtils.toStr(resp), RedisKey.RECOMMEND_LIST_EXPIRE_DAYS, TimeUnit.DAYS);
+        RedisUtils.hset(key, String.valueOf(articleId), JsonUtils.toStr(resp), BlogRedisKey.RECOMMEND_LIST_EXPIRE_DAYS, TimeUnit.DAYS);
     }
 
     /**
