@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ApiModel("用户上下线通知")
-public class WSOnlineOfflineNotify extends BaseResp{
+public class WSOnlineOfflineNotify extends WsBaseResp {
 
     private static final Integer type = WSRespTypeEnum.ONLINE_OFFLINE_NOTIFY.getType();
 
@@ -28,11 +28,6 @@ public class WSOnlineOfflineNotify extends BaseResp{
 
     @ApiModelProperty("在线人数")
     private Long onlineNum;
-
-    @Override
-    public BaseResp buildResp(Object... o) {
-        return null;
-    }
 
     @Override
     public Integer getType() {

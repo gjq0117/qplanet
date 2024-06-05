@@ -1,8 +1,7 @@
 package com.gjq.planet.common.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -18,6 +17,9 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("room_friend")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class RoomFriend implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -55,13 +57,13 @@ public class RoomFriend implements Serializable {
     /**
      * 创建时间
      */
-    @TableField(value = "create_time",fill = FieldFill.INSERT)
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
     private Date createTime;
 
     /**
      * 更新时间
      */
-    @TableField(value = "update_time",fill = FieldFill.UPDATE)
+    @TableField(value = "update_time", fill = FieldFill.UPDATE)
     private Date updateTime;
 
     /**

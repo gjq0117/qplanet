@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
-
 /**
  * @author: gjq0117
  * @date: 2024/5/15 19:22
@@ -17,17 +15,12 @@ import javax.validation.constraints.NotNull;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TokenValidFail extends BaseResp {
+public class TokenValidFail extends WsBaseResp {
 
     /**
      *  token
      */
     private String token;
-
-    @Override
-    public BaseResp buildResp(@NotNull Object... o) {
-        return TokenValidFail.builder().token(o[0].toString()).build();
-    }
 
     @Override
     public Integer getType() {

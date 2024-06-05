@@ -9,6 +9,7 @@ import com.gjq.planet.common.domain.vo.resp.user.UserSummerInfoResp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,6 +48,11 @@ public class UserSummerInfoCache extends AbstractRedisHashCache<UserSummerInfoRe
         return userList.stream()
                 .map(UserBuilder::buildUserSummerInfo)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    protected List<UserSummerInfoResp> load(Long keyNum, List<Long> keys) {
+        return Collections.emptyList();
     }
 
     @Override

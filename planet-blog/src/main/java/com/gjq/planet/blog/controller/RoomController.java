@@ -3,6 +3,7 @@ package com.gjq.planet.blog.controller;
 
 import com.gjq.planet.blog.service.IRoomService;
 import com.gjq.planet.common.utils.ApiResult;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/room")
+@Api(tags = "房间信息")
 public class RoomController {
 
     @Autowired

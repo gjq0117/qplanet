@@ -18,13 +18,24 @@ import java.util.List;
 @Service
 public class GroupMemberDao extends ServiceImpl<GroupMemberMapper, GroupMember> {
 
-    /**
-     *  通过群组ID过去用户列表
-     *
-     * @param groupId groupId
-     */
-    public List<Long> getMemberPageByGroupId(Long groupId) {
 
-        return null;
+    public GroupMember getByGroupIdAndUid(Long groupId, Long uid) {
+        return lambdaQuery()
+                .eq(GroupMember::getGroupId, groupId)
+                .eq(GroupMember::getUid, uid)
+                .one();
+    }
+
+    public List<GroupMember> listByGroupId(Long groupId) {
+        return lambdaQuery()
+                .eq(GroupMember::getGroupId, groupId)
+                .list();
+    }
+
+    public List<GroupMember> listByUidsAndGroup(List<Long> uids, Long groupId) {
+        return lambdaQuery()
+                .eq(GroupMember::getGroupId, groupId)
+                .in(GroupMember::getUid, uids)
+                .list();
     }
 }

@@ -36,9 +36,12 @@ public class ContactResp {
     @ApiModelProperty("最后一条消息")
     private String lastMsg;
 
-    @ApiModelProperty("群头像")
+    @ApiModelProperty("头像")
     private String avatar;
 
-    @ApiModelProperty("群名")
+    @ApiModelProperty("群名/好友名")
     private String name;
+
+    @ApiModelProperty("最后一条消息发送人姓名")
+    private String lastMsgSendName;
 }

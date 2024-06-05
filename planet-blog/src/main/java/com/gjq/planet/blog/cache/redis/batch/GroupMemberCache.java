@@ -32,12 +32,17 @@ public class GroupMemberCache extends AbstractRedisHashCache<GroupMember> {
 
     @Override
     protected String getHashKey(GroupMember groupMember) {
-        return String.valueOf(groupMember.getId());
+        return String.valueOf(groupMember.getUid());
     }
 
     @Override
     protected List<GroupMember> load(List<Long> keys) {
         return CollectionUtil.isEmpty(keys) ? groupMemberDao.list() : groupMemberDao.listByIds(keys);
+    }
+
+    @Override
+    protected List<GroupMember> load(Long keyNum, List<Long> keys) {
+        return CollectionUtil.isEmpty(keys) ? groupMemberDao.listByGroupId(keyNum) : groupMemberDao.listByUidsAndGroup(keys, keyNum);
     }
 
     @Override

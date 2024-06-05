@@ -1,8 +1,9 @@
 package com.gjq.planet.common.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import com.gjq.planet.common.domain.dto.msg.MessageExtra;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -17,7 +18,10 @@ import java.util.Date;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("message")
+@TableName(value = "message", autoResultMap = true)
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Message implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -25,7 +29,7 @@ public class Message implements Serializable {
     /**
      * ID
      */
-    @TableId("id")
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
@@ -66,6 +70,8 @@ public class Message implements Serializable {
 
     /**
      * 类型
+     *
+     * @see com.gjq.planet.common.enums.im.MessageTypeEnum
      */
     @TableField("type")
     private Integer type;
@@ -73,8 +79,8 @@ public class Message implements Serializable {
     /**
      * 扩展信息
      */
-    @TableField("extra")
-    private String extra;
+    @TableField(value = "extra", typeHandler = JacksonTypeHandler.class)
+    private MessageExtra extra;
 
     /**
      * 创建时间
@@ -85,7 +91,7 @@ public class Message implements Serializable {
     /**
      * 更新时间
      */
-    @TableField(value = "update_time",fill = FieldFill.UPDATE)
+    @TableField(value = "update_time", fill = FieldFill.UPDATE)
     private Date updateTime;
 
     /**

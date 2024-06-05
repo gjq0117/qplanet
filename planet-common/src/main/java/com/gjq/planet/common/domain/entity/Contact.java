@@ -27,7 +27,7 @@ public class Contact implements Serializable {
     /**
      * ID
      */
-    @TableId("id")
+    @TableId(value = "id",type = IdType.AUTO)
     private Long id;
 
     /**

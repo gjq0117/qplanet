@@ -1,5 +1,6 @@
 package com.gjq.planet.common.enums.im;
 
+import com.gjq.planet.common.domain.vo.resp.websocket.base.NewMessage;
 import com.gjq.planet.common.domain.vo.resp.websocket.base.TokenValidFail;
 import com.gjq.planet.common.domain.vo.resp.websocket.base.WSLoginSuccess;
 import com.gjq.planet.common.domain.vo.resp.websocket.base.WSOnlineOfflineNotify;
@@ -21,9 +22,9 @@ import java.util.stream.Collectors;
 public enum WSRespTypeEnum {
 
     LOGIN_SUCCESS(1, "登录成功通知", WSLoginSuccess.class),
-    TOKEN_VALID_FAIL(2,"token验证失败", TokenValidFail.class),
+    TOKEN_VALID_FAIL(2, "token验证失败", TokenValidFail.class),
     ONLINE_OFFLINE_NOTIFY(3, "上下线通知", WSOnlineOfflineNotify.class),
-    ;
+    NEW_MESSAGE(4, "新消息通知", NewMessage.class);
 
     private final Integer type;
     private final String desc;

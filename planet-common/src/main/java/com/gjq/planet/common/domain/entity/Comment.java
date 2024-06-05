@@ -25,7 +25,7 @@ public class Comment implements Serializable {
     /**
      * 主键
      */
-    @TableId("id")
+    @TableId(value = "id",type = IdType.AUTO)
     private Long id;
 
     /**

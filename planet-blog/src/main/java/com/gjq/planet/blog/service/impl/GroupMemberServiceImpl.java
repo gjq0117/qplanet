@@ -45,6 +45,10 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
     public CursorPageBaseResp<GroupMemberResp> getGroupMemberPage(GroupMemberReq req) {
         Room room = roomCache.get(req.getRoomId());
         AssertUtil.isNotEmpty(room, "房间号不存在");
+        if (room.isFriendRoom()) {
+            // 好友房间 不需要进行下面操作
+            return null;
+        }
         RoomGroup roomGroup = roomGroupCache.get(room.getId());
         List<Long> uidList = groupMemberCache.getBatch(roomGroup.getId(), null).stream().map(GroupMember::getUid).collect(Collectors.toList());
         // 排除自己

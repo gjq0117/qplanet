@@ -1,6 +1,8 @@
 package com.gjq.planet.common.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.gjq.planet.common.enums.im.RoomTypeEnum;
 import lombok.*;
 
 import java.io.Serializable;
@@ -27,7 +29,7 @@ public class Room implements Serializable {
     /**
      * ID
      */
-    @TableId("id")
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
@@ -81,5 +83,29 @@ public class Room implements Serializable {
     @TableField("deleted")
     private Integer deleted;
 
+    /**
+     * 是否是好友房间
+     */
+    @JsonIgnore
+    public Boolean isFriendRoom() {
+        return RoomTypeEnum.of(this.type).equals(RoomTypeEnum.SINGLE_CHAT);
+    }
 
+    /**
+     * 是否是群聊房间(普通群聊/全员群聊)
+     */
+    @JsonIgnore
+    public Boolean isGroupRoom() {
+        return RoomTypeEnum.of(this.type).equals(RoomTypeEnum.COMMON_ROOM_CHAT) || RoomTypeEnum.of(this.type).equals(RoomTypeEnum.ALL_STAFF_ROOM_CHAT);
+    }
+
+    /**
+     * 是否是热点房间
+     *
+     * @return
+     */
+    @JsonIgnore
+    public Boolean isHotRoom() {
+        return RoomTypeEnum.of(this.type).equals(RoomTypeEnum.ALL_STAFF_ROOM_CHAT);
+    }
 }

@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
-
 
 /**
  * @author: gjq0117
@@ -18,17 +16,12 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class WSLoginSuccess extends BaseResp {
+public class WSLoginSuccess extends WsBaseResp {
 
     /**
      *  用户ID
      */
     private Long uid;
-
-    @Override
-    public BaseResp buildResp(@NotNull Object... objects) {
-        return WSLoginSuccess.builder().uid((Long) objects[0]).build();
-    }
 
     @Override
     public Integer getType() {

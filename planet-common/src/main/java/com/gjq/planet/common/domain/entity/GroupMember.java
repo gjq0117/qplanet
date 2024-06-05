@@ -27,7 +27,7 @@ public class GroupMember implements Serializable {
     /**
      * 群成员
      */
-    @TableId("id")
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**

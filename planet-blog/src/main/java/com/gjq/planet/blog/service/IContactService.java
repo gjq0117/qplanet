@@ -22,4 +22,13 @@ public interface IContactService {
      * @return 分页信息
      */
     CursorPageBaseResp<ContactResp> getContactListPage(Long uid, ContactPageReq req);
+
+    /**
+     *  创建好友会话
+     *
+     * @param roomId
+     * @param uid1
+     * @param uid2
+     */
+    void createFriendContact(Long roomId, Long uid1, Long uid2);
 }

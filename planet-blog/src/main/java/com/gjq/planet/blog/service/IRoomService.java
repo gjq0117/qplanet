@@ -17,4 +17,11 @@ public interface IRoomService  {
      * @return 在线人数
      */
     Long getOnlineNum(Long roomId);
+
+    /**
+     *  创建单聊房间
+     *
+     * @return 房间号
+     */
+    Long createSingleRoom();
 }

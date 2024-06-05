@@ -6,6 +6,7 @@ import com.gjq.planet.common.domain.entity.RoomGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -37,6 +38,11 @@ public class RoomGroupCache extends AbstractRedisHashCache<RoomGroup> {
     @Override
     protected List<RoomGroup> load(List<Long> keys) {
         return roomGroupDao.listByRoomIds(keys);
+    }
+
+    @Override
+    protected List<RoomGroup> load(Long keyNum, List<Long> keys) {
+        return Collections.emptyList();
     }
 
     @Override

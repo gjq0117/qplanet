@@ -1,7 +1,10 @@
 package com.gjq.planet.blog.service;
 
 import com.gjq.planet.common.domain.vo.resp.websocket.WSResp;
+import com.gjq.planet.common.domain.vo.resp.websocket.base.WsBaseResp;
 import io.netty.channel.Channel;
+
+import java.util.List;
 
 /**
  * @author: gjq0117
@@ -40,4 +43,12 @@ public interface WebsocketService {
      * @param resp 消息
      */
     void sendMsg(Channel channel, WSResp resp);
+
+    /**
+     *  推送消息
+     *
+     * @param wsBaseResp 新消息
+     * @param uidList 用户id列表(如果为null，就推送全体在线成员)
+     */
+    void pushMsg(WsBaseResp wsBaseResp, List<Long> uidList);
 }
