@@ -3,14 +3,19 @@ package com.gjq.planet.blog.service.impl;
 import cn.hutool.core.util.ObjectUtil;
 import com.gjq.planet.blog.dao.UserApplyDao;
 import com.gjq.planet.blog.dao.UserFriendDao;
+import com.gjq.planet.blog.service.IMessageService;
+import com.gjq.planet.blog.service.IRoomFriendService;
 import com.gjq.planet.blog.service.IUserApplyService;
 import com.gjq.planet.blog.service.IUserFriendService;
+import com.gjq.planet.blog.service.adapter.MessageBuilder;
 import com.gjq.planet.blog.service.adapter.UserApplyBuilder;
 import com.gjq.planet.blog.service.adapter.UserFriendBuilder;
+import com.gjq.planet.common.domain.entity.RoomFriend;
 import com.gjq.planet.common.domain.entity.UserApply;
 import com.gjq.planet.common.domain.entity.UserFriend;
-import com.gjq.planet.common.domain.vo.req.userapply.UserApplyPageReq;
+import com.gjq.planet.common.domain.vo.req.chat.ChatMessageReq;
 import com.gjq.planet.common.domain.vo.req.userapply.FriendApplyReq;
+import com.gjq.planet.common.domain.vo.req.userapply.UserApplyPageReq;
 import com.gjq.planet.common.domain.vo.resp.CursorPageBaseResp;
 import com.gjq.planet.common.domain.vo.resp.userapply.FriendApplyResp;
 import com.gjq.planet.common.enums.im.ApplyStatusEnum;
@@ -43,6 +48,12 @@ public class UserApplyServiceImpl implements IUserApplyService {
 
     @Autowired
     private IUserFriendService userFriendService;
+
+    @Autowired
+    private IRoomFriendService roomFriendService;
+
+    @Autowired
+    private IMessageService chatService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -89,7 +100,19 @@ public class UserApplyServiceImpl implements IUserApplyService {
         userFriendDao.save(userFriend1);
         UserFriend userFriend2 = UserFriendBuilder.buildUserFriend(targetId, currUid);
         userFriendDao.save(userFriend2);
+        //4、如果没有就创建好友房间/会话（如果之前是好友，然后删了，会有房间记录）
+        Long roomId;
+        RoomFriend roomFriend = roomFriendService.getByUids(currUid, targetId);
+        if (Objects.nonNull(roomFriend)) {
+            roomId = roomFriend.getRoomId();
+        } else {
+            roomId = roomFriendService.createFriendRoom(currUid, targetId);
+        }
+        //5、同意方（currUid）向房间内发送一条消息
+        ChatMessageReq req = MessageBuilder.buildHelloMsgReq(roomId);
+        chatService.sendMsg(currUid, req);
     }
+
 
     @Override
     public void rejectFriendApply(Long currUid, Long targetId) {

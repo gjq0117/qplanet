@@ -8,6 +8,7 @@ import com.gjq.planet.common.utils.ApiResult;
 import com.gjq.planet.common.domain.vo.req.visitor.VisitorListReq;
 import com.gjq.planet.common.domain.vo.resp.visitor.VisitorListResp;
 import com.gjq.planet.common.domain.vo.resp.visitor.VisitorProvinceResp;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/visitor")
+@Api(tags = "网站访问信息")
 public class VisitorController {
 
     @Autowired

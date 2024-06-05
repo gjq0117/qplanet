@@ -12,6 +12,7 @@
         <module>planet-common</module>
         <module>planet-blog</module>
         <module>planet-framework</module>
+        <module>planet-framework/planet-transaction-starter</module>
     </modules>
 
     <properties>
@@ -40,6 +41,7 @@
         <jsoup.version>1.15.3</jsoup.version>
         <okhttp.version>4.8.1</okhttp.version>
         <minio.version>8.3.1</minio.version>
+        <rocket-mq-version>2.2.2</rocket-mq-version>
         <redisson-spring-boot-starter.version>3.17.1</redisson-spring-boot-starter.version>
     </properties>
 
@@ -57,6 +59,11 @@
                 <groupId>org.gjq.planet</groupId>
                 <artifactId>planet-common</artifactId>
                 <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-spring-boot-starter</artifactId>
+                <version>${rocket-mq-version}</version>
             </dependency>
             <dependency>
                 <groupId>io.minio</groupId>

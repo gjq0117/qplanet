@@ -55,6 +55,11 @@ public abstract class AbstractRedisHashCache<VALUE> implements BatchCache<Long, 
     protected abstract List<VALUE> load(List<Long> keys);
 
     /**
+     * 从数据库中加载
+     */
+    protected abstract List<VALUE> load(Long keyNum, List<Long> keys);
+
+    /**
      * 获取过期秒数
      *
      * @return s
@@ -154,7 +159,12 @@ public abstract class AbstractRedisHashCache<VALUE> implements BatchCache<Long, 
             // 获取所有值
             List<VALUE> collect = map.values().stream().map(value -> JsonUtils.toObj((String) value, type)).collect(Collectors.toList());
             if (collect.isEmpty()) {
-                List<VALUE> loadValues = load(null);
+                List<VALUE> loadValues;
+                if (Objects.nonNull(keyNum)) {
+                    loadValues = load(keyNum, keys);
+                } else {
+                    loadValues = load(keys);
+                }
                 // 加载到缓存
                 loadInRedis(loadValues, keyNum);
                 return loadValues;

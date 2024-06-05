@@ -1,8 +1,12 @@
 package com.gjq.planet.blog;
 
 import cn.hutool.core.util.RandomUtil;
+import com.gjq.planet.blog.cache.redis.batch.RoomCache;
 import com.gjq.planet.blog.cache.redis.batch.UserSummerInfoCache;
+import com.gjq.planet.blog.dao.MessageDao;
+import com.gjq.planet.blog.dao.RoomDao;
 import com.gjq.planet.blog.dao.UserDao;
+import com.gjq.planet.common.domain.entity.Room;
 import com.gjq.planet.common.domain.entity.User;
 import com.gjq.planet.common.enums.blog.SystemRoleEnum;
 import com.gjq.planet.common.enums.blog.YesOrNoEnum;
@@ -79,5 +83,25 @@ public class CommonTest {
 
         // removeBatch
 //        userSummerInfoCache.removeBatch(Arrays.asList(2,3));
+    }
+
+    @Autowired
+    private MessageDao messageDao;
+
+    @Autowired
+    private RoomDao roomDao;
+
+    @Autowired
+    private RoomCache roomCache;
+
+    @Test
+    public void test() {
+        Room room = roomDao.getById(1);
+        Room before = roomCache.get(room.getId());
+        System.out.println(before);
+
+        roomCache.put(room);
+        Room after = roomCache.get(room.getId());
+        System.out.println(after);
     }
 }

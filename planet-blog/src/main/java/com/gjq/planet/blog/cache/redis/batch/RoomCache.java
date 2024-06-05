@@ -7,6 +7,7 @@ import com.gjq.planet.common.domain.entity.Room;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -38,6 +39,11 @@ public class RoomCache extends AbstractRedisHashCache<Room> {
     @Override
     protected List<Room> load(List<Long> keys) {
         return CollectionUtil.isEmpty(keys) ? roomDao.list() : roomDao.listByIds(keys);
+    }
+
+    @Override
+    protected List<Room> load(Long keyNum, List<Long> keys) {
+        return Collections.emptyList();
     }
 
     @Override

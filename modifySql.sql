@@ -5,7 +5,7 @@ CREATE TABLE `user_apply`
     `uid`         bigint(20) NULL COMMENT '申请人ID',
     `type`        tinyint(1) NULL COMMENT '申请类型【0：好友】',
     `target_id`   bigint(20) NULL COMMENT '目标ID',
-    `remark`         varchar(255) NULL COMMENT '申请备注消息',
+    `remark`      varchar(255) NULL COMMENT '申请备注消息',
     `status`      tinyint(1) NULL DEFAULT 0 COMMENT '申请状态【0：待审核、1：已同意、2：已拒绝】',
     `read_status` tinyint(1) NULL DEFAULT 0 COMMENT '已读状态【0：未读、1：已读】',
     `create_time` datetime NULL COMMENT '创建时间',
@@ -122,4 +122,24 @@ CREATE TABLE `contact`
     PRIMARY KEY (`id`),
     INDEX         `idx_uid_room_id`(`uid`, `room_id`)
 ) COMMENT = '会话信息表';
+-- end
+
+-- 2024.06.01 start
+CREATE TABLE `secure_invoke_record`
+(
+    `id`                 bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'id',
+    `secure_invoke_json` json NOT NULL COMMENT '请求快照参数json',
+    `status`             tinyint(8) NOT NULL COMMENT '状态 1待执行 2已失败',
+    `next_retry_time`    datetime(3) NOT NULL COMMENT '下一次重试的时间',
+    `retry_times`        int(11) NOT NULL COMMENT '已经重试的次数',
+    `max_retry_times`    int(11) NOT NULL COMMENT '最大重试次数',
+    `fail_reason`        text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '执行失败的堆栈',
+    `create_time`        datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) COMMENT '创建时间',
+    `update_time`        datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3) COMMENT '修改时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    INDEX                `idx_next_retry_time`(`next_retry_time`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '本地消息表' ROW_FORMAT = Dynamic;
+
+SET
+FOREIGN_KEY_CHECKS = 1;
 -- end

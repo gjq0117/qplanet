@@ -3,11 +3,14 @@ package com.gjq.planet.blog.service.impl;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
+import com.gjq.planet.blog.cache.redis.batch.RoomCache;
 import com.gjq.planet.blog.dao.UserDao;
 import com.gjq.planet.blog.dao.UserFriendDao;
+import com.gjq.planet.blog.service.IRoomFriendService;
 import com.gjq.planet.blog.service.IUserFriendService;
 import com.gjq.planet.blog.service.adapter.GroupMemberBuilder;
 import com.gjq.planet.blog.service.adapter.UserFriendBuilder;
+import com.gjq.planet.common.domain.entity.RoomFriend;
 import com.gjq.planet.common.domain.entity.User;
 import com.gjq.planet.common.domain.entity.UserFriend;
 import com.gjq.planet.common.domain.vo.req.userfriend.PutFriendRemarkReq;
@@ -43,6 +46,12 @@ public class UserFriendServiceImpl implements IUserFriendService {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private RoomCache roomCache;
+
+    @Autowired
+    private IRoomFriendService roomFriendService;
 
     @Override
     public Boolean isFriend(Long currUid, Long uid) {
@@ -110,6 +119,9 @@ public class UserFriendServiceImpl implements IUserFriendService {
         UserFriend userFriend2 = getUserFriend(friendUid, currUid);
         userFriendDao.removeById(userFriend1.getId());
         userFriendDao.removeById(userFriend2.getId());
+        // 删除房间缓存
+        RoomFriend roomFriend = roomFriendService.getByUids(userFriend1.getUid(), userFriend2.getUid());
+        roomCache.remove(roomFriend.getRoomId());
     }
 
     /**
@@ -135,6 +147,9 @@ public class UserFriendServiceImpl implements IUserFriendService {
             return new CursorPageBaseResp<>(userFriendPage.getCursor(), userFriendPage.getIsLast(), new ArrayList<>());
         }
         List<UserFriend> friendUserList = sFunction.apply(userFriendPage.getList());
+        if (CollectionUtil.isEmpty(friendUserList)) {
+            return new CursorPageBaseResp<>(userFriendPage.getCursor(), userFriendPage.getIsLast(), new ArrayList<>());
+        }
         List<User> userList = userDao.listByIds(friendUserList.stream().map(UserFriend::getFriendUid).collect(Collectors.toList()));
         List<GroupMemberResp> groupMemberRespList = GroupMemberBuilder.buildGroupMember(userList);
         return new CursorPageBaseResp<>(userFriendPage.getCursor(), userFriendPage.getIsLast(), groupMemberRespList);

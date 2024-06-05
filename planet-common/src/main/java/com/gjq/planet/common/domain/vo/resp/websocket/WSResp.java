@@ -1,6 +1,6 @@
 package com.gjq.planet.common.domain.vo.resp.websocket;
 
-import com.gjq.planet.common.domain.vo.resp.websocket.base.BaseResp;
+import com.gjq.planet.common.domain.vo.resp.websocket.base.WsBaseResp;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @ApiModel("ws响应消息类")
 public class WSResp {
 
-    public WSResp(BaseResp data) {
+    public WSResp(WsBaseResp data) {
         this.data = data;
         this.type = data.getType();
     }
@@ -32,5 +32,5 @@ public class WSResp {
     private Integer type;
 
     @ApiModelProperty("数据类型")
-    private BaseResp data;
+    private WsBaseResp data;
 }

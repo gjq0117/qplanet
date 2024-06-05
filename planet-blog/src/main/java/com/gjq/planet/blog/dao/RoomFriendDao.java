@@ -14,6 +14,18 @@ import org.springframework.stereotype.Service;
  * @since 2024-05-24
  */
 @Service
-public class RoomFriendDao extends ServiceImpl<RoomFriendMapper, RoomFriend>  {
+public class RoomFriendDao extends ServiceImpl<RoomFriendMapper, RoomFriend> {
 
+    public RoomFriend getByRoomId(Long roomId) {
+        return lambdaQuery()
+                .eq(RoomFriend::getRoomId, roomId)
+                .one();
+    }
+
+    public RoomFriend getByUids(long min, long max) {
+        return lambdaQuery()
+                .eq(RoomFriend::getUid1, min)
+                .eq(RoomFriend::getUid2, max)
+                .one();
+    }
 }

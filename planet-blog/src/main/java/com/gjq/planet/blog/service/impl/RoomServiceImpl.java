@@ -1,12 +1,16 @@
 package com.gjq.planet.blog.service.impl;
 
 import com.gjq.planet.blog.cache.redis.batch.GroupMemberCache;
+import com.gjq.planet.blog.cache.redis.batch.RoomCache;
 import com.gjq.planet.blog.cache.redis.batch.RoomGroupCache;
+import com.gjq.planet.blog.dao.RoomDao;
 import com.gjq.planet.blog.dao.UserDao;
 import com.gjq.planet.blog.service.IRoomService;
 import com.gjq.planet.common.domain.entity.GroupMember;
+import com.gjq.planet.common.domain.entity.Room;
 import com.gjq.planet.common.domain.entity.RoomGroup;
 import com.gjq.planet.common.enums.blog.YesOrNoEnum;
+import com.gjq.planet.common.enums.im.RoomTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,13 +34,35 @@ public class RoomServiceImpl implements IRoomService {
     private GroupMemberCache groupMemberCache;
 
     @Autowired
+    private RoomCache roomCache;
+
+    @Autowired
+    private RoomDao roomDao;
+
+    @Autowired
     private UserDao userDao;
 
     @Override
     public Long getOnlineNum(Long roomId) {
+        Room room = roomCache.get(roomId);
+        if (room.isFriendRoom()) {
+            // 如果是单聊房间直接返回0
+            return 0L;
+        }
+        // TODO 优化
         RoomGroup roomGroup = roomGroupCache.get(roomId);
         List<GroupMember> memberCache = groupMemberCache.getBatch(roomGroup.getId(), null);
         List<Long> uidList = memberCache.stream().map(GroupMember::getUid).collect(Collectors.toList());
         return userDao.listByIds(uidList).stream().filter(user -> YesOrNoEnum.YES.getCode().equals(user.getIsActive())).count();
+    }
+
+    @Override
+    public Long createSingleRoom() {
+        Room room = Room.builder()
+                .type(RoomTypeEnum.SINGLE_CHAT.getType())
+                .hotFlag(0)
+                .build();
+        roomDao.save(room);
+        return room.getId();
     }
 }
