@@ -22,6 +22,9 @@ public class HasArticleSortResp {
     @ApiModelProperty("分类名")
     private String sortName;
 
+    @ApiModelProperty("分类优先级")
+    private Integer priority;
+
     @ApiModelProperty("分类下的所有文章")
     private List<ArticleResp> articleRespList;
 }

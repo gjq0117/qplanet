@@ -102,7 +102,9 @@ public class ArticleServiceImpl implements IArticleService {
         // 保存到数据库
         saveOrUpdateArticle(req);
         // 上推荐
-        recommendArticleListCache.setById(req.getId());
+        if (req.getRecommendStatus()) {
+            recommendArticleListCache.setById(req.getId());
+        }
         // 上列表
         sortListCache.setById(req.getSortId());
     }
@@ -112,19 +114,18 @@ public class ArticleServiceImpl implements IArticleService {
         List<ArticleResp> result = null;
         // 有redis读redis
         result = articleRespListCache.getList();
-        if (Objects.nonNull(result) && result.size() > 0) {
+        if (Objects.nonNull(result) && !result.isEmpty()) {
             // redis中存在
             return result;
         }
         // 查数据库
         List<Article> articleList = articleDao.list(new QueryWrapper<Article>().orderByDesc("create_time"));
-        if (Objects.nonNull(articleList) && articleList.size() > 0) {
-            result = articleList.stream().map(article ->
-                    this.transToResp(article)
+        if (Objects.nonNull(articleList) && !articleList.isEmpty()) {
+            result = articleList.stream().map(this::transToResp
             ).collect(Collectors.toList());
         }
         // 保存到redis
-        if (Objects.nonNull(result) && result.size() > 0) {
+        if (Objects.nonNull(result) && !result.isEmpty()) {
             articleRespListCache.setList(result);
         }
         return result;
@@ -292,6 +293,9 @@ public class ArticleServiceImpl implements IArticleService {
         }
         // 没有就读库
         Article article = articleDao.getById(articleId);
+        if (Objects.isNull(article)) {
+            return null;
+        }
         ArticleResp articleResp = this.transToResp(article);
         // 设置缓存
         articleRespListCache.setOne(articleResp);

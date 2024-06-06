@@ -57,11 +57,15 @@ public class SortListCache {
      * @param articleSortRespList 文章列表
      */
     public void setList(List<HasArticleSortResp> articleSortRespList) {
-        // 倒序存
-        for (int i = 0; i < articleSortRespList.size(); i++) {
-            HasArticleSortResp resp = articleSortRespList.get(articleSortRespList.size() - i - 1);
+        articleSortRespList.forEach(resp -> {
             RedisUtils.hset(key, String.valueOf(resp.getId()), JsonUtils.toStr(resp), SORT_ARTICLE_LIST_EXPIRE_DAYS, TimeUnit.DAYS);
-        }
+        });
+
+        // 倒序存
+//        for (int i = 0; i < articleSortRespList.size(); i++) {
+//            HasArticleSortResp resp = articleSortRespList.get(articleSortRespList.size() - i - 1);
+//            RedisUtils.hset(key, String.valueOf(resp.getId()), JsonUtils.toStr(resp), SORT_ARTICLE_LIST_EXPIRE_DAYS, TimeUnit.DAYS);
+//        }
     }
 
     /**
@@ -106,7 +110,7 @@ public class SortListCache {
      */
     public List<HasArticleSortResp> getList() {
         Map<Object, Object> map = RedisUtils.hmget(key);
-        return map.values().stream().map(obj -> JsonUtils.toObj((String) obj, HasArticleSortResp.class)).collect(Collectors.toList());
+        return map.values().stream().map(obj -> JsonUtils.toObj((String) obj, HasArticleSortResp.class)).sorted(Comparator.comparing(HasArticleSortResp::getPriority)).collect(Collectors.toList());
     }
 
     /**

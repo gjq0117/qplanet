@@ -176,7 +176,7 @@ public class SortServiceImpl implements ISortService {
                     hasArticleSortResp.setArticleRespList(collect);
                 }
                 return hasArticleSortResp;
-            }).collect(Collectors.toList());
+            }).sorted(Comparator.comparing(HasArticleSortResp::getPriority)).collect(Collectors.toList());
         }
         // 存缓存
         sortListCache.setList(result);

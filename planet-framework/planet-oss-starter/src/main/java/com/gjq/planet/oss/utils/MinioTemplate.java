@@ -2,9 +2,7 @@ package com.gjq.planet.oss.utils;
 
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.util.StrUtil;
-
 import com.gjq.planet.oss.config.OssProperties;
 import com.gjq.planet.oss.domain.req.OssReq;
 import com.gjq.planet.oss.domain.resp.OssResp;
@@ -136,9 +134,11 @@ public class MinioTemplate {
     public String generateAutoPath(OssReq req) {
         String uid = Optional.ofNullable(req.getUid()).map(String::valueOf).orElse("000000");
         cn.hutool.core.lang.UUID uuid = cn.hutool.core.lang.UUID.fastUUID();
-        String suffix = FileNameUtil.getSuffix(req.getFileName());
-        String yearAndMonth = DateUtil.format(new Date(), DatePattern.NORM_MONTH_PATTERN);
-        return req.getFilePath() + StrUtil.SLASH + yearAndMonth + StrUtil.SLASH + uid + StrUtil.SLASH + uuid + StrUtil.DOT + suffix;
+//        String suffix = FileNameUtil.getSuffix(req.getFileName());
+        String yearAndMonth = DateUtil.format(new Date(), DatePattern.NORM_DATE_PATTERN);
+        //   https://minio.qplanet.cn/blog/2024-06-06/10001/uuid.../文件名.txt
+        return req.getFilePath() + StrUtil.SLASH + yearAndMonth + StrUtil.SLASH + uid + StrUtil.SLASH + uuid.toString().replace(StrUtil.DASHED, "") + StrUtil.DASHED + req.getFileName();
+//        return req.getFilePath() + StrUtil.SLASH + yearAndMonth + StrUtil.SLASH + uid + StrUtil.SLASH + uuid.toString().replace(StrUtil.DASHED, "") + StrUtil.DOT + suffix;
     }
 
     /**

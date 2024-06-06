@@ -10,6 +10,7 @@ import com.gjq.planet.common.domain.vo.resp.article.RecommendArticleResp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -70,7 +71,7 @@ public class RecommendArticleListCache {
      */
     public List<RecommendArticleResp> getList() {
         Map<Object, Object> map = RedisUtils.hmget(key);
-        return map.values().stream().map(obj -> JsonUtils.toObj((String) obj, RecommendArticleResp.class)).collect(Collectors.toList());
+        return map.values().stream().map(obj -> JsonUtils.toObj((String) obj, RecommendArticleResp.class)).sorted(Comparator.comparing(RecommendArticleResp::getPublishTime).reversed()).collect(Collectors.toList());
     }
 
     /**

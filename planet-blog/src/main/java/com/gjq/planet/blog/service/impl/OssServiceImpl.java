@@ -34,7 +34,8 @@ public class OssServiceImpl implements OssService {
                 .fileName(req.getFileName())
                 .filePath(sceneEnum.getPath())
                 .uid(uid)
-                .autoPath(false)
+                // 开启自动生成地址，防止地址重复
+                .autoPath(true)
                 .build();
         return minioTemplate.getPreSignedObjectUrl(ossReq);
     }
