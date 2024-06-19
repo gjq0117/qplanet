@@ -38,4 +38,10 @@ public class GroupMemberDao extends ServiceImpl<GroupMemberMapper, GroupMember> 
                 .in(GroupMember::getUid, uids)
                 .list();
     }
+
+    public List<GroupMember> ListByGroupId(Long groupId) {
+        return lambdaQuery()
+                .eq(GroupMember::getGroupId, groupId)
+                .list();
+    }
 }

@@ -50,7 +50,7 @@ public class ContactBuilder {
             // 好友会话
             contactResp.setAvatar(friend.getAvatar());
             contactResp.setName(friend.getNickname());
-        } else if (Objects.nonNull(message)) {
+        } else if (Objects.nonNull(roomGroup)) {
             // 群聊会话
             contactResp.setAvatar(roomGroup.getAvatar());
             contactResp.setName(roomGroup.getName());

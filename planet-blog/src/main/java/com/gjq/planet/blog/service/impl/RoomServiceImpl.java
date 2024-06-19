@@ -6,9 +6,11 @@ import com.gjq.planet.blog.cache.redis.batch.RoomGroupCache;
 import com.gjq.planet.blog.dao.RoomDao;
 import com.gjq.planet.blog.dao.UserDao;
 import com.gjq.planet.blog.service.IRoomService;
+import com.gjq.planet.blog.service.WebsocketService;
 import com.gjq.planet.common.domain.entity.GroupMember;
 import com.gjq.planet.common.domain.entity.Room;
 import com.gjq.planet.common.domain.entity.RoomGroup;
+import com.gjq.planet.common.domain.vo.resp.websocket.base.NewMemberJoin;
 import com.gjq.planet.common.enums.blog.YesOrNoEnum;
 import com.gjq.planet.common.enums.im.RoomTypeEnum;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -42,6 +45,9 @@ public class RoomServiceImpl implements IRoomService {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private WebsocketService websocketService;
+
     @Override
     public Long getOnlineNum(Long roomId) {
         Room room = roomCache.get(roomId);
@@ -64,5 +70,12 @@ public class RoomServiceImpl implements IRoomService {
                 .build();
         roomDao.save(room);
         return room.getId();
+    }
+
+    @Override
+    public void newMemberJoining(Long uid, Long roomId) {
+        RoomGroup roomGroup = roomGroupCache.get(roomId);
+        Set<Long> uidSet = groupMemberCache.getBatch(roomGroup.getId(), null).stream().map(GroupMember::getUid).collect(Collectors.toSet());
+        websocketService.pushMsg(new NewMemberJoin(uid), uidSet);
     }
 }

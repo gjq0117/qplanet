@@ -6,10 +6,30 @@ spring:
   profiles:
     active: myTest
   datasource:
-    url: jdbc:mysql://${planet.mysql.ip}:${planet.mysql.port}/${planet.mysql.db}?useUnicode=true&&useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
-    username: ${planet.mysql.username}
-    password: ${planet.mysql.password}
-    driver-class-name: com.mysql.jdbc.Driver
+    druid:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://${planet.mysql.ip}:${planet.mysql.port}/${planet.mysql.db}?useUnicode=true&&useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+      username: ${planet.mysql.username}
+      password: ${planet.mysql.password}
+      # 初始化链接数量
+      initial-size: 10
+      # 最大活动线程数
+      max-active: 100
+      # 最小空闲连接数
+      min-idle: 10
+      # 获取链接的等待超时时间
+      max-wait: 60000
+      # 间隔多久进行一次检查，检查需要关闭的空闲连接
+      time-between-eviction-runs-millis: 60000
+      # 配置一个连接在连接池里最下的生存时间
+      min-evictable-idle-time-millis: 30000
+      # 校验的sql
+      validation-query: SELECT 1
+      # 异步初始化策略
+      async-init: true
+      # 打开PSCache。并且指定每个连接上PSCache连接大小
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
   redis:
     # Redis服务器地址
     host: ${planet.redis.host}
@@ -21,6 +41,17 @@ spring:
     timeout: 1800000
     # 设置密码
     password: ${planet.redis.password}
+    jedis:
+      pool:
+        enabled: true
+        # 连接池最大连接数
+        max-active: 20
+        # 连接池最大阻塞时间（ms） 负值表示没有时间限制
+        max-wait: -1
+        # 最大空闲连接
+        max-idle: 10
+        # 最小空闲连接
+        min-idle: 2
   # 邮箱配置
   mail:
     host: ${planet.mail.host}

@@ -1,10 +1,12 @@
 package com.gjq.planet.blog.event.listener;
 
+import com.gjq.planet.blog.cache.redis.batch.GroupMemberCache;
 import com.gjq.planet.blog.dao.ContactDao;
 import com.gjq.planet.blog.dao.GroupMemberDao;
 import com.gjq.planet.blog.dao.RoomDao;
 import com.gjq.planet.blog.dao.RoomGroupDao;
 import com.gjq.planet.blog.event.UserRegisterSuccessEvent;
+import com.gjq.planet.blog.service.IRoomService;
 import com.gjq.planet.blog.service.IpService;
 import com.gjq.planet.common.domain.entity.*;
 import com.gjq.planet.common.enums.blog.YesOrNoEnum;
@@ -41,7 +43,14 @@ public class UserRegisterSuccessListener {
     private GroupMemberDao groupMemberDao;
 
     @Autowired
+    private GroupMemberCache groupMemberCache;
+
+    @Autowired
     private ContactDao contactDao;
+
+    @Autowired
+    private IRoomService roomService;
+
 
     /**
      * 初始化IP信息
@@ -75,6 +84,7 @@ public class UserRegisterSuccessListener {
                 .role(ChatGroupRoleEnum.COMMON_MEMBER.getType())
                 .build();
         groupMemberDao.save(groupMember);
+        groupMemberCache.put(groupMember.getGroupId(), groupMember);
         // 会话列表
         Contact contact = Contact.builder()
                 .uid(user.getId())
@@ -82,6 +92,8 @@ public class UserRegisterSuccessListener {
                 .readTime(new Date())
                 .build();
         contactDao.save(contact);
+        // 新成员进群
+        roomService.newMemberJoining(user.getId(), roomGroup.getRoomId());
     }
 
     /**

@@ -14,8 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -70,9 +70,14 @@ public class WebsocketServiceImpl implements WebsocketService {
     @Override
     public void userOffline(Channel channel, String token) {
         Long uidOrNull = tokenUtils.getUidOrNull(token);
-        if (Objects.nonNull(uidOrNull)) {
+        userOffline(uidOrNull);
+    }
+
+    @Override
+    public void userOffline(Long uid) {
+        if (Objects.nonNull(uid)) {
             // 移除连接信息
-            ONLINE_UID_MAP.remove(uidOrNull);
+            ONLINE_UID_MAP.remove(uid);
         }
     }
 
@@ -82,11 +87,11 @@ public class WebsocketServiceImpl implements WebsocketService {
     }
 
     @Override
-    public void pushMsg(WsBaseResp wsBaseResp, List<Long> uidList) {
+    public void pushMsg(WsBaseResp wsBaseResp, Set<Long> uidSet) {
         WSResp wsResp = new WSResp(wsBaseResp);
-        if (Objects.nonNull(uidList)) {
+        if (Objects.nonNull(uidSet)) {
             // 推送指定用户
-            for (Long uid : uidList) {
+            for (Long uid : uidSet) {
                 Channel channel = ONLINE_UID_MAP.get(uid);
                 if (Objects.nonNull(channel)) {
                     executor.execute(() -> {

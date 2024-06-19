@@ -8,7 +8,6 @@ import com.gjq.planet.common.utils.JsonUtils;
 import com.gjq.planet.transaction.dao.SecureInvokeRecordDao;
 import com.gjq.planet.transaction.domain.dto.SecureInvokeDTO;
 import com.gjq.planet.transaction.domain.entity.SecureInvokeRecord;
-import com.sun.istack.internal.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +15,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
+import javax.validation.constraints.NotNull;
 import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.List;

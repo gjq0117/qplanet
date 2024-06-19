@@ -1,4 +1,4 @@
-package com.gjq.planet.blog.service.consumer;
+package com.gjq.planet.blog.mq.consumer;
 
 import com.gjq.planet.blog.cache.redis.batch.GroupMemberCache;
 import com.gjq.planet.blog.cache.redis.batch.RoomCache;
@@ -7,6 +7,7 @@ import com.gjq.planet.blog.dao.ContactDao;
 import com.gjq.planet.blog.dao.MessageDao;
 import com.gjq.planet.blog.dao.RoomDao;
 import com.gjq.planet.blog.dao.RoomFriendDao;
+import com.gjq.planet.blog.service.IContactService;
 import com.gjq.planet.blog.service.IMessageService;
 import com.gjq.planet.blog.service.WebsocketService;
 import com.gjq.planet.common.constant.MQConstant;
@@ -20,8 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -60,19 +62,29 @@ public class MsgSendConsumer implements RocketMQListener<MsgSendMessageDTO> {
     @Autowired
     private IMessageService messageService;
 
+    @Autowired
+    private IContactService contactService;
+
     @Override
     public void onMessage(MsgSendMessageDTO dto) {
         Message message = messageDao.getById(dto.getMsgId());
-        // 更新最新消息
         Room room = roomCache.get(message.getRoomId());
+        // 推送消息
+        pushMsg(room, message);
+    }
+
+    private void pushMsg(Room room, Message message) {
+        // 更新最新消息
         if (Objects.isNull(room)) return;
         ChatMessageBody chatMessageResp = messageService.buildMsgResp(message.getId());
+        Set<Long> uidSet = null;
         if (room.isFriendRoom()) {
             // 单聊房间（更新会话最新消息）
             RoomFriend friendRoom = roomFriendDao.getByRoomId(room.getId());
             contactDao.refreshActiveTime(room.getId(), message, Arrays.asList(friendRoom.getUid1(), friendRoom.getUid2()));
             // 推送消息给好友
-            websocketService.pushMsg(new NewMessage(chatMessageResp), Arrays.asList(friendRoom.getUid1(), friendRoom.getUid2()));
+            uidSet = new HashSet<>(Arrays.asList(friendRoom.getUid1(), friendRoom.getUid2()));
+            websocketService.pushMsg(new NewMessage(chatMessageResp), uidSet);
         } else if (room.isGroupRoom()) {
             // 群聊房间（更新房间最新消息）
             roomDao.refreshActiveTime(room.getId(), message);
@@ -85,8 +97,8 @@ public class MsgSendConsumer implements RocketMQListener<MsgSendMessageDTO> {
             } else {
                 // 普通群聊
                 RoomGroup roomGroup = roomGroupCache.get(room.getId());
-                List<Long> uidList = groupMemberCache.getBatch(roomGroup.getId(), null).stream().map(GroupMember::getUid).collect(Collectors.toList());
-                websocketService.pushMsg(new NewMessage(chatMessageResp), uidList);
+                uidSet = groupMemberCache.getBatch(roomGroup.getId(), null).stream().map(GroupMember::getUid).collect(Collectors.toSet());
+                websocketService.pushMsg(new NewMessage(chatMessageResp), uidSet);
             }
         }
     }

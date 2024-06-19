@@ -28,7 +28,8 @@ public class ContactDao extends ServiceImpl<ContactMapper, Contact> {
     public CursorPageBaseResp<Contact> getCursorPage(Long uid, ContactPageReq req) {
         return CursorUtils.getCursorPageByMysql(this, req, wrapper -> {
             wrapper.eq(Contact::getUid, uid);
-        }, Contact::getActiveTime);
+            wrapper.isNotNull(Contact::getActiveTime);
+        }, Contact::getActiveTime, false);
     }
 
     /**
@@ -45,5 +46,25 @@ public class ContactDao extends ServiceImpl<ContactMapper, Contact> {
                 .in(Contact::getUid, uidList)
                 .eq(Contact::getRoomId, roomId)
                 .update();
+    }
+
+    public Contact getByUidAndRoomId(Long uid, Long roomId) {
+        return lambdaQuery()
+                .eq(Contact::getUid, uid)
+                .eq(Contact::getRoomId, roomId)
+                .one();
+    }
+
+    /**
+     *  获取群聊会话
+     *
+     * @param uid
+     * @return
+     */
+    public List<Contact> getGroupContact(Long uid) {
+        return lambdaQuery()
+                .eq(Contact::getUid, uid)
+                .eq(Contact::getActiveTime, null)
+                .list();
     }
 }

@@ -13,7 +13,7 @@ CREATE TABLE `user_apply`
     `deleted`     tinyint(1) NULL DEFAULT 0 COMMENT '是否删除【0：未删除、1：已删除】',
     PRIMARY KEY (`id`),
     INDEX         `idx_target_type`(`target_id`, `type`)
-) COMMENT = '用户申请表';
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户申请表' ROW_FORMAT = Dynamic;
 
 CREATE TABLE `user_friend`
 (
@@ -27,7 +27,7 @@ CREATE TABLE `user_friend`
     `deleted`     tinyint(1) NULL DEFAULT 0 COMMENT '是否删除【0：未删除、1：删除】',
     PRIMARY KEY (`id`),
     INDEX         `idx_uid_friend_uid`(`uid`, `friend_uid`)
-) COMMENT = '用户好友表';
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户好友表' ROW_FORMAT = Dynamic;
 -- end
 
 -- start 2024.05.24 start
@@ -44,9 +44,10 @@ CREATE TABLE `room`
     `update_time` datetime NULL COMMENT '更新时间',
     `deleted`     tinyint(1) NULL DEFAULT 0 COMMENT '是否删除【0：未删除；1：删除】',
     PRIMARY KEY (`id`)
-) COMMENT = '房间信息表';
-insert into room(id, type, hot_flag, create_time, update_time, deleted)
-values (1, 3, 1, NOW(), NOW(), 0);
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '房间信息表' ROW_FORMAT = Dynamic;
+-- 创建默认大群聊
+insert into room(id, type, hot_flag, active_time, create_time, update_time, deleted)
+values (1, 3, 1, NOW(), NOW(), NOW(), 0);
 
 CREATE TABLE `message`
 (
@@ -62,8 +63,9 @@ CREATE TABLE `message`
     `create_time`  datetime NULL COMMENT '创建时间',
     `update_time`  datetime NULL COMMENT '更新时间',
     `deleted`      tinyint(1) NULL DEFAULT 0 COMMENT '是否删除【0：未删除；1：删除】',
-    PRIMARY KEY (`id`)
-) COMMENT = '消息表';
+    PRIMARY KEY (`id`),
+    INDEX          `idx_room_id`(`room_id`)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '消息表' ROW_FORMAT = Dynamic;
 
 CREATE TABLE `room_friend`
 (
@@ -76,7 +78,7 @@ CREATE TABLE `room_friend`
     `update_time` datetime NULL COMMENT '更新时间',
     `deleted`     tinyint(1) NULL DEFAULT 0 COMMENT '是否删除【0：未删除；1：删除】',
     PRIMARY KEY (`id`)
-) COMMENT = '好友房间';
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '好友房间表' ROW_FORMAT = Dynamic;
 
 CREATE TABLE `room_group`
 (
@@ -90,8 +92,9 @@ CREATE TABLE `room_group`
     `deleted`     tinyint(1) NULL DEFAULT 0 COMMENT '是否删除【0：未删除；1：删除】',
     PRIMARY KEY (`id`),
     INDEX         `idx_room_id`(`room_id`)
-) COMMENT = '群聊房间';
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '群聊房间' ROW_FORMAT = Dynamic;
 insert into room_group(id, room_id, name, avatar, create_time, update_time, deleted)
+-- 默认群信息
 values (1, 1, 'Q星球全员群', 'https://minio.qplanet.cn/planet/user/3ea6beec64369c2642b92c6726f1epng.png', NOW(), NOW(),
         0);
 
@@ -104,8 +107,9 @@ CREATE TABLE `group_member`
     `create_time` datetime NULL COMMENT '创建时间',
     `update_time` datetime NULL COMMENT '更新时间',
     `deleted`     tinyint(1) NULL DEFAULT 0 COMMENT '是否删除【0：未删除；1：已删除】',
-    PRIMARY KEY (`id`)
-) COMMENT = '群成员信息';
+    PRIMARY KEY (`id`),
+    INDEX         `idx_group_id_uid`(`group_id`, `uid`)
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '群成员信息' ROW_FORMAT = Dynamic;
 
 
 CREATE TABLE `contact`
@@ -121,7 +125,7 @@ CREATE TABLE `contact`
     `deleted`     tinyint(1) NULL DEFAULT 0 COMMENT '是否删除【0：未删除；1：删除】',
     PRIMARY KEY (`id`),
     INDEX         `idx_uid_room_id`(`uid`, `room_id`)
-) COMMENT = '会话信息表';
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '会话信息表' ROW_FORMAT = Dynamic;
 -- end
 
 -- 2024.06.01 start
@@ -139,7 +143,4 @@ CREATE TABLE `secure_invoke_record`
     PRIMARY KEY (`id`) USING BTREE,
     INDEX                `idx_next_retry_time`(`next_retry_time`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '本地消息表' ROW_FORMAT = Dynamic;
-
-SET
-FOREIGN_KEY_CHECKS = 1;
 -- end

@@ -1,7 +1,7 @@
 package com.gjq.planet.blog.event.listener;
 
 import com.gjq.planet.blog.event.MessageSendEvent;
-import com.gjq.planet.blog.service.producer.MqProducer;
+import com.gjq.planet.blog.mq.producer.MqProducer;
 import com.gjq.planet.common.constant.MQConstant;
 import com.gjq.planet.common.domain.dto.msg.MsgSendMessageDTO;
 import lombok.extern.slf4j.Slf4j;

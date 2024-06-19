@@ -10,9 +10,7 @@ import com.gjq.planet.common.utils.RequestHolder;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -32,11 +30,18 @@ public class ContactController {
     @Autowired
     private IContactService contactService;
 
-    @GetMapping("/getContactListPage")
+    @PostMapping("/getContactListPage")
     @ApiOperation("获取会话分页列表")
-    public ApiResult<CursorPageBaseResp<ContactResp>> getContactListPage(@Valid ContactPageReq req) {
+    public ApiResult<CursorPageBaseResp<ContactResp>> getContactListPage(@RequestBody @Valid ContactPageReq req) {
         Long uid = RequestHolder.get().getUid();
         return ApiResult.success(contactService.getContactListPage(uid, req));
+    }
+
+    @GetMapping("/getContactResp/{roomId}")
+    @ApiOperation("主动拉取会话信息")
+    public ApiResult<ContactResp> getContactResp(@PathVariable("roomId") Long roomId) {
+        Long uid = RequestHolder.get().getUid();
+        return ApiResult.success(contactService.getContactResp(uid, roomId));
     }
 }
 

@@ -42,7 +42,7 @@ public class UserFriendDao extends ServiceImpl<UserFriendMapper, UserFriend> {
     public CursorPageBaseResp<UserFriend> pageFriendInfo(UserFriendPageReq req) {
         return CursorUtils.getCursorPageByMysql(this, req, wrapper -> {
             wrapper.eq(UserFriend::getUid, req.getCurrUid());
-        }, UserFriend::getCreateTime);
+        }, UserFriend::getCreateTime, false);
     }
 
     /**

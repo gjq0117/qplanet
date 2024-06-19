@@ -24,4 +24,12 @@ public interface IRoomService  {
      * @return 房间号
      */
     Long createSingleRoom();
+
+    /**
+     *  新成员进群
+     *
+     * @param uid 用户ID
+     * @param roomId 房间号
+     */
+    void newMemberJoining(Long uid, Long roomId);
 }

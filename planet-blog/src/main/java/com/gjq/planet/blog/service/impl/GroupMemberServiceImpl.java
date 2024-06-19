@@ -3,6 +3,7 @@ package com.gjq.planet.blog.service.impl;
 import com.gjq.planet.blog.cache.redis.batch.GroupMemberCache;
 import com.gjq.planet.blog.cache.redis.batch.RoomCache;
 import com.gjq.planet.blog.cache.redis.batch.RoomGroupCache;
+import com.gjq.planet.blog.dao.GroupMemberDao;
 import com.gjq.planet.blog.service.IGroupMemberService;
 import com.gjq.planet.blog.service.IUserService;
 import com.gjq.planet.common.domain.entity.GroupMember;
@@ -41,6 +42,9 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
     @Autowired
     private GroupMemberCache groupMemberCache;
 
+    @Autowired
+    private GroupMemberDao groupMemberDao;
+
     @Override
     public CursorPageBaseResp<GroupMemberResp> getGroupMemberPage(GroupMemberReq req) {
         Room room = roomCache.get(req.getRoomId());
@@ -50,7 +54,8 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
             return null;
         }
         RoomGroup roomGroup = roomGroupCache.get(room.getId());
-        List<Long> uidList = groupMemberCache.getBatch(roomGroup.getId(), null).stream().map(GroupMember::getUid).collect(Collectors.toList());
+         List<Long> uidList = groupMemberCache.getBatch(roomGroup.getId(), null).stream().map(GroupMember::getUid).collect(Collectors.toList());
+//        List<Long> uidList = groupMemberDao.ListByGroupId(roomGroup.getId()).stream().map(GroupMember::getUid).collect(Collectors.toList());
         // 排除自己
         uidList.remove(RequestHolder.get().getUid());
         return userService.getUserCursorPage(uidList, req);

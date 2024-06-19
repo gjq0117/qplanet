@@ -6,5 +6,6 @@ MAINTAINER gjq0117@163.com
 ADD planet-blog-1.0-SNAPSHOT.jar app.jar
 # 暴露端口
 EXPOSE 8000
+EXPOSE 8010
 #运行jar包
 ENTRYPOINT ["nohup","java","-jar","app.jar","&"]

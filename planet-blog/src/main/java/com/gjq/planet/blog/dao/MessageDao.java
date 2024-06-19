@@ -40,6 +40,6 @@ public class MessageDao extends ServiceImpl<MessageMapper, Message> {
     public CursorPageBaseResp<Message> getCursorPage(Long roomId, ChatMessagePageReq req) {
         return CursorUtils.getCursorPageByMysql(this, req, wrapper -> {
             wrapper.eq(Message::getRoomId, roomId);
-        }, Message::getId);
+        }, Message::getId, false);
     }
 }

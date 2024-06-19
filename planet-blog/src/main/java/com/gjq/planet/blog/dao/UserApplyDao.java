@@ -47,7 +47,7 @@ public class UserApplyDao extends ServiceImpl<UserApplyMapper, UserApply> {
         return CursorUtils.getCursorPageByMysql(this, req, wrapper -> {
              wrapper.eq(UserApply::getTargetId, req.getCurrUid())
                      .eq(UserApply::getType, UserApplyTypeEnum.FRIEND_APPLY.getType());
-        }, UserApply::getCreateTime);
+        }, UserApply::getCreateTime, false);
 
     }
 

@@ -1,4 +1,4 @@
-package com.gjq.planet.blog.service.producer;
+package com.gjq.planet.blog.mq.producer;
 
 import com.gjq.planet.transaction.annotation.SecureInvoke;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;

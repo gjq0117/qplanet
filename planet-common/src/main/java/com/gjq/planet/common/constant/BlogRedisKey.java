@@ -42,7 +42,7 @@ public class BlogRedisKey {
     /**
      * 注册验证码过期时间（分钟）
      */
-    public static final int REGISTER_CODE_EXPIRE_MINUTES = 5;
+    public static final int REGISTER_CODE_EXPIRE_MINUTES = 1;
 
     /**
      * ===================== 修改密码验证码 ==========================

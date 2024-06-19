@@ -93,6 +93,29 @@ public class UserDao extends ServiceImpl<UserMapper, User> {
                     .select(User::getId, User::getLastActiveTime, User::getIsActive)
                     .eq(User::getIsActive, activeStatusEnum.getStatus())
                     .in(!CollectionUtil.isEmpty(uidList), User::getId, uidList);
-        }, User::getLastActiveTime);
+        }, User::getLastActiveTime, false);
+    }
+
+    /**
+     *  通过用户名获取用户信息
+     *
+     * @param username 用户名
+     */
+    public User getByUserName(String username) {
+        return lambdaQuery()
+                .eq(User::getUsername, username)
+                .one();
+    }
+
+    /**
+     *  通过手机号获取用户信息
+     *
+     * @param phone 手机号
+     * @return 用户信息
+     */
+    public User getByPhone(String phone) {
+        return lambdaQuery()
+                .eq(User::getPhone, phone)
+                .one();
     }
 }

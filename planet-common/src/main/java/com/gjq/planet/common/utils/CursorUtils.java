@@ -20,7 +20,7 @@ import java.util.function.Consumer;
  */
 public class CursorUtils {
 
-    public static  <T> CursorPageBaseResp<T> getCursorPageByMysql(IService<T> mapper, CursorPageBaseReq request, Consumer<LambdaQueryWrapper<T>> initWrapper, SFunction<T, ?> cursorColumn) {
+    public static  <T> CursorPageBaseResp<T> getCursorPageByMysql(IService<T> mapper, CursorPageBaseReq request, Consumer<LambdaQueryWrapper<T>> initWrapper, SFunction<T, ?> cursorColumn, Boolean isAsc) {
         // 游标类型
         Class<?> cursorType = LambdaUtils.getReturnType(cursorColumn);
         LambdaQueryWrapper<T> wrapper = new LambdaQueryWrapper<>();
@@ -31,7 +31,11 @@ public class CursorUtils {
         // 格外条件
         initWrapper.accept(wrapper);
         // 游标方向
-        wrapper.orderByDesc(cursorColumn);
+        if (isAsc) {
+            wrapper.orderByAsc(cursorColumn);
+        } else {
+            wrapper.orderByDesc(cursorColumn);
+        }
         // 分页查询
         Page<T> page = mapper.page(request.initPage(), wrapper);
         // 取出游标

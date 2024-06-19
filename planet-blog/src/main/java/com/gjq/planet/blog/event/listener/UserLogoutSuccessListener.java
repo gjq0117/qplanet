@@ -2,11 +2,13 @@ package com.gjq.planet.blog.event.listener;
 
 import com.gjq.planet.blog.dao.UserDao;
 import com.gjq.planet.blog.event.UserLogoutSuccessEvent;
+import com.gjq.planet.blog.service.WebsocketService;
 import com.gjq.planet.common.domain.entity.User;
 import com.gjq.planet.common.enums.blog.UserActiveStatusEnum;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 /**
  * @author: gjq0117
@@ -19,11 +21,14 @@ public class UserLogoutSuccessListener {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private WebsocketService websocketService;
+
     /**
      * 用户退出登录改变状态
      *
      */
-    @EventListener(classes = UserLogoutSuccessEvent.class)
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT, classes = UserLogoutSuccessEvent.class, fallbackExecution = true)
     public void updateStatus(UserLogoutSuccessEvent userLogoutSuccessEvent) {
         User user = userLogoutSuccessEvent.getUser();
         User update = User.builder()
@@ -31,5 +36,14 @@ public class UserLogoutSuccessListener {
                 .isActive(UserActiveStatusEnum.OFFLINE.getStatus())
                 .build();
         userDao.updateById(update);
+    }
+
+    /**
+     *  使websocket断连
+     */
+    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT, classes = UserLogoutSuccessEvent.class, fallbackExecution = true)
+    public void wsOffline(UserLogoutSuccessEvent userLogoutSuccessEvent) {
+        User user = userLogoutSuccessEvent.getUser();
+        websocketService.userOffline(user.getId());
     }
 }

@@ -5,6 +5,7 @@ import cn.hutool.core.lang.Pair;
 import cn.hutool.crypto.SecureUtil;
 import com.gjq.planet.blog.cache.redis.batch.UserSummerInfoCache;
 import com.gjq.planet.blog.dao.UserDao;
+import com.gjq.planet.blog.event.UserInfoModifyEvent;
 import com.gjq.planet.blog.event.UserLoginSuccessEvent;
 import com.gjq.planet.blog.event.UserLogoutSuccessEvent;
 import com.gjq.planet.blog.event.UserRegisterSuccessEvent;
@@ -12,7 +13,7 @@ import com.gjq.planet.blog.mapper.UserMapper;
 import com.gjq.planet.blog.service.IUserService;
 import com.gjq.planet.blog.service.adapter.GroupMemberBuilder;
 import com.gjq.planet.blog.service.adapter.UserBuilder;
-import com.gjq.planet.blog.utils.ChatMemberUtils;
+import com.gjq.planet.common.utils.CursorSplitUtils;
 import com.gjq.planet.blog.utils.EmailUtil;
 import com.gjq.planet.blog.utils.TokenUtils;
 import com.gjq.planet.common.constant.BlogRedisKey;
@@ -46,7 +47,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -214,15 +218,34 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public void modifyUserInfo(ModifyUserInfoReq req) {
         if (Objects.isNull(req)) {
             return;
         }
-        // 用户昵称不能相同
-        User user = userDao.getByNickName(req.getNickname());
-        AssertUtil.isTrue(Objects.isNull(user) || user.getId().equals(RequestHolder.get().getUid()), "用户昵称已经被占用了噢~ 再换一个吧！");
+        validModifyInfo(req);
         User update = UserBuilder.buildFromModifyReq(req);
         userDao.updateById(update);
+        // 发布用户修改事件
+        applicationEventPublisher.publishEvent(new UserInfoModifyEvent(this ,update.getId()));
+    }
+
+    /**
+     *  校验修改信息
+     *
+     * @param req
+     */
+    private void validModifyInfo(ModifyUserInfoReq req) {
+        //用户名不能重复
+        User user = userDao.getByUserName(req.getUsername());
+        AssertUtil.isTrue(Objects.isNull(user) || user.getId().equals(RequestHolder.get().getUid()), "用户名称已经被占用了噢~ 再换一个吧！");
+        // 手机号不能相同
+        user = userDao.getByPhone(req.getPhone());
+        AssertUtil.isTrue(Objects.isNull(user) || user.getId().equals(RequestHolder.get().getUid()), "手机号已经被注册了噢~ 再换一个吧！");
+        // 邮箱不能重复
+        // 用户昵称不能相同
+        user = userDao.getByNickName(req.getNickname());
+        AssertUtil.isTrue(Objects.isNull(user) || user.getId().equals(RequestHolder.get().getUid()), "用户昵称已经被占用了噢~ 再换一个吧！");
     }
 
     @Override
@@ -254,7 +277,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public CursorPageBaseResp<GroupMemberResp> getUserCursorPage(List<Long> uidList, GroupMemberReq req) {
         // 先查询出在线的，再查询出不在线的
-        Pair<UserActiveStatusEnum, String> cursorPair = ChatMemberUtils.getCursorPair(req.getCursor());
+        Pair<UserActiveStatusEnum, String> cursorPair = CursorSplitUtils.getActiveStatusPair(req.getCursor());
         UserActiveStatusEnum activeStatusEnum = cursorPair.getKey();
         String cursor = cursorPair.getValue();
         Boolean isLast = Boolean.FALSE;
@@ -278,7 +301,7 @@ public class UserServiceImpl implements IUserService {
             cursor = userCursorPageResp.getCursor();
             isLast = userCursorPageResp.getIsLast();
         }
-        return new CursorPageBaseResp<>(ChatMemberUtils.generateCursor(activeStatusEnum, cursor), isLast, result);
+        return new CursorPageBaseResp<>(CursorSplitUtils.generateActiveStatusCursor(activeStatusEnum, cursor), isLast, result);
     }
 
     @Override

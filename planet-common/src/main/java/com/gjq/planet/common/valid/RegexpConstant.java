@@ -10,12 +10,12 @@ public class RegexpConstant {
     /**
      * 系统用户名正则表达式
      */
-    public static final String USERNAME_REGEXP = "[a-zA-Z]{5,10}";
+    public static final String USERNAME_REGEXP = "[a-zA-Z]{8,15}";
 
     /**
      * 系统用户名正则表达式提示消息
      */
-    public static final String USERNAME_MESSAGE = "用户名只能是5-10位以内英文字母";
+    public static final String USERNAME_MESSAGE = "用户名只能是8-15位以内英文字母";
 
     // ============================================================================================
 
@@ -47,12 +47,12 @@ public class RegexpConstant {
     /**
      * 系统昵称正则表达式
      */
-    public static final String NICKNAME_REGEXP = "^(?!_)(?!.*?_$)[a-zA-Z0-9_\\u4e00-\\u9fa5]{5,10}$";
+    public static final String NICKNAME_REGEXP = "^(?!_)(?!.*?_$)[a-zA-Z0-9_\\u4e00-\\u9fa5]{2,8}$";
 
     /**
      * 系统昵称正则表达式消息提示
      */
-    public static final String NICKNAME_MASSAGE = "昵称只能包含字母、数字、下划线或中文字符,不能以下划线开头或结尾，且在5-10位之间";
+    public static final String NICKNAME_MASSAGE = "昵称只能包含字母、数字、下划线或中文字符,不能以下划线开头或结尾，且在2-8位之间";
 
     /**
      * 系统好友备注正则表达式

@@ -45,6 +45,8 @@ public class UserBuilder {
                 .nickname(buildNickName())
                 // 默认性别未知
                 .gender(GenderEnum.UNKNOWN.getType())
+                // 默认头像
+                .avatar("https://minio.qplanet.cn/planet/blog/2024-06-06/10000/3ea6beec64369c2642b92c6726f1epng.png")
                 .userStatus(YesOrNoEnum.YES.getCode())
                 .userType(SystemRoleEnum.CUSTOMER.getCode())
                 .lastActiveTime(new Date())

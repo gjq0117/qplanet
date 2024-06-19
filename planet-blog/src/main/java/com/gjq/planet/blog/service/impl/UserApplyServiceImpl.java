@@ -3,10 +3,7 @@ package com.gjq.planet.blog.service.impl;
 import cn.hutool.core.util.ObjectUtil;
 import com.gjq.planet.blog.dao.UserApplyDao;
 import com.gjq.planet.blog.dao.UserFriendDao;
-import com.gjq.planet.blog.service.IMessageService;
-import com.gjq.planet.blog.service.IRoomFriendService;
-import com.gjq.planet.blog.service.IUserApplyService;
-import com.gjq.planet.blog.service.IUserFriendService;
+import com.gjq.planet.blog.service.*;
 import com.gjq.planet.blog.service.adapter.MessageBuilder;
 import com.gjq.planet.blog.service.adapter.UserApplyBuilder;
 import com.gjq.planet.blog.service.adapter.UserFriendBuilder;
@@ -26,8 +23,11 @@ import com.gjq.planet.common.utils.RequestHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -51,6 +51,9 @@ public class UserApplyServiceImpl implements IUserApplyService {
 
     @Autowired
     private IRoomFriendService roomFriendService;
+
+    @Autowired
+    private IContactService contactService;
 
     @Autowired
     private IMessageService chatService;
@@ -89,7 +92,7 @@ public class UserApplyServiceImpl implements IUserApplyService {
     }
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     public void agreeFriendApply(Long currUid, Long targetId) {
         //1、检验是否有这个申请(TA向你申请的)，且申请必须要是待审核状态
         checkUserApplyIsAvailable(targetId, currUid, UserApplyTypeEnum.FRIEND_APPLY.getType());
@@ -108,7 +111,9 @@ public class UserApplyServiceImpl implements IUserApplyService {
         } else {
             roomId = roomFriendService.createFriendRoom(currUid, targetId);
         }
-        //5、同意方（currUid）向房间内发送一条消息
+        //5、向双方推送一个新会话
+        contactService.pushNewContact(roomId, new HashSet<>(Arrays.asList(currUid, targetId)));
+        //6、同意方（currUid）向房间内发送一条消息
         ChatMessageReq req = MessageBuilder.buildHelloMsgReq(roomId);
         chatService.sendMsg(currUid, req);
     }
