@@ -7,7 +7,6 @@ import com.gjq.planet.common.domain.entity.Message;
 import com.gjq.planet.common.domain.vo.req.chat.ChatMessageReq;
 import com.gjq.planet.common.domain.vo.resp.chat.ChatMessageBody;
 import com.gjq.planet.common.enums.im.MessageTypeEnum;
-import com.gjq.planet.common.utils.CommonUtil;
 
 /**
  * @author: gjq0117
@@ -37,7 +36,7 @@ public class MessageBuilder {
         ChatMessageBody.MessageInfo messageInfo = ChatMessageBody.MessageInfo.builder()
                 .id(message.getId())
                 .roomId(message.getRoomId())
-                .sendTime(CommonUtil.formatTime(message.getCreateTime()))
+                .sendTime(message.getCreateTime().getTime())
                 .type(message.getType())
                 .build();
         AbstractMsgHandler<?> msgHandler = MsgHandlerFactory.getStrategyNoNull(message.getType());

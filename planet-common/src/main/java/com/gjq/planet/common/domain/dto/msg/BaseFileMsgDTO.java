@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -27,6 +26,5 @@ public class BaseFileMsgDTO implements Serializable {
     private String url;
 
     @ApiModelProperty("文件大小")
-    @NotNull(message = "文件大小不能为空")
     private Long size;
 }

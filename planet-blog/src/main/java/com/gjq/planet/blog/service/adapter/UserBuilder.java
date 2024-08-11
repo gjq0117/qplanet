@@ -10,7 +10,7 @@ import com.gjq.planet.common.domain.vo.resp.user.UserListResp;
 import com.gjq.planet.common.domain.vo.resp.user.UserSummerInfoResp;
 import com.gjq.planet.common.enums.blog.GenderEnum;
 import com.gjq.planet.common.enums.blog.SystemRoleEnum;
-import com.gjq.planet.common.enums.blog.YesOrNoEnum;
+import com.gjq.planet.common.enums.common.YesOrNoEnum;
 import com.gjq.planet.common.utils.CommonUtil;
 import com.gjq.planet.common.utils.RequestHolder;
 import org.springframework.beans.BeanUtils;

@@ -4,7 +4,7 @@ import com.gjq.planet.common.domain.entity.User;
 import com.gjq.planet.common.domain.entity.UserFriend;
 import com.gjq.planet.common.domain.vo.resp.user.UserSummerInfoResp;
 import com.gjq.planet.common.domain.vo.resp.userfriend.FriendDetailedResp;
-import com.gjq.planet.common.enums.blog.YesOrNoEnum;
+import com.gjq.planet.common.enums.common.YesOrNoEnum;
 import org.springframework.beans.BeanUtils;
 
 /**

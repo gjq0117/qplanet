@@ -9,7 +9,7 @@ import com.gjq.planet.blog.event.UserRegisterSuccessEvent;
 import com.gjq.planet.blog.service.IRoomService;
 import com.gjq.planet.blog.service.IpService;
 import com.gjq.planet.common.domain.entity.*;
-import com.gjq.planet.common.enums.blog.YesOrNoEnum;
+import com.gjq.planet.common.enums.common.YesOrNoEnum;
 import com.gjq.planet.common.enums.im.ChatGroupRoleEnum;
 import com.gjq.planet.common.enums.im.RoomTypeEnum;
 import com.gjq.planet.common.utils.RequestHolder;

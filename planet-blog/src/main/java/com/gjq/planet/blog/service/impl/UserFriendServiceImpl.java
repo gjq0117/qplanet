@@ -18,7 +18,7 @@ import com.gjq.planet.common.domain.vo.req.userfriend.UserFriendPageReq;
 import com.gjq.planet.common.domain.vo.resp.CursorPageBaseResp;
 import com.gjq.planet.common.domain.vo.resp.groupmember.GroupMemberResp;
 import com.gjq.planet.common.domain.vo.resp.userfriend.FriendDetailedResp;
-import com.gjq.planet.common.enums.blog.YesOrNoEnum;
+import com.gjq.planet.common.enums.common.YesOrNoEnum;
 import com.gjq.planet.common.exception.BusinessException;
 import com.gjq.planet.common.utils.AssertUtil;
 import com.gjq.planet.common.utils.RequestHolder;

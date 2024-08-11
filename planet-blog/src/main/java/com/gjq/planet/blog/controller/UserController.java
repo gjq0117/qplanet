@@ -4,12 +4,15 @@ package com.gjq.planet.blog.controller;
 import com.gjq.planet.blog.service.IUserService;
 import com.gjq.planet.common.annotation.NotToken;
 import com.gjq.planet.common.annotation.PlanetAdmin;
+import com.gjq.planet.common.domain.vo.req.CursorPageBaseReq;
+import com.gjq.planet.common.domain.vo.resp.CursorPageBaseResp;
 import com.gjq.planet.common.domain.vo.resp.user.UserSummerInfoResp;
 import com.gjq.planet.common.domain.vo.req.user.*;
 import com.gjq.planet.common.domain.vo.resp.user.LoginResp;
 import com.gjq.planet.common.domain.vo.resp.user.UserInfoResp;
 import com.gjq.planet.common.domain.vo.resp.user.UserListResp;
 import com.gjq.planet.common.utils.ApiResult;
+import com.gjq.planet.common.utils.RequestHolder;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,6 +128,13 @@ public class UserController {
     @PostMapping("/batchRefreshUserSummerInfo")
     public ApiResult<List<UserSummerInfoResp>> batchRefreshUserSummerInfo(@RequestBody RefreshUserSummerReq req) {
         return ApiResult.success(userService.batchRefreshUserSummerInfo(req));
+    }
+
+    @ApiOperation("获取用户@列表")
+    @PostMapping("/getUserAtList")
+    public ApiResult<CursorPageBaseResp<Long>> getUserAtList(@RequestBody @Valid CursorPageBaseReq atPageReq) {
+        Long uid = RequestHolder.get().getUid();
+        return ApiResult.success(userService.getUserAtList(uid, atPageReq));
     }
 }
 

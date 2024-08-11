@@ -1,6 +1,6 @@
 package com.gjq.planet.common.valid;
 
-import com.gjq.planet.common.enums.blog.YesOrNoEnum;
+import com.gjq.planet.common.enums.common.YesOrNoEnum;
 import com.gjq.planet.common.valid.validator.YesOrNoValidator;
 
 import javax.validation.Constraint;

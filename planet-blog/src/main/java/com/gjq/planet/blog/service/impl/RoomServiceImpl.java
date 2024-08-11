@@ -11,7 +11,7 @@ import com.gjq.planet.common.domain.entity.GroupMember;
 import com.gjq.planet.common.domain.entity.Room;
 import com.gjq.planet.common.domain.entity.RoomGroup;
 import com.gjq.planet.common.domain.vo.resp.websocket.base.NewMemberJoin;
-import com.gjq.planet.common.enums.blog.YesOrNoEnum;
+import com.gjq.planet.common.enums.common.YesOrNoEnum;
 import com.gjq.planet.common.enums.im.RoomTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

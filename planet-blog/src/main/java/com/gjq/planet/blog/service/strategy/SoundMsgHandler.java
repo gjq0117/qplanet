@@ -3,12 +3,14 @@ package com.gjq.planet.blog.service.strategy;
 import com.gjq.planet.common.domain.dto.msg.SoundMsgDTO;
 import com.gjq.planet.common.domain.entity.Message;
 import com.gjq.planet.common.enums.im.MessageTypeEnum;
+import org.springframework.stereotype.Component;
 
 /**
  * @author: gjq0117
  * @date: 2024/5/30 10:42
  * @description: 语音消息处理器
  */
+@Component
 public class SoundMsgHandler extends AbstractMsgHandler<SoundMsgDTO> {
 
     @Override

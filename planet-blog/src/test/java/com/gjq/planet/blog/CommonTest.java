@@ -9,7 +9,7 @@ import com.gjq.planet.blog.dao.UserDao;
 import com.gjq.planet.common.domain.entity.Room;
 import com.gjq.planet.common.domain.entity.User;
 import com.gjq.planet.common.enums.blog.SystemRoleEnum;
-import com.gjq.planet.common.enums.blog.YesOrNoEnum;
+import com.gjq.planet.common.enums.common.YesOrNoEnum;
 import com.gjq.planet.common.utils.RedisUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;

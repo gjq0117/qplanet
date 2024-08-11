@@ -48,7 +48,7 @@ public class ChatMessageBody {
         private Long roomId;
 
         @ApiModelProperty("消息发送时间")
-        private String sendTime;
+        private Long sendTime;
 
         @ApiModelProperty("消息类型 1正常文本 2.撤回消息")
         private Integer type;

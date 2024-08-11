@@ -26,7 +26,7 @@ import com.gjq.planet.common.domain.vo.resp.sort.SortResp;
 import com.gjq.planet.common.enums.blog.ArticleAttributeStatusEnum;
 import com.gjq.planet.common.enums.blog.ArticleRelationEnum;
 import com.gjq.planet.common.enums.blog.ArticleStatusEnum;
-import com.gjq.planet.common.enums.blog.YesOrNoEnum;
+import com.gjq.planet.common.enums.common.YesOrNoEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;

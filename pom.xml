@@ -13,6 +13,7 @@
         <module>planet-blog</module>
         <module>planet-framework</module>
         <module>planet-framework/planet-transaction-starter</module>
+        <module>planet-framework/planet-lock-starter</module>
     </modules>
 
     <properties>

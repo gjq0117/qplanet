@@ -33,7 +33,7 @@ import com.gjq.planet.common.domain.vo.resp.user.UserListResp;
 import com.gjq.planet.common.domain.vo.resp.user.UserSummerInfoResp;
 import com.gjq.planet.common.enums.blog.SystemRoleEnum;
 import com.gjq.planet.common.enums.blog.UserActiveStatusEnum;
-import com.gjq.planet.common.enums.blog.YesOrNoEnum;
+import com.gjq.planet.common.enums.common.YesOrNoEnum;
 import com.gjq.planet.common.utils.AssertUtil;
 import com.gjq.planet.common.utils.CommonUtil;
 import com.gjq.planet.common.utils.RedisUtils;
@@ -322,6 +322,13 @@ public class UserServiceImpl implements IUserService {
             Long lastRefreshDate = lastRefreshDateList.get(uidList.indexOf(userSummerInfoResp.getUid()));
             return Objects.isNull(lastRefreshDate) || lastRefreshDate < lastUpdateTime;
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    public CursorPageBaseResp<Long> getUserAtList(Long currUid, CursorPageBaseReq req) {
+        CursorPageBaseResp<User> userAtList = userDao.getUserAtList(currUid, req);
+        List<Long> uidList = userAtList.getList().stream().map(User::getId).collect(Collectors.toList());
+        return new CursorPageBaseResp<>(userAtList.getCursor(), userAtList.getIsLast(), uidList);
     }
 
     /**

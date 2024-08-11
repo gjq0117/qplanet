@@ -2,7 +2,7 @@ package com.gjq.planet.common.domain.vo.req.user;
 
 import com.gjq.planet.common.enums.blog.GenderEnum;
 import com.gjq.planet.common.enums.blog.SystemRoleEnum;
-import com.gjq.planet.common.enums.blog.YesOrNoEnum;
+import com.gjq.planet.common.enums.common.YesOrNoEnum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

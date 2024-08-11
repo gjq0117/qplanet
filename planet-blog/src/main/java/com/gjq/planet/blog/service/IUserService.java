@@ -1,6 +1,7 @@
 package com.gjq.planet.blog.service;
 
 
+import com.gjq.planet.common.domain.vo.req.CursorPageBaseReq;
 import com.gjq.planet.common.domain.vo.req.groupmember.GroupMemberReq;
 import com.gjq.planet.common.domain.vo.req.user.*;
 import com.gjq.planet.common.domain.vo.resp.CursorPageBaseResp;
@@ -133,4 +134,13 @@ public interface IUserService {
      * @return return
      */
     List<UserSummerInfoResp> batchRefreshUserSummerInfo(RefreshUserSummerReq req);
+
+    /**
+     *  获取用户At列表
+     *
+     * @param currUid 当前用户ID
+     * @param req 分页请求
+     * @return
+     */
+    CursorPageBaseResp<Long> getUserAtList(Long currUid, CursorPageBaseReq req);
 }

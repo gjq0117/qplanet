@@ -97,7 +97,7 @@ public class UserDao extends ServiceImpl<UserMapper, User> {
     }
 
     /**
-     *  通过用户名获取用户信息
+     * 通过用户名获取用户信息
      *
      * @param username 用户名
      */
@@ -108,7 +108,7 @@ public class UserDao extends ServiceImpl<UserMapper, User> {
     }
 
     /**
-     *  通过手机号获取用户信息
+     * 通过手机号获取用户信息
      *
      * @param phone 手机号
      * @return 用户信息
@@ -117,5 +117,11 @@ public class UserDao extends ServiceImpl<UserMapper, User> {
         return lambdaQuery()
                 .eq(User::getPhone, phone)
                 .one();
+    }
+
+    public CursorPageBaseResp<User> getUserAtList(Long currUid, CursorPageBaseReq req) {
+        return CursorUtils.getCursorPageByMysql(this, req, wrapper -> {
+            wrapper.ne(User::getId, currUid);
+        }, User::getCreateTime, false);
     }
 }

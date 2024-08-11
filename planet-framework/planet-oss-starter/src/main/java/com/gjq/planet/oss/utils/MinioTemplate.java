@@ -137,7 +137,7 @@ public class MinioTemplate {
 //        String suffix = FileNameUtil.getSuffix(req.getFileName());
         String yearAndMonth = DateUtil.format(new Date(), DatePattern.NORM_DATE_PATTERN);
         //   https://minio.qplanet.cn/blog/2024-06-06/10001/uuid.../文件名.txt
-        return req.getFilePath() + StrUtil.SLASH + yearAndMonth + StrUtil.SLASH + uid + StrUtil.SLASH + uuid.toString().replace(StrUtil.DASHED, "") + StrUtil.DASHED + req.getFileName();
+        return req.getFilePath() + StrUtil.SLASH + yearAndMonth + StrUtil.SLASH + uid + StrUtil.SLASH + uuid.toString().replace(StrUtil.COLON, "") + StrUtil.COLON + req.getFileName();
 //        return req.getFilePath() + StrUtil.SLASH + yearAndMonth + StrUtil.SLASH + uid + StrUtil.SLASH + uuid.toString().replace(StrUtil.DASHED, "") + StrUtil.DOT + suffix;
     }
 
