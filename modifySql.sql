@@ -144,3 +144,30 @@ CREATE TABLE `secure_invoke_record`
     INDEX                `idx_next_retry_time`(`next_retry_time`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '本地消息表' ROW_FORMAT = Dynamic;
 -- end
+
+-- 线上部署完成
+
+-- start 2024.8.13 14:08 新增机器人信息表
+DROP TABLE IF EXISTS `robot`;
+CREATE TABLE `robot`  (
+  `id` bigint(20) NOT NULL COMMENT '主键',
+  `uid` bigint(20) NULL DEFAULT NULL COMMENT '对应的uid',
+  `model` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '大模型',
+  `temperature` float(5, 1) NULL DEFAULT NULL COMMENT '模型温度（0~1之间）',
+  `api_key` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'openAI对应的apiKey',
+  `base_url` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'openAI对应的baseUrl',
+  `today_reply_num` int(10) NULL DEFAULT NULL COMMENT '今日回答次数',
+  `total_reply_num` int(10) NULL DEFAULT NULL COMMENT '总共回答次数',
+  `daily_limit_num` int(10) NULL DEFAULT NULL COMMENT '每日上限次数',
+  `today_fail_num` int(10) NULL DEFAULT NULL COMMENT '今日回答失败次数',
+  `total_fail_num` int(10) NULL DEFAULT NULL COMMENT '总共回答失败次数',
+  `enabled` int(1) NULL DEFAULT NULL COMMENT '是否启用【0：否；1：是】',
+  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
+  `deleted` tinyint(1) NULL DEFAULT NULL COMMENT '是否删除【0：未删除；1：删除】',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '机器人信息（openAI）' ROW_FORMAT = Dynamic;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- end

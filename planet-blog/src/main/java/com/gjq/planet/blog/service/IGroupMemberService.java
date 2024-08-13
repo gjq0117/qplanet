@@ -18,4 +18,11 @@ public interface IGroupMemberService {
      * 获取群成员分页信息
      */
     CursorPageBaseResp<GroupMemberResp> getGroupMemberPage(GroupMemberReq req);
+
+    /**
+     *  加入系统大群聊
+     *
+     * @param uid
+     */
+    void joinSystemGroup(Long uid);
 }

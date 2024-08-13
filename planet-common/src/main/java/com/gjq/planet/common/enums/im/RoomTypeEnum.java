@@ -19,7 +19,9 @@ public enum RoomTypeEnum {
 
     SINGLE_CHAT(1, "单聊"),
     COMMON_ROOM_CHAT(2, "普通群聊"),
-    ALL_STAFF_ROOM_CHAT(3, "全员群聊");
+    ALL_STAFF_ROOM_CHAT(3, "全员群聊"),
+    ROBOT_CHAT(4, "机器人"),
+    ;
 
     private final Integer type;
 

@@ -108,4 +108,14 @@ public class Room implements Serializable {
     public Boolean isHotRoom() {
         return RoomTypeEnum.of(this.type).equals(RoomTypeEnum.ALL_STAFF_ROOM_CHAT);
     }
+
+    /**
+     *  是否是机器人房间
+     *
+     * @return
+     */
+    @JsonIgnore
+    public Boolean isRobotRoom() {
+        return  RoomTypeEnum.of(this.type).equals(RoomTypeEnum.ROBOT_CHAT);
+    }
 }

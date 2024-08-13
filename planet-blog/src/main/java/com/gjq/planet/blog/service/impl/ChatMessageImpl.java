@@ -7,6 +7,7 @@ import com.gjq.planet.blog.dao.MessageDao;
 import com.gjq.planet.blog.dao.RoomFriendDao;
 import com.gjq.planet.blog.event.MessageSendEvent;
 import com.gjq.planet.blog.service.IMessageService;
+import com.gjq.planet.blog.service.IRobotService;
 import com.gjq.planet.blog.service.IUserFriendService;
 import com.gjq.planet.blog.service.adapter.MessageBuilder;
 import com.gjq.planet.blog.service.strategy.AbstractMsgHandler;
@@ -26,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.Collectors;
 
 /**
@@ -57,6 +59,12 @@ public class ChatMessageImpl implements IMessageService {
 
     @Autowired
     private ApplicationEventPublisher eventPublisher;
+
+    @Autowired
+    private IRobotService robotService;
+
+    @Autowired
+    private ThreadPoolExecutor executor;
 
     @Override
     @Transactional
@@ -102,6 +110,9 @@ public class ChatMessageImpl implements IMessageService {
             RoomGroup roomGroup = roomGroupCache.get(room.getId());
             GroupMember groupMember = groupMemberDao.getByGroupIdAndUid(roomGroup.getId(), uid);
             AssertUtil.isNotEmpty(groupMember, "你已不是群成员了噢~");
+        } else if(room.isRobotRoom()) {
+            // TODO 校验机器人是否存在（单聊情况）
+
         } else {
             throw new BusinessException("房间类型错误，roomType：" + room.getType());
         }
