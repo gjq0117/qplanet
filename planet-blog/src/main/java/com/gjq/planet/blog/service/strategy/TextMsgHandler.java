@@ -60,8 +60,6 @@ public class TextMsgHandler extends AbstractMsgHandler<TextMsgDTO> {
         if (CollectionUtil.isNotEmpty(textMsgDTO.getAtUidList())) {
             // 前端可能传来重复的
             List<Long> atUidList = textMsgDTO.getAtUidList().stream().distinct().collect(Collectors.toList());
-            // TODO 考虑是否@机器人,并校验机器人是否存在（群聊的情况）
-
             RoomGroup roomGroup = roomGroupCache.get(roomId);
             List<GroupMember> memberCacheBatch = groupMemberCache.getBatch(roomGroup.getId(), atUidList);
             AssertUtil.equal(atUidList.size(), memberCacheBatch.size(), "@用户不存在");

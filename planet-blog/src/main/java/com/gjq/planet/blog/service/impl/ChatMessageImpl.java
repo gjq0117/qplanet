@@ -2,13 +2,14 @@ package com.gjq.planet.blog.service.impl;
 
 import com.gjq.planet.blog.cache.redis.batch.RoomCache;
 import com.gjq.planet.blog.cache.redis.batch.RoomGroupCache;
+import com.gjq.planet.blog.config.openai.OpenAiFactory;
 import com.gjq.planet.blog.dao.GroupMemberDao;
 import com.gjq.planet.blog.dao.MessageDao;
 import com.gjq.planet.blog.dao.RoomFriendDao;
 import com.gjq.planet.blog.event.MessageSendEvent;
 import com.gjq.planet.blog.service.IMessageService;
-import com.gjq.planet.blog.service.IRobotService;
 import com.gjq.planet.blog.service.IUserFriendService;
+import com.gjq.planet.blog.service.WebsocketService;
 import com.gjq.planet.blog.service.adapter.MessageBuilder;
 import com.gjq.planet.blog.service.strategy.AbstractMsgHandler;
 import com.gjq.planet.blog.service.strategy.MsgHandlerFactory;
@@ -27,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.stream.Collectors;
 
 /**
@@ -61,10 +61,7 @@ public class ChatMessageImpl implements IMessageService {
     private ApplicationEventPublisher eventPublisher;
 
     @Autowired
-    private IRobotService robotService;
-
-    @Autowired
-    private ThreadPoolExecutor executor;
+    private WebsocketService websocketService;
 
     @Override
     @Transactional
@@ -111,8 +108,10 @@ public class ChatMessageImpl implements IMessageService {
             GroupMember groupMember = groupMemberDao.getByGroupIdAndUid(roomGroup.getId(), uid);
             AssertUtil.isNotEmpty(groupMember, "你已不是群成员了噢~");
         } else if(room.isRobotRoom()) {
-            // TODO 校验机器人是否存在（单聊情况）
-
+            // 校验机器人是否存在（单聊情况）
+            RoomFriend roomFriend = roomFriendDao.getByRoomId(room.getId());
+            Long modelId = uid.equals(roomFriend.getUid1()) ? roomFriend.getUid1() : roomFriend.getUid2();
+            AssertUtil.isNotEmpty(OpenAiFactory.getModel(modelId), "不存在此机器人~");
         } else {
             throw new BusinessException("房间类型错误，roomType：" + room.getType());
         }

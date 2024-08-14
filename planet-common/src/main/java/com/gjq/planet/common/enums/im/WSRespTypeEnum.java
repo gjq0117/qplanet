@@ -24,6 +24,7 @@ public enum WSRespTypeEnum {
     NEW_MESSAGE(4, "新消息通知", NewMessage.class),
     NEW_MEMBERS_JOINING_GROUP(5, "新人进群通知", NewMemberJoin.class),
     NEW_CONTACT(6, "新会话通知",NewContact.class),
+    CALL_ROBOT(7,"回调机器人", CallRobot.class),
     ;
 
     private final Integer type;
