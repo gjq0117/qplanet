@@ -42,7 +42,7 @@ public class StatisticsServiceImpl implements StatisticsService {
     @Override
     public KeyBroadResp getKeyBroadData() {
         return KeyBroadResp.builder()
-                .userCount(userDao.count())
+                .userCount((int)userDao.count())
                 .articleCount(articleDao.getPublishCount())
                 .viewCount(Optional.ofNullable(webInfoDao.getFirstOne()).map(WebInfo::getViewCount).orElse(0L))
                 // TODO 点赞数量先写死

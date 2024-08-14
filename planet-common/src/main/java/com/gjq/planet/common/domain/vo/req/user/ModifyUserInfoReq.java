@@ -4,10 +4,11 @@ import com.gjq.planet.common.valid.Gender;
 import com.gjq.planet.common.valid.RegexpConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+
 
 /**
  * @author: gjq0117

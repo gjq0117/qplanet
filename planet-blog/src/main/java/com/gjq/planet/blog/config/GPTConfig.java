@@ -4,7 +4,7 @@ import com.gjq.planet.blog.dao.RobotDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 /**
  * @ClassDescription: gpt配置，注入系统中的机器人信息

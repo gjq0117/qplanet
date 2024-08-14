@@ -24,7 +24,7 @@ public class ArticleDao extends ServiceImpl<ArticleMapper, Article> {
     public Integer getArticleNumBySortId(Long sortId) {
         return lambdaQuery()
                 .eq(Article::getSortId, sortId)
-                .count();
+                .count().intValue();
     }
 
     public Boolean changeViewStatus(Long articleId, Integer status) {
@@ -101,6 +101,6 @@ public class ArticleDao extends ServiceImpl<ArticleMapper, Article> {
     public Integer getPublishCount() {
         return lambdaQuery()
                 .eq(Article::getStatus,ArticleStatusEnum.PUBLISH.getType())
-                .count();
+                .count().intValue();
     }
 }

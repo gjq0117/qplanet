@@ -15,8 +15,8 @@ public class LambdaUtils {
 
     @SneakyThrows
     public static <T> Class<?> getReturnType(SFunction<T, ?> func) {
-        com.baomidou.mybatisplus.core.toolkit.support.SerializedLambda lambda = com.baomidou.mybatisplus.core.toolkit.LambdaUtils.resolve(func);
-        Class<?> aClass = lambda.getInstantiatedType();
+        com.baomidou.mybatisplus.core.toolkit.support.LambdaMeta lambda =  com.baomidou.mybatisplus.core.toolkit.LambdaUtils.extract(func);
+        Class<?> aClass = lambda.getInstantiatedClass();
         String fieldName = PropertyNamer.methodToProperty(lambda.getImplMethodName());
         Field field = aClass.getDeclaredField(fieldName);
         field.setAccessible(true);

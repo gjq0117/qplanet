@@ -4,7 +4,7 @@ import com.gjq.planet.common.domain.vo.req.visitor.VisitorListReq;
 import com.gjq.planet.common.domain.vo.resp.visitor.VisitorListResp;
 import com.gjq.planet.common.domain.vo.resp.visitor.VisitorProvinceResp;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 /**

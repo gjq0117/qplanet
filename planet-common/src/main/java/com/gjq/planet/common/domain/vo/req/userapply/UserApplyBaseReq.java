@@ -2,9 +2,9 @@ package com.gjq.planet.common.domain.vo.req.userapply;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
 
 /**
  * @author: gjq0117

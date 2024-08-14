@@ -27,7 +27,7 @@ public class MessageDao extends ServiceImpl<MessageMapper, Message> {
                 .eq(Message::getRoomId, roomId)
                 .gt(Message::getId, fromId)
                 .le(Message::getId, toId)
-                .count();
+                .count().intValue();
     }
 
     /**

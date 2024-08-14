@@ -3,10 +3,11 @@ package com.gjq.planet.common.domain.vo.req.user;
 import com.gjq.planet.common.valid.RegexpConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Pattern;
+
 
 /**
  * @author: gjq0117

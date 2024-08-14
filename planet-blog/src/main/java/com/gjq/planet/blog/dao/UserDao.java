@@ -81,7 +81,7 @@ public class UserDao extends ServiceImpl<UserMapper, User> {
     public Integer getOnlineNum() {
         return lambdaQuery()
                 .eq(User::getIsActive, UserActiveStatusEnum.ONLINE.getStatus())
-                .count();
+                .count().intValue();
     }
 
     /**

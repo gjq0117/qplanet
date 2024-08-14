@@ -23,7 +23,7 @@ public class LabelDao extends ServiceImpl<LabelMapper, Label> {
     public Integer getNumBySortId(Long sortId) {
         return lambdaQuery()
                 .eq(Label::getSortId, sortId)
-                .count();
+                .count().intValue();
     }
 
     public List<Label> getListBySortId(Long sortId) {

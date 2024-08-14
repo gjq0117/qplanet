@@ -3,9 +3,10 @@ package com.gjq.planet.common.exception;
 import cn.hutool.http.ContentType;
 import com.gjq.planet.common.utils.ApiResult;
 import com.gjq.planet.common.utils.JsonUtils;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 
-import javax.servlet.http.HttpServletResponse;
+
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 

@@ -3,8 +3,8 @@ package com.gjq.planet.common.valid.validator;
 import com.gjq.planet.common.enums.common.YesOrNoEnum;
 import com.gjq.planet.common.valid.YesOrNo;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import java.util.Objects;
 
 /**

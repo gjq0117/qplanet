@@ -3,8 +3,8 @@ package com.gjq.planet.common.valid.validator;
 import com.gjq.planet.common.enums.blog.SystemRoleEnum;
 import com.gjq.planet.common.valid.SystemRole;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import java.util.Objects;
 
 /**

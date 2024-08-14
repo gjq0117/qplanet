@@ -6,11 +6,12 @@ spring:
   profiles:
     active: myTest
   datasource:
+    url: jdbc:mysql://${planet.mysql.ip}:${planet.mysql.port}/${planet.mysql.db}?useUnicode=true&&useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
+    username: ${planet.mysql.username}
+    password: ${planet.mysql.password}
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
     druid:
-      driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://${planet.mysql.ip}:${planet.mysql.port}/${planet.mysql.db}?useUnicode=true&&useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
-      username: ${planet.mysql.username}
-      password: ${planet.mysql.password}
       # 初始化链接数量
       initial-size: 10
       # 最大活动线程数
@@ -30,28 +31,29 @@ spring:
       # 打开PSCache。并且指定每个连接上PSCache连接大小
       pool-prepared-statements: true
       max-pool-prepared-statement-per-connection-size: 20
-  redis:
-    # Redis服务器地址
-    host: ${planet.redis.host}
-    # Redis服务器端口号
-    port: ${planet.redis.port}
-    # 使用的数据库索引，默认是0
-    database: ${planet.redis.database}
-    # 连接超时时间
-    timeout: 1800000
-    # 设置密码
-    password: ${planet.redis.password}
-    jedis:
-      pool:
-        enabled: true
-        # 连接池最大连接数
-        max-active: 20
-        # 连接池最大阻塞时间（ms） 负值表示没有时间限制
-        max-wait: -1
-        # 最大空闲连接
-        max-idle: 10
-        # 最小空闲连接
-        min-idle: 2
+  data:
+    redis:
+      # Redis服务器地址
+      host: ${planet.redis.host}
+      # Redis服务器端口号
+      port: ${planet.redis.port}
+      # 使用的数据库索引，默认是0
+      database: ${planet.redis.database}
+      # 连接超时时间
+      timeout: 1800000
+      # 设置密码
+      password: ${planet.redis.password}
+      jedis:
+        pool:
+          enabled: true
+          # 连接池最大连接数
+          max-active: 20
+          # 连接池最大阻塞时间（ms） 负值表示没有时间限制
+          max-wait: -1
+          # 最大空闲连接
+          max-idle: 10
+          # 最小空闲连接
+          min-idle: 2
   # 邮箱配置
   mail:
     host: ${planet.mail.host}
@@ -74,6 +76,15 @@ spring:
     pathmatch:
       # swagger新UI所需配置
       matching-strategy: ANT_PATH_MATCHER
+  # openAI配置
+  ai:
+    openai:
+      chat:
+        options:
+          temperature: 0.7
+          model: gpt-4o-mini
+        api-key: sk-KmHvbq6UqmmtkL72RXaL3fVMxQRa0UQIXkVA8Q3v7vIGAi0t
+        base-url: https://api.chatanywhere.com.cn
 mybatis-plus:
   mapper-locations: classpath*:mapper/**/*.xml
   configuration:

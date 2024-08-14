@@ -3,9 +3,9 @@ package com.gjq.planet.common.domain.vo.req.userfriend;
 import com.gjq.planet.common.valid.RegexpConstant;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
-import javax.validation.constraints.Pattern;
 
 /**
  * @author: gjq0117

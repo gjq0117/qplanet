@@ -3,12 +3,12 @@ package com.gjq.planet.common.domain.vo.req.chat;
 import com.gjq.planet.common.domain.vo.req.CursorPageBaseReq;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
 
 /**
  * @author: gjq0117

@@ -25,7 +25,7 @@ public class ArticleRelationDao extends ServiceImpl<ArticleRelationMapper, Artic
         return lambdaQuery()
                 .eq(ArticleRelation::getType, ArticleRelationEnum.LABEL.getType())
                 .eq(ArticleRelation::getTargetId, labelId)
-                .count();
+                .count().intValue();
     }
 
     /**

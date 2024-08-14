@@ -3,8 +3,8 @@ package com.gjq.planet.common.valid;
 import com.gjq.planet.common.enums.blog.GenderEnum;
 import com.gjq.planet.common.valid.validator.GenderValidator;
 
-import javax.validation.Constraint;
-import javax.validation.Payload;
+import jakarta.validation.Constraint;
+import jakarta.validation.Payload;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

@@ -1,6 +1,6 @@
 package com.gjq.planet.common.valid.group;
 
-import javax.validation.GroupSequence;
+import jakarta.validation.GroupSequence;
 
 /**
  * @author: gjq0117

@@ -3,9 +3,10 @@ package com.gjq.planet.common.domain.vo.req.groupmember;
 import com.gjq.planet.common.domain.vo.req.CursorPageBaseReq;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
+
 
 /**
  * @author: gjq0117

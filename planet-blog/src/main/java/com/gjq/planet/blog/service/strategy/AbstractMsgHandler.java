@@ -9,7 +9,7 @@ import com.gjq.planet.common.enums.im.MessageTypeEnum;
 import com.gjq.planet.common.utils.AssertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.lang.reflect.ParameterizedType;
 
 /**
