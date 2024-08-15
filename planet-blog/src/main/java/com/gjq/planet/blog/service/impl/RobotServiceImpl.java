@@ -7,10 +7,10 @@ import com.gjq.planet.blog.service.IRobotService;
 import com.gjq.planet.common.domain.entity.*;
 import com.gjq.planet.common.domain.vo.req.robot.RobotReq;
 import com.gjq.planet.common.domain.vo.resp.robot.RobotResp;
+import com.gjq.planet.common.enums.common.YesOrNoEnum;
 import com.gjq.planet.common.enums.im.RoomTypeEnum;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,9 +48,6 @@ public class RobotServiceImpl implements IRobotService {
     @Autowired
     private IGroupMemberService groupMemberService;
 
-    @Autowired
-    private ApplicationEventPublisher applicationEventPublisher;
-
     @Override
     public void add(RobotReq req) {
         //1、插入机器人信息
@@ -62,6 +59,7 @@ public class RobotServiceImpl implements IRobotService {
                 .id(insert.getId())
                 .nickname(req.getName())
                 .avatar(req.getAvatar())
+                .userStatus(YesOrNoEnum.YES.getCode())
                 .build();
         userDao.save(user);
 

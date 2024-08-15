@@ -27,6 +27,11 @@ public class CallRobot extends WsBaseResp {
      */
     private Long msgId;
 
+    /**
+     *  房间号
+     */
+    private Long roomId;
+
     @Override
     public Integer getType() {
         return WSRespTypeEnum.CALL_ROBOT.getType();

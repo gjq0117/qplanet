@@ -20,6 +20,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.Collections;
 import java.util.Objects;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @author: gjq0117
@@ -42,6 +43,9 @@ public class MessageSendListener {
     @Autowired
     private WebsocketService websocketService;
 
+    @Autowired
+    private ThreadPoolExecutor executor;
+
     /**
      *  消息推送MQ
      *
@@ -62,10 +66,18 @@ public class MessageSendListener {
      */
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT, classes = MessageSendEvent.class, fallbackExecution = true)
     public void callRobot(MessageSendEvent event) {
-        Long msgId = event.getMsgId();
-        Message msg = messageDao.getById(msgId);
-        Long robotId = needCallRobot(msg);
-        websocketService.pushMsg(new CallRobot(robotId, msgId), Collections.singleton(msg.getFromUid()));
+        // 异步调用
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                Long msgId = event.getMsgId();
+                Message msg = messageDao.getById(msgId);
+                Long robotId = needCallRobot(msg);
+                if (Objects.nonNull(robotId)) {
+                    websocketService.pushMsg(new CallRobot(robotId, msgId, msg.getRoomId()), Collections.singleton(msg.getFromUid()));
+                }
+            }
+        });
     }
 
     /**

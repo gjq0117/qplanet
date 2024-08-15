@@ -150,7 +150,7 @@ CREATE TABLE `secure_invoke_record`
 -- start 2024.8.13 14:08 新增机器人信息表
 DROP TABLE IF EXISTS `robot`;
 CREATE TABLE `robot`  (
-  `id` bigint(20) NOT NULL COMMENT '主键',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `uid` bigint(20) NULL DEFAULT NULL COMMENT '对应的uid',
   `model` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '大模型',
   `temperature` float(5, 1) NULL DEFAULT NULL COMMENT '模型温度（0~1之间）',
@@ -164,9 +164,9 @@ CREATE TABLE `robot`  (
   `enabled` int(1) NULL DEFAULT NULL COMMENT '是否启用【0：否；1：是】',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '最后修改时间',
-  `deleted` tinyint(1) NULL DEFAULT NULL COMMENT '是否删除【0：未删除；1：删除】',
+  `deleted` tinyint(1) NULL DEFAULT 0 COMMENT '是否删除【0：未删除；1：删除】',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '机器人信息（openAI）' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '机器人信息（openAI）' ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
 

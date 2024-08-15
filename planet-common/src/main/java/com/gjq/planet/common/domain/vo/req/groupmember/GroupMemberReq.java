@@ -20,4 +20,7 @@ public class GroupMemberReq extends CursorPageBaseReq {
     @ApiModelProperty("房间号")
     @NotNull(message = "房间号不能为空")
     private Long roomId;
+
+    @ApiModelProperty("是否是第一次请求")
+    private Boolean isFirst;
 }

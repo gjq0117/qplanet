@@ -25,4 +25,12 @@ public interface IGroupMemberService {
      * @param uid
      */
     void joinSystemGroup(Long uid);
+
+    /**
+     *  获取群组用户at分页信息
+     *
+     * @param atPageReq
+     * @return
+     */
+    CursorPageBaseResp<Long> getGroupMemberAtPage(GroupMemberReq atPageReq);
 }

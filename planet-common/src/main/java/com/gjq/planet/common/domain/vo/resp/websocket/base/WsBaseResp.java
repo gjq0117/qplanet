@@ -10,6 +10,7 @@ public abstract class WsBaseResp {
     /**
      *  获取响应类型
      *
+     * @see com.gjq.planet.common.enums.im.WSRespTypeEnum
      * @return type
      */
     public abstract Integer getType();

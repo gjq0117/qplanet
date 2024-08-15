@@ -76,15 +76,6 @@ spring:
     pathmatch:
       # swagger新UI所需配置
       matching-strategy: ANT_PATH_MATCHER
-  # openAI配置
-  ai:
-    openai:
-      chat:
-        options:
-          temperature: 0.7
-          model: gpt-4o-mini
-        api-key: sk-KmHvbq6UqmmtkL72RXaL3fVMxQRa0UQIXkVA8Q3v7vIGAi0t
-        base-url: https://api.chatanywhere.com.cn
 mybatis-plus:
   mapper-locations: classpath*:mapper/**/*.xml
   configuration:
