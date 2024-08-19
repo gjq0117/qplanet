@@ -1,5 +1,6 @@
 package com.gjq.planet.blog.dao;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gjq.planet.blog.mapper.GroupMemberMapper;
 import com.gjq.planet.common.domain.entity.GroupMember;
@@ -43,5 +44,9 @@ public class GroupMemberDao extends ServiceImpl<GroupMemberMapper, GroupMember> 
         return lambdaQuery()
                 .eq(GroupMember::getGroupId, groupId)
                 .list();
+    }
+
+    public void removeByUidAndGroupId(Long uid, Long groupId) {
+        this.remove(new QueryWrapper<GroupMember>().eq("uid", uid).eq("group_id", groupId));
     }
 }

@@ -86,6 +86,12 @@ public class RobotResp {
     private Integer totalFailNum;
 
     /**
+     *  今日剩余次数
+     */
+    @ApiModelProperty("今日剩余次数")
+    private Integer totalResidue;
+
+    /**
      *  是否启用 【0：否；1：是】
      */
     @ApiModelProperty("是否启用 【0：否；1：是】")

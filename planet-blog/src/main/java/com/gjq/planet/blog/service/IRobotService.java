@@ -42,4 +42,14 @@ public interface IRobotService {
      * @param robotId
      */
     void deleteById(Long robotId);
+
+    /**
+     *  调用机器人回复
+     *
+     * @param robotId 机器人ID
+     * @param content 需要回答的内容
+     * @return 回答的结果
+     */
+    String call(Long robotId, String content);
+
 }

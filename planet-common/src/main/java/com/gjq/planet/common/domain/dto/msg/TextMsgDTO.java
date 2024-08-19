@@ -29,7 +29,6 @@ public class TextMsgDTO implements Serializable {
 
     @ApiModelProperty("消息内容")
     @NotBlank(message = "消息内容不能为空")
-    @Size(max = 1024, message = "消息内容过长")
     private String content;
 
     @ApiModelProperty("回复的消息id,如果没有就别传")

@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.gjq.planet.blog.cache.redis.batch.RoomCache;
+import com.gjq.planet.blog.dao.RoomDao;
 import com.gjq.planet.blog.dao.UserDao;
 import com.gjq.planet.blog.dao.UserFriendDao;
 import com.gjq.planet.blog.service.IRoomFriendService;
@@ -19,6 +20,7 @@ import com.gjq.planet.common.domain.vo.resp.CursorPageBaseResp;
 import com.gjq.planet.common.domain.vo.resp.groupmember.GroupMemberResp;
 import com.gjq.planet.common.domain.vo.resp.userfriend.FriendDetailedResp;
 import com.gjq.planet.common.enums.common.YesOrNoEnum;
+import com.gjq.planet.common.enums.im.RoomTypeEnum;
 import com.gjq.planet.common.exception.BusinessException;
 import com.gjq.planet.common.utils.AssertUtil;
 import com.gjq.planet.common.utils.RequestHolder;
@@ -52,6 +54,8 @@ public class UserFriendServiceImpl implements IUserFriendService {
 
     @Autowired
     private IRoomFriendService roomFriendService;
+    @Autowired
+    private RoomDao roomDao;
 
     @Override
     public Boolean isFriend(Long currUid, Long uid) {
@@ -122,6 +126,24 @@ public class UserFriendServiceImpl implements IUserFriendService {
         // 删除房间缓存
         RoomFriend roomFriend = roomFriendService.getByUids(userFriend1.getUid(), userFriend2.getUid());
         roomCache.remove(roomFriend.getRoomId());
+    }
+
+    @Override
+    public Long initSingleChatEnvironment(Long uid1, Long uid2, RoomTypeEnum roomTypeEnum) {
+        //1、向数据库中插入两条好友记录（双向好友关系）
+        UserFriend userFriend1 = UserFriendBuilder.buildUserFriend(uid1, uid2);
+        userFriendDao.save(userFriend1);
+        UserFriend userFriend2 = UserFriendBuilder.buildUserFriend(uid2, uid1);
+        userFriendDao.save(userFriend2);
+        //2、如果没有就创建好友房间/会话（如果之前是好友，然后删了，会有房间记录）
+        Long roomId;
+        RoomFriend roomFriend = roomFriendService.getByUids(uid1, uid2);
+        if (Objects.nonNull(roomFriend)) {
+            roomId = roomFriend.getRoomId();
+        } else {
+            roomId = roomFriendService.createFriendRoom(uid1, uid2, roomTypeEnum);
+        }
+        return roomId;
     }
 
     /**

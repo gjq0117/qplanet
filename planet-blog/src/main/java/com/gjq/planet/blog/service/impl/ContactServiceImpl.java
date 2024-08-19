@@ -155,7 +155,7 @@ public class ContactServiceImpl implements IContactService {
         RoomGroup roomGroup = null;
         User lastMsgSendUser = null;
         // 获取最后一条消息
-        if (room.isFriendRoom()) {
+        if (room.isFriendRoom() || room.isRobotRoom()) {
             // 单聊
             message = messageDao.getById(contact.getLastMsgId());
             // 好友信息

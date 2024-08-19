@@ -5,6 +5,7 @@ import com.gjq.planet.common.domain.vo.req.userfriend.UserFriendPageReq;
 import com.gjq.planet.common.domain.vo.resp.CursorPageBaseResp;
 import com.gjq.planet.common.domain.vo.resp.groupmember.GroupMemberResp;
 import com.gjq.planet.common.domain.vo.resp.userfriend.FriendDetailedResp;
+import com.gjq.planet.common.enums.im.RoomTypeEnum;
 
 /**
  * <p>
@@ -75,10 +76,20 @@ public interface IUserFriendService {
     void cancelFriendCare(Long currUid, Long friendUid);
 
     /**
-     *  删除好友
+     *  删除指定好友
      *
      * @param currUid 当前用户ID
      * @param friendUid 好友ID
      */
     void deleteFriend(Long currUid, Long friendUid);
+
+    /**
+     *  初始化聊天环境
+     *
+     * @param uid1 uid1
+     * @param uid2 uid2
+     * @param roomTypeEnum 房间类型（一般为单聊或者机器人房间）
+     * @return 房间号
+     */
+    Long initSingleChatEnvironment(Long uid1, Long uid2, RoomTypeEnum roomTypeEnum);
 }

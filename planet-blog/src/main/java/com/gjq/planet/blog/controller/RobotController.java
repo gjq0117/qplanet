@@ -32,7 +32,7 @@ public class RobotController {
     private IRobotService robotService;
 
     @PlanetAdmin
-    @GetMapping("/getRobotList")
+    @PostMapping("/getRobotList")
     @ApiOperation("获取机器人信息列表")
     public ApiResult<List<RobotResp>> getRobotList() {
         return ApiResult.success(robotService.getRobotList());

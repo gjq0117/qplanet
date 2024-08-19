@@ -69,6 +69,10 @@ public class RobotReq {
     @NotBlank(message = "base_url不能为空")
     private String baseUrl;
 
+    @ApiModelProperty("每日上限次数")
+    @NotNull(message = "每日上限次数不能为空")
+    private Integer dailyLimitNum;
+
     @ApiModelProperty("是否启用 【0：否；1：是】")
     @YesOrNo
     private Integer enabled;

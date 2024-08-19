@@ -11,6 +11,8 @@ import com.gjq.planet.common.domain.entity.User;
 import com.gjq.planet.common.enums.blog.SystemRoleEnum;
 import com.gjq.planet.common.enums.common.YesOrNoEnum;
 import com.gjq.planet.common.utils.RedisUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -31,6 +34,13 @@ public class CommonTest {
 
     @Autowired
     private UserDao userDao;
+
+    @Test
+    public void testJsoup() {
+        String msg = "<span class=\\\"at-class\\\" contenteditable=\\\"false\\\" uid=\\\"1\\\" style=\\\"padding: 3px\\\">@GPT-4</span><span class=\\\"at-class\\\" contenteditable=\\\"false\\\" uid=\\\"1\\\" style=\\\"padding: 3px\\\">@GPT-1</span>111";
+        Document parse = Jsoup.parse(msg);
+        System.out.println(Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(parse.lastChild()).lastChild()).lastChild()).toString());
+    }
 
     @Test
     public void testRedisExpire() {

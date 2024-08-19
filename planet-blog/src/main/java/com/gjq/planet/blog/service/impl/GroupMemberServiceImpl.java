@@ -113,6 +113,14 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
     }
 
     @Override
+    public void leaveSystemGroup(Long uid) {
+        List<Room> allStaffRoomList = roomDao.getAllStaffRoom();
+        RoomGroup roomGroup = roomGroupDao.getByRoomId(allStaffRoomList.get(0).getId());
+        groupMemberDao.removeByUidAndGroupId(uid, roomGroup.getId());
+        groupMemberCache.remove(roomGroup.getId(), uid);
+    }
+
+    @Override
     public CursorPageBaseResp<Long> getGroupMemberAtPage(GroupMemberReq atPageReq) {
         // 把机器人排列到最前面
         CursorPageBaseResp<GroupMemberResp> groupMemberPage = this.getGroupMemberPage(atPageReq);
@@ -120,7 +128,10 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
         List<Long> robotIdList = null;
         if (atPageReq.getIsFirst()) {
             // 找出机器人列表
-            robotIdList = robotDao.list().stream().map(Robot::getUid).toList();
+            robotIdList = robotDao.list().stream()
+                    // 过滤掉没有启用的
+                    .filter(robot -> YesOrNoEnum.YES.getCode().equals(robot.getEnabled()))
+                    .map(Robot::getUid).toList();
             result.addAll(robotIdList);
         }
         List<Long> uidList = groupMemberPage.getList().stream().map(GroupMemberResp::getUid).toList();

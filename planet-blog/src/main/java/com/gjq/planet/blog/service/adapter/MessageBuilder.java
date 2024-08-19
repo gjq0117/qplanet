@@ -8,6 +8,8 @@ import com.gjq.planet.common.domain.vo.req.chat.ChatMessageReq;
 import com.gjq.planet.common.domain.vo.resp.chat.ChatMessageBody;
 import com.gjq.planet.common.enums.im.MessageTypeEnum;
 
+import java.util.List;
+
 /**
  * @author: gjq0117
  * @date: 2024/5/30 15:46
@@ -48,14 +50,15 @@ public class MessageBuilder {
     }
 
     /**
-     *  构建招呼语句的请求
+     *  构建文本消息的请求
      *
      * @param roomId 房间号
      * @return
      */
-    public static ChatMessageReq buildHelloMsgReq(Long roomId) {
+    public static ChatMessageReq buildTextMsgReq(Long roomId, String content, List<Long> atList) {
         TextMsgDTO textMsg = TextMsgDTO.builder()
-                .content("我们已经是好友啦，开始聊天吧!")
+                .content(content)
+                .atUidList(atList)
                 .build();
         return ChatMessageReq.builder()
                 .roomId(roomId)
@@ -64,4 +67,6 @@ public class MessageBuilder {
                 .body(textMsg)
                 .build();
     }
+
+
 }

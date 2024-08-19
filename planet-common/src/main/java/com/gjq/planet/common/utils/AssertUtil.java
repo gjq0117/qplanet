@@ -49,7 +49,7 @@ public class AssertUtil {
      */
     public static <T> void allCheckValidateThrow(T obj) {
         Set<ConstraintViolation<T>> constraintViolations = validator.validate(obj);
-        if (constraintViolations.size() > 0) {
+        if (!constraintViolations.isEmpty()) {
             StringBuilder errorMsg = new StringBuilder();
             Iterator<ConstraintViolation<T>> iterator = constraintViolations.iterator();
             while (iterator.hasNext()) {

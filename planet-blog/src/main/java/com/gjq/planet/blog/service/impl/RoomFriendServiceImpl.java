@@ -7,6 +7,7 @@ import com.gjq.planet.blog.service.IRoomFriendService;
 import com.gjq.planet.blog.service.IRoomService;
 import com.gjq.planet.common.domain.entity.Room;
 import com.gjq.planet.common.domain.entity.RoomFriend;
+import com.gjq.planet.common.enums.im.RoomTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -34,9 +35,9 @@ public class RoomFriendServiceImpl implements IRoomFriendService {
 
     @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-    public Long createFriendRoom(Long uid1, Long uid2) {
+    public Long createFriendRoom(Long uid1, Long uid2, RoomTypeEnum roomTypeEnum) {
         // 1、创建通用房间
-        Long roomId = roomService.createSingleRoom();
+        Long roomId = roomService.createSingleRoom(roomTypeEnum);
         Room room = roomCache.get(roomId);
         // 2、为每个用户创建一个会话
         contactService.createFriendContact(room.getId(),uid1, uid2);

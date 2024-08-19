@@ -4,12 +4,11 @@ import com.gjq.planet.blog.cache.redis.batch.GroupMemberCache;
 import com.gjq.planet.blog.cache.redis.batch.RoomCache;
 import com.gjq.planet.blog.cache.redis.batch.RoomGroupCache;
 import com.gjq.planet.blog.dao.RoomDao;
+import com.gjq.planet.blog.dao.RoomFriendDao;
 import com.gjq.planet.blog.dao.UserDao;
 import com.gjq.planet.blog.service.IRoomService;
 import com.gjq.planet.blog.service.WebsocketService;
-import com.gjq.planet.common.domain.entity.GroupMember;
-import com.gjq.planet.common.domain.entity.Room;
-import com.gjq.planet.common.domain.entity.RoomGroup;
+import com.gjq.planet.common.domain.entity.*;
 import com.gjq.planet.common.domain.vo.resp.websocket.base.NewMemberJoin;
 import com.gjq.planet.common.enums.common.YesOrNoEnum;
 import com.gjq.planet.common.enums.im.RoomTypeEnum;
@@ -18,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -46,6 +46,9 @@ public class RoomServiceImpl implements IRoomService {
     private UserDao userDao;
 
     @Autowired
+    private RoomFriendDao roomFriendDao;
+
+    @Autowired
     private WebsocketService websocketService;
 
     @Override
@@ -63,9 +66,9 @@ public class RoomServiceImpl implements IRoomService {
     }
 
     @Override
-    public Long createSingleRoom() {
+    public Long createSingleRoom(RoomTypeEnum roomTypeEnum) {
         Room room = Room.builder()
-                .type(RoomTypeEnum.SINGLE_CHAT.getType())
+                .type(roomTypeEnum.getType())
                 .hotFlag(0)
                 .build();
         roomDao.save(room);
@@ -77,5 +80,21 @@ public class RoomServiceImpl implements IRoomService {
         RoomGroup roomGroup = roomGroupCache.get(roomId);
         Set<Long> uidSet = groupMemberCache.getBatch(roomGroup.getId(), null).stream().map(GroupMember::getUid).collect(Collectors.toSet());
         websocketService.pushMsg(new NewMemberJoin(uid), uidSet);
+    }
+
+    @Override
+    public void clearAllRoomAndFriend(Long uid) {
+        // 获取除自己以外的所有用户的uid
+        Set<Long> uidList = userDao.list().stream().map(User::getId).filter(id -> !Objects.equals(id, uid)).collect(Collectors.toSet());
+        for (Long id :uidList) {
+            // 删除好友房间
+            RoomFriend roomFriend = roomFriendDao.getByUids(Math.min(id, uid), Math.max(id, uid));
+            if (Objects.nonNull(roomFriend)) {
+                roomFriendDao.removeById(roomFriend);
+                // 删除房间信息
+                roomCache.remove(roomFriend.getRoomId());
+                roomDao.removeById(roomFriend.getRoomId());
+            }
+        }
     }
 }

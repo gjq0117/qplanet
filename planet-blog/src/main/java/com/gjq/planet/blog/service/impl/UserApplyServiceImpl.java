@@ -6,16 +6,14 @@ import com.gjq.planet.blog.dao.UserFriendDao;
 import com.gjq.planet.blog.service.*;
 import com.gjq.planet.blog.service.adapter.MessageBuilder;
 import com.gjq.planet.blog.service.adapter.UserApplyBuilder;
-import com.gjq.planet.blog.service.adapter.UserFriendBuilder;
-import com.gjq.planet.common.domain.entity.RoomFriend;
 import com.gjq.planet.common.domain.entity.UserApply;
-import com.gjq.planet.common.domain.entity.UserFriend;
 import com.gjq.planet.common.domain.vo.req.chat.ChatMessageReq;
 import com.gjq.planet.common.domain.vo.req.userapply.FriendApplyReq;
 import com.gjq.planet.common.domain.vo.req.userapply.UserApplyPageReq;
 import com.gjq.planet.common.domain.vo.resp.CursorPageBaseResp;
 import com.gjq.planet.common.domain.vo.resp.userapply.FriendApplyResp;
 import com.gjq.planet.common.enums.im.ApplyStatusEnum;
+import com.gjq.planet.common.enums.im.RoomTypeEnum;
 import com.gjq.planet.common.enums.im.UserApplyTypeEnum;
 import com.gjq.planet.common.exception.BusinessException;
 import com.gjq.planet.common.utils.AssertUtil;
@@ -98,23 +96,12 @@ public class UserApplyServiceImpl implements IUserApplyService {
         checkUserApplyIsAvailable(targetId, currUid, UserApplyTypeEnum.FRIEND_APPLY.getType());
         //2、改变申请记录状态(TA向你申请的)
         userApplyDao.changeApplyStatus(currUid, UserApplyTypeEnum.FRIEND_APPLY.getType(), targetId, ApplyStatusEnum.AGREED.getStatus());
-        //3、向数据库中插入两条好友记录（双向好友关系）
-        UserFriend userFriend1 = UserFriendBuilder.buildUserFriend(currUid, targetId);
-        userFriendDao.save(userFriend1);
-        UserFriend userFriend2 = UserFriendBuilder.buildUserFriend(targetId, currUid);
-        userFriendDao.save(userFriend2);
-        //4、如果没有就创建好友房间/会话（如果之前是好友，然后删了，会有房间记录）
-        Long roomId;
-        RoomFriend roomFriend = roomFriendService.getByUids(currUid, targetId);
-        if (Objects.nonNull(roomFriend)) {
-            roomId = roomFriend.getRoomId();
-        } else {
-            roomId = roomFriendService.createFriendRoom(currUid, targetId);
-        }
-        //5、向双方推送一个新会话
+        //3、 初始化聊天环境
+        Long roomId = userFriendService.initSingleChatEnvironment(currUid, targetId, RoomTypeEnum.SINGLE_CHAT);
+        //4、向双方推送一个新会话
         contactService.pushNewContact(roomId, new HashSet<>(Arrays.asList(currUid, targetId)));
-        //6、同意方（currUid）向房间内发送一条消息
-        ChatMessageReq req = MessageBuilder.buildHelloMsgReq(roomId);
+        //5、同意方（currUid）向房间内发送一条消息
+        ChatMessageReq req = MessageBuilder.buildTextMsgReq(roomId, "我们已经是好友啦，开始聊天吧!", null);
         chatService.sendMsg(currUid, req);
     }
 

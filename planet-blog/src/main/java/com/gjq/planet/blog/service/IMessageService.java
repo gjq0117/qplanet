@@ -2,6 +2,7 @@ package com.gjq.planet.blog.service;
 
 import com.gjq.planet.common.domain.vo.req.chat.ChatMessagePageReq;
 import com.gjq.planet.common.domain.vo.req.chat.ChatMessageReq;
+import com.gjq.planet.common.domain.vo.req.robot.CallRobotReq;
 import com.gjq.planet.common.domain.vo.resp.CursorPageBaseResp;
 import com.gjq.planet.common.domain.vo.resp.chat.ChatMessageBody;
 
@@ -40,4 +41,13 @@ public interface IMessageService  {
      * @return
      */
     CursorPageBaseResp<ChatMessageBody> PageMsg(ChatMessagePageReq req, Long currId);
+
+    /**
+     *  回调机器人
+     *
+     * @param uid 当前用户ID
+     * @param req
+     * @return
+     */
+    Long callRobot(Long uid, CallRobotReq req);
 }

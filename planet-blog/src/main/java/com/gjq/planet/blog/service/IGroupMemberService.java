@@ -27,6 +27,13 @@ public interface IGroupMemberService {
     void joinSystemGroup(Long uid);
 
     /**
+     *  指定用户离开系统群聊
+     *
+     * @param uid
+     */
+    void leaveSystemGroup(Long uid);
+
+    /**
      *  获取群组用户at分页信息
      *
      * @param atPageReq

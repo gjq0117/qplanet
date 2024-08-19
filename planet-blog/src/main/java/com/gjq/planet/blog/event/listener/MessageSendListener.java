@@ -64,20 +64,14 @@ public class MessageSendListener {
      *
      * @param event event
      */
-    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT, classes = MessageSendEvent.class, fallbackExecution = true)
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT, classes = MessageSendEvent.class, fallbackExecution = true)
     public void callRobot(MessageSendEvent event) {
-        // 异步调用
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                Long msgId = event.getMsgId();
-                Message msg = messageDao.getById(msgId);
-                Long robotId = needCallRobot(msg);
-                if (Objects.nonNull(robotId)) {
-                    websocketService.pushMsg(new CallRobot(robotId, msgId, msg.getRoomId()), Collections.singleton(msg.getFromUid()));
-                }
-            }
-        });
+        Long msgId = event.getMsgId();
+        Message msg = messageDao.getById(msgId);
+        Long robotId = needCallRobot(msg);
+        if (Objects.nonNull(robotId)) {
+            websocketService.pushMsg(new CallRobot(robotId, msgId, msg.getRoomId()), Collections.singleton(msg.getFromUid()));
+        }
     }
 
     /**
@@ -91,7 +85,10 @@ public class MessageSendListener {
         // 单聊
         Room room = roomCache.get(msg.getRoomId());
         if (room.isRobotRoom()) {
-            result = OpenAiFactory.getFirstModelId();
+            // 不是机器人本身发的消息
+            if (Objects.isNull(OpenAiFactory.getModel(msg.getFromUid()))) {
+                result = OpenAiFactory.getFirstModelId();
+            }
         } else {
             // 群聊(文本消息)
             TextMsgDTO textMsgDTO = msg.getExtra().getTextMsgDTO();

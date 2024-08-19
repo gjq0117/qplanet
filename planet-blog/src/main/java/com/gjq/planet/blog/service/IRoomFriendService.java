@@ -1,6 +1,7 @@
 package com.gjq.planet.blog.service;
 
 import com.gjq.planet.common.domain.entity.RoomFriend;
+import com.gjq.planet.common.enums.im.RoomTypeEnum;
 
 /**
  * <p>
@@ -17,8 +18,9 @@ public interface IRoomFriendService {
      *
      * @param uid1
      * @param uid2
+     * @param roomTypeEnum 房间类型（一般为好友房间或者机器人房间）
      */
-    Long createFriendRoom(Long uid1, Long uid2);
+    Long createFriendRoom(Long uid1, Long uid2, RoomTypeEnum roomTypeEnum);
 
     /**
      *  通过uid获取好友房间
