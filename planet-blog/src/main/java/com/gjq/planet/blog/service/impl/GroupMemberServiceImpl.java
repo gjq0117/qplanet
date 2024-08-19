@@ -69,8 +69,8 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
     public CursorPageBaseResp<GroupMemberResp> getGroupMemberPage(GroupMemberReq req) {
         Room room = roomCache.get(req.getRoomId());
         AssertUtil.isNotEmpty(room, "房间号不存在");
-        if (room.isFriendRoom()) {
-            // 好友房间 不需要进行下面操作
+        if (room.isFriendRoom() || room.isRobotRoom()) {
+            // 好友房间|机器人房间 不需要进行下面操作
             return null;
         }
         RoomGroup roomGroup = roomGroupCache.get(room.getId());
@@ -122,6 +122,11 @@ public class GroupMemberServiceImpl implements IGroupMemberService {
 
     @Override
     public CursorPageBaseResp<Long> getGroupMemberAtPage(GroupMemberReq atPageReq) {
+        Room room = roomCache.get(atPageReq.getRoomId());
+        if (!room.isGroupRoom()) {
+            // 不是群聊
+            return null;
+        }
         // 把机器人排列到最前面
         CursorPageBaseResp<GroupMemberResp> groupMemberPage = this.getGroupMemberPage(atPageReq);
         List<Long> result = new ArrayList<>();

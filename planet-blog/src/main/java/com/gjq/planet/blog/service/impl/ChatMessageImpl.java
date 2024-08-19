@@ -25,12 +25,13 @@ import com.gjq.planet.common.utils.AssertUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -111,7 +112,7 @@ public class ChatMessageImpl implements IMessageService {
         //3、调用机器人
         String reply = robotService.call(req.getRobotId(), content);
         //4、消息请求体
-        ChatMessageReq replyReq = buildRobotReplyMsgReq(uid, req.getRoomId(), reply);
+        ChatMessageReq replyReq = buildRobotReplyMsgReq(uid, roomCache.get(req.getRoomId()), reply);
         //5、发送消息
         return sendMsg(req.getRobotId(), replyReq);
     }
@@ -120,15 +121,21 @@ public class ChatMessageImpl implements IMessageService {
      *  构建机器人回复后的消息请求体
      *
      * @param uid uid
-     * @param roomId roomId
+     * @param room room
      * @param reply reply
      * @return ChatMessageReq
      */
-    private ChatMessageReq buildRobotReplyMsgReq(Long uid, Long roomId, String reply) {
+    private ChatMessageReq buildRobotReplyMsgReq(Long uid, Room room, String reply) {
         String nickname = userDao.getById(uid).getNickname();
         // 构建@后的html标签
-        String at_str = "<span class=\"at-class\" contentEditable=\"false\" uid=\""+ uid +"\" style=\"padding: 2px\">@"+ nickname +"</span>";
-        return MessageBuilder.buildTextMsgReq(roomId, at_str + reply, Collections.singletonList(uid));
+        String at_str = "";
+        List<Long> atUidList = new ArrayList<>();
+        if (!room.isRobotRoom()) {
+            // 群聊的情况
+            at_str += "<span class=\"at-class\" contentEditable=\"false\" uid=\""+ uid +"\" style=\"padding: 2px\">@"+ nickname +"</span>";
+            atUidList.add(uid);
+        }
+        return MessageBuilder.buildTextMsgReq(room.getId(), at_str + reply, atUidList);
     }
 
     /**
@@ -160,8 +167,12 @@ public class ChatMessageImpl implements IMessageService {
         } else if(room.isRobotRoom()) {
             // 校验机器人是否存在（单聊情况）
             RoomFriend roomFriend = roomFriendDao.getByRoomId(room.getId());
-            Long modelId = uid.equals(roomFriend.getUid1()) ? roomFriend.getUid1() : roomFriend.getUid2();
-            AssertUtil.isNotEmpty(OpenAiFactory.getModel(modelId), "不存在此机器人~");
+            // 必须存在一个是机器人
+            OpenAiChatModel model1 = OpenAiFactory.getModel(roomFriend.getUid1());
+            OpenAiChatModel model2 = OpenAiFactory.getModel(roomFriend.getUid2());
+            if (Objects.isNull(model1) && Objects.isNull(model2)) {
+                throw new BusinessException("不存在此机器人~");
+            }
         } else {
             throw new BusinessException("房间类型错误，roomType：" + room.getType());
         }

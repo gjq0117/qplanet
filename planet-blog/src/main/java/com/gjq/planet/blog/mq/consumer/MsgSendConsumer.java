@@ -78,8 +78,8 @@ public class MsgSendConsumer implements RocketMQListener<MsgSendMessageDTO> {
         if (Objects.isNull(room)) return;
         ChatMessageBody chatMessageResp = messageService.buildMsgResp(message.getId());
         Set<Long> uidSet = null;
-        if (room.isFriendRoom()) {
-            // 单聊房间（更新会话最新消息）
+        if (room.isFriendRoom() || room.isRobotRoom()) {
+            // 单聊房间|机器人房间（更新会话最新消息）
             RoomFriend friendRoom = roomFriendDao.getByRoomId(room.getId());
             contactDao.refreshActiveTime(room.getId(), message, Arrays.asList(friendRoom.getUid1(), friendRoom.getUid2()));
             // 推送消息给好友

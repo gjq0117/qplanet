@@ -3,6 +3,7 @@ package com.gjq.planet.blog.cache.redis.batch;
 import com.gjq.planet.common.utils.JsonUtils;
 import com.gjq.planet.common.utils.RedisUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.CollectionUtils;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.*;
@@ -177,8 +178,10 @@ public abstract class AbstractRedisHashCache<VALUE> implements BatchCache<Long, 
         if (!loadList.isEmpty()) {
             List<VALUE> loadValues = load(loadList);
             // 加载到缓存
-            loadInRedis(loadValues, keyNum);
-            result.addAll(loadValues);
+            if (!CollectionUtils.isEmpty(loadValues)) {
+                loadInRedis(loadValues, keyNum);
+                result.addAll(loadValues);
+            }
         }
         // 从redis全量数据中过滤需要的数据
         for (Long key : keys) {
@@ -190,6 +193,7 @@ public abstract class AbstractRedisHashCache<VALUE> implements BatchCache<Long, 
     }
 
     private void loadInRedis(List<VALUE> loadValues, Long keyNum) {
+        if (CollectionUtils.isEmpty(loadValues)) return;
         if (Objects.nonNull(keyNum)) {
             setBatch(keyNum, loadValues);
         } else {

@@ -54,8 +54,8 @@ public class RoomServiceImpl implements IRoomService {
     @Override
     public Long getOnlineNum(Long roomId) {
         Room room = roomCache.get(roomId);
-        if (room.isFriendRoom()) {
-            // 如果是单聊房间直接返回0
+        if (room.isFriendRoom() || room.isRobotRoom()) {
+            // 如果是单聊房间或者机器人房间直接返回0
             return 0L;
         }
         // TODO 优化

@@ -128,7 +128,7 @@ public class RobotServiceImpl implements IRobotService {
             if (BigDecimal.ZERO.equals(totalSuccess)) {
                 robotResp.setSuccessRate(0f);
             } else {
-                robotResp.setSuccessRate(totalSuccess.divide(BigDecimal.valueOf(total), 2, RoundingMode.HALF_UP).floatValue() * 100);
+                robotResp.setSuccessRate(totalSuccess.divide(BigDecimal.valueOf(total), 4, RoundingMode.HALF_UP).floatValue() * 100);
             }
             // 今日剩余次数【每日上线次数 - 今日成功次数】
             robotResp.setTotalResidue(Optional.ofNullable(robotResp.getDailyLimitNum()).orElse(0) - totalSuccess.intValue());
