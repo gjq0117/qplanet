@@ -41,5 +41,5 @@ public interface IRoomService  {
      *
      * @param uid
      */
-    void clearAllRoomAndFriend(Long uid);
+    void clearAllImInfo(Long uid);
 }

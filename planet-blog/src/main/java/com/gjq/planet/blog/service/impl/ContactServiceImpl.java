@@ -104,7 +104,7 @@ public class ContactServiceImpl implements IContactService {
             List<ContactResp> friendContactRespList = cursorPageBaseResp.getList()
                     .stream()
                     .map(this::buildContactResp)
-                    .collect(Collectors.toList());
+                    .toList();
             // 游标
             timeCursor = cursorPageBaseResp.getCursor();
             // 最后一个

@@ -52,4 +52,11 @@ public interface IRobotService {
      */
     String call(Long robotId, String content);
 
+    /**
+     *  判断指定机器人今日是否可用
+     *
+     * @param robotId robotId
+     * @return Boolean
+     */
+    Boolean todayCanUse(Long robotId);
 }

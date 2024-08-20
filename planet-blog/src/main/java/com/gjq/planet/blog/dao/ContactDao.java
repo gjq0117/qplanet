@@ -1,5 +1,6 @@
 package com.gjq.planet.blog.dao;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gjq.planet.blog.mapper.ContactMapper;
 import com.gjq.planet.common.domain.entity.Contact;
@@ -66,5 +67,15 @@ public class ContactDao extends ServiceImpl<ContactMapper, Contact> {
                 .eq(Contact::getUid, uid)
                 .eq(Contact::getActiveTime, null)
                 .list();
+    }
+
+    /**
+     *  通过房间号和uid删除会话信息
+     *
+     * @param roomId roomId
+     * @param uid uid
+     */
+    public void removeByRoomIdAndUid(Long roomId, Long uid) {
+        this.remove(new QueryWrapper<Contact>().eq("room_id", roomId).eq("uid", uid));
     }
 }

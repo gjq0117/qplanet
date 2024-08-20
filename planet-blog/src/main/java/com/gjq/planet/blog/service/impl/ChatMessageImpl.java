@@ -168,9 +168,9 @@ public class ChatMessageImpl implements IMessageService {
             // 校验机器人是否存在（单聊情况）
             RoomFriend roomFriend = roomFriendDao.getByRoomId(room.getId());
             // 必须存在一个是机器人
-            OpenAiChatModel model1 = OpenAiFactory.getModel(roomFriend.getUid1());
-            OpenAiChatModel model2 = OpenAiFactory.getModel(roomFriend.getUid2());
-            if (Objects.isNull(model1) && Objects.isNull(model2)) {
+            Long modelId = Objects.isNull(OpenAiFactory.getModel(roomFriend.getUid1())) ? roomFriend.getUid2() : roomFriend.getUid1();
+            OpenAiChatModel model = OpenAiFactory.getModel(modelId);
+            if (Objects.isNull(model)) {
                 throw new BusinessException("不存在此机器人~");
             }
         } else {

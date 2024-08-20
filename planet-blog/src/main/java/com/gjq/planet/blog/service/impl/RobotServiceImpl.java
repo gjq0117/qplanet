@@ -120,18 +120,16 @@ public class RobotServiceImpl implements IRobotService {
             // 组装ai信息
             BeanUtils.copyProperties(robot, robotResp);
 
-            // 总调用次数 - 总失败次数
-            BigDecimal totalSuccess = BigDecimal.valueOf(Optional.ofNullable(robot.getTotalReplyNum()).orElse(0) - Optional.ofNullable(robot.getTotalFailNum()).orElse(0));
-            // 总调用次数
-            Integer total = Optional.ofNullable(robot.getTotalReplyNum()).orElse(0);
-            // 计算响应成功率【(总调用次数 - 总失败次数) / 总调用次数】
-            if (BigDecimal.ZERO.equals(totalSuccess)) {
+            // 总调用次数(总回答次数 + 总失败次数)
+            int total = Optional.ofNullable(robot.getTotalReplyNum()).orElse(0) + Optional.ofNullable(robot.getTotalFailNum()).orElse(0);
+            // 计算响应成功率【总回答次数 / 总调用次数】
+            if (Objects.isNull(robot.getTotalReplyNum()) || robot.getTotalReplyNum() == 0) {
                 robotResp.setSuccessRate(0f);
             } else {
-                robotResp.setSuccessRate(totalSuccess.divide(BigDecimal.valueOf(total), 4, RoundingMode.HALF_UP).floatValue() * 100);
+                robotResp.setSuccessRate(BigDecimal.valueOf(robot.getTotalReplyNum()).divide(BigDecimal.valueOf(total), 4 ,RoundingMode.HALF_UP).floatValue() * 100);
             }
-            // 今日剩余次数【每日上线次数 - 今日成功次数】
-            robotResp.setTotalResidue(Optional.ofNullable(robotResp.getDailyLimitNum()).orElse(0) - totalSuccess.intValue());
+            // 今日剩余次数【每日上限次数 - 今日成功次数】
+            robotResp.setTotalResidue(robot.getDailyLimitNum() - Optional.ofNullable(robot.getTodayReplyNum()).orElse(0));
 
             return robotResp;
         }).collect(Collectors.toList());
@@ -147,21 +145,29 @@ public class RobotServiceImpl implements IRobotService {
         userDao.removeById(robotId);
         // 离开系统群聊
         groupMemberService.leaveSystemGroup(robotId);
-        // 删除好友、房间等信息
-        roomService.clearAllRoomAndFriend(robotId);
+        // 清空所有聊天相关的信息（房间、会话、好友房间信息、好友信息）
+        roomService.clearAllImInfo(robotId);
     }
 
     @Override
     public String call(Long robotId, String content) {
-        if (Objects.isNull(OpenAiFactory.getModel(robotId))) {
-            throw new BusinessException("此机器人不存在！！！");
+        if (!todayCanUse(robotId)) {
+            return "抱歉，今天脑容量有点不够啦~ 明天再来找我吧~";
         }
-        callBeforePostProcess(robotId);
         return tryCall(robotId, content);
+    }
+
+    @Override
+    public Boolean todayCanUse(Long robotId) {
+        Robot robot = robotDao.getById(robotId);
+        return robot.getDailyLimitNum() - Optional.ofNullable(robot.getTodayReplyNum()).orElse(0) > 0;
     }
 
     private String tryCall(Long robotId ,String msg) {
         OpenAiChatModel model = OpenAiFactory.getModel(robotId);
+        if (Objects.isNull(model)) {
+            throw new BusinessException("此机器人不存在！！！");
+        }
         Future<String> future = executor.submit(new Callable<String>() {
             @Override
             public String call() throws Exception {
@@ -173,13 +179,14 @@ public class RobotServiceImpl implements IRobotService {
             String reply = future.get(10, TimeUnit.SECONDS);
             if (StringUtils.isNotBlank(reply)) {
                 // 响应成功
+                handleCallSuccess(robotId);
                 return reply;
             }
         } catch (Exception e) {
-            return handleFail(robotId);
+            return handleCallFail(robotId);
         }
         // 响应失败
-        return handleFail(robotId);
+        return handleCallFail(robotId);
     }
 
 
@@ -189,7 +196,7 @@ public class RobotServiceImpl implements IRobotService {
      * @param robotId 机器人ID
      * @return
      */
-    private String handleFail(Long robotId) {
+    private String handleCallFail(Long robotId) {
         // 今日失败次数、总失败次数 + 1
         Robot robot = robotDao.getById(robotId);
         robot.setTodayFailNum(Optional.ofNullable(robot.getTodayFailNum()).orElse(0) + 1);
@@ -204,8 +211,8 @@ public class RobotServiceImpl implements IRobotService {
      * @param robotId 机器人ID
      * @return
      */
-    private void callBeforePostProcess(Long robotId) {
-        // 总调用次数、今日调用次数 + 1
+    private void handleCallSuccess(Long robotId) {
+        // 总回答次数、今日回答次数 + 1
         Robot robot = robotDao.getById(robotId);
         robot.setTodayReplyNum(Optional.ofNullable(robot.getTodayReplyNum()).orElse(0) + 1);
         robot.setTotalReplyNum(Optional.ofNullable(robot.getTotalReplyNum()).orElse(0) + 1);
@@ -221,20 +228,34 @@ public class RobotServiceImpl implements IRobotService {
     private void initRobotChatEnvironment(Long robotUid, List<Long> uidList) {
         //1、机器人加入大群聊
         groupMemberService.joinSystemGroup(robotUid);
+        // 批量分组、并行处理
+        List<Callable<Object>> batchTasks = new ArrayList<>();
+        // 最大任务数量
+        int taskMaxNum = 10;
         for (Long uid : uidList) {
-            executor.execute(new Runnable() {
+            Callable<Object> task = new Callable<>() {
                 @Override
-                public void run() {
+                public Object call() throws Exception {
                     // 为每个用户添加这个机器人好友
-                    if (uid.equals(robotUid)) return;
+                    if (uid.equals(robotUid)) return null;
                     Long roomId = userFriendService.initSingleChatEnvironment(uid, robotUid, RoomTypeEnum.ROBOT_CHAT);
                     // 双方推送一个新的会话消息
                     contactService.pushNewContact(roomId, new HashSet<>(Arrays.asList(uid, robotUid)));
                     // 机器人主动给对方发送一条招呼语句
                     ChatMessageReq req = MessageBuilder.buildTextMsgReq(roomId, "您好，尊贵的Q星球会员！我是您的新助理，之后有什么问题敬请问我吧~", null);
                     chatService.sendMsg(robotUid, req);
+                    return null;
                 }
-            });
+            };
+            batchTasks.add(task);
+            if (batchTasks.size() >= taskMaxNum) {
+                try {
+                    executor.invokeAll(batchTasks);
+                    batchTasks.clear();
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
 
     }

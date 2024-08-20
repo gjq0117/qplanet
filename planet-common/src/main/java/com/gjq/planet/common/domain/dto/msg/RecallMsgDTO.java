@@ -1,7 +1,7 @@
 package com.gjq.planet.common.domain.dto.msg;
 
 import io.swagger.annotations.ApiModelProperty;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,11 +23,11 @@ public class RecallMsgDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty("撤回消息者的UID")
-    @NotBlank(message = "撤回消息者uid不能为空")
+    @ApiModelProperty("撤回消息ID")
+    @NotNull(message = "撤回消息id不能为空")
     private Long msgId;
 
     @ApiModelProperty("撤回时间点")
-    @NotBlank(message = "撤回时间点不能为空")
+    @NotNull(message = "撤回时间点不能为空")
     private Date recallTime;
 }
