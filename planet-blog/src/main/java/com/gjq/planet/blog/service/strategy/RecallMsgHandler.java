@@ -20,6 +20,11 @@ import java.util.Optional;
 @Component
 public class RecallMsgHandler extends AbstractMsgHandler<RecallMsgDTO> {
 
+    /**
+     *  最大的撤回时间（ms）
+     */
+    private static final Long MAX_RECALL_TIME = 2 * 60 * 1000L;
+
     @Autowired
     private MessageDao messageDao;
 
@@ -30,10 +35,11 @@ public class RecallMsgHandler extends AbstractMsgHandler<RecallMsgDTO> {
 
     @Override
     protected void checkMsg(RecallMsgDTO recallMsgDTO, Long roomId, Long uid) {
-        // 检查消息是否存在 | 检查消息是否属于本人
+        // 检查消息是否存在 | 检查消息是否属于本人 | 撤回的消息是否超过两分钟
         Message message = messageDao.getById(recallMsgDTO.getMsgId());
         AssertUtil.isNotEmpty(message, "撤回的消息不存在~");
         AssertUtil.isTrue(Objects.equals(uid, message.getFromUid()), "这条消息不是你发送的噢~");
+        AssertUtil.isTrue(recallMsgDTO.getRecallTime().getTime() - message.getCreateTime().getTime() <= MAX_RECALL_TIME, "消息已经超过两分钟了噢~不能撤回啦");
     }
 
     @Override
