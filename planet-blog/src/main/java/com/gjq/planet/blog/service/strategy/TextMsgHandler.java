@@ -101,18 +101,19 @@ public class TextMsgHandler extends AbstractMsgHandler<TextMsgDTO> {
         if (Objects.nonNull(textMsgDTO.getReplyMsgId())) {
             // 存在回复的消息
             Message dbReplyMsg = messageDao.getById(textMsgDTO.getReplyMsgId());
-            TextMessageBody.ReplyMsg replyMsg = TextMessageBody.ReplyMsg.builder()
-                    .id(dbReplyMsg.getId())
-                    .uid(dbReplyMsg.getFromUid())
-                    .type(dbReplyMsg.getType())
-                    // TODO
-                    .canCallback(1)
-                    .gapCount(textMsgDTO.getSkipCount())
-                    .build();
-            AbstractMsgHandler<?> msgHandler = MsgHandlerFactory.getStrategyNoNull(dbReplyMsg.getType());
-            replyMsg.setBody(msgHandler.showMsg(dbReplyMsg));
+            if (Objects.nonNull(dbReplyMsg)) {
+                TextMessageBody.ReplyMsg replyMsg = TextMessageBody.ReplyMsg.builder()
+                        .id(dbReplyMsg.getId())
+                        .uid(dbReplyMsg.getFromUid())
+                        .type(dbReplyMsg.getType())
+                        .canCallback(1)
+                        .gapCount(textMsgDTO.getSkipCount())
+                        .build();
+                AbstractMsgHandler<?> msgHandler = MsgHandlerFactory.getStrategyNoNull(dbReplyMsg.getType());
+                replyMsg.setBody(msgHandler.showMsg(dbReplyMsg));
 
-            textMessageBody.setReply(replyMsg);
+                textMessageBody.setReply(replyMsg);
+            }
         }
         return textMessageBody;
     }

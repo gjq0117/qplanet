@@ -30,6 +30,9 @@ public class UserSummerInfoResp {
     @ApiModelProperty("用户头像")
     private String avatar;
 
+    @ApiModelProperty("性别【0:保密；1:男；2:女】")
+    private Integer gender;
+
     @ApiModelProperty(value = "归属地")
     private String locPlace;
 

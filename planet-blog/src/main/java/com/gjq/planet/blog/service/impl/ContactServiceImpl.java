@@ -27,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.stream.Collectors;
 
 /**
  * @author: gjq0117
@@ -82,7 +81,7 @@ public class ContactServiceImpl implements IContactService {
             List<Contact> groupContactList = contactMapper.getGroupContact(uid, time);
             List<ContactResp> groupContactRespList = groupContactList.stream()
                     .map(this::buildContactResp)
-                    .collect(Collectors.toList());
+                    .toList();
             // 最后一条
             groupLast = groupContactList.size() != req.getPageSize();
             // 如果不是最后一条，获取群聊的游标

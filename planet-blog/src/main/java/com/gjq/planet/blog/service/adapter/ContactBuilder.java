@@ -4,7 +4,6 @@ import com.gjq.planet.blog.service.strategy.AbstractMsgHandler;
 import com.gjq.planet.blog.service.strategy.MsgHandlerFactory;
 import com.gjq.planet.common.domain.entity.*;
 import com.gjq.planet.common.domain.vo.resp.contact.ContactResp;
-import com.gjq.planet.common.enums.im.RoomTypeEnum;
 import com.gjq.planet.common.utils.CommonUtil;
 
 import java.util.Date;
@@ -41,7 +40,7 @@ public class ContactBuilder {
             contactResp.setLastMsg(handler.showContactMsg(message));
         }
         // 最后活跃时间
-        Date activeTime = RoomTypeEnum.SINGLE_CHAT.getType().equals(room.getType()) ? contact.getActiveTime() : room.getActiveTime();
+        Date activeTime = room.isFriendRoom() || room.isRobotRoom() ? contact.getActiveTime() : room.getActiveTime();
         if (Objects.nonNull(activeTime)) {
             contactResp.setActiveTime(CommonUtil.formatTime(activeTime));
         }
